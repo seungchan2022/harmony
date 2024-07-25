@@ -9,7 +9,7 @@ extension Link {
 // MARK: - Link.Dashboard.Path
 
 extension Link.Dashboard {
-//  public enum Path: String, Equatable {
-//
-//  }
+  public enum Path: String, Equatable {
+    case home
+  }
 }

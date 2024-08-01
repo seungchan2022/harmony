@@ -1,10 +1,23 @@
+import Architecture
+import LinkNavigator
 import SwiftUI
 
-@main
-struct AppMain: App {
-  var body: some Scene {
-    WindowGroup {
-      Text("App Main")
-    }
+// MARK: - AppMain
+
+struct AppMain {
+  let viewModel: AppViewModel
+}
+
+// MARK: View
+
+extension AppMain: View {
+
+  var body: some View {
+    LinkNavigationView(
+      linkNavigator: viewModel.linkNavigator,
+      item: .init(path: Link.Dashboard.Path.home.rawValue),
+      prefersLargeTitles: true)
+      .ignoresSafeArea()
+      .onAppear()
   }
 }

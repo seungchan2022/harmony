@@ -22,6 +22,9 @@ struct HomeReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
+    var itemList: [MusicEntity.Chart.Item] = []
+    var fetchItem: FetchState.Data<MusicEntity.Chart.Response?> = .init(isLoading: false, value: .none)
+
     init(id: UUID = UUID()) {
       self.id = id
     }
@@ -31,16 +34,20 @@ struct HomeReducer {
     case binding(BindingAction<State>)
     case teardown
 
+    case getItem
+    case fetchItem(Result<MusicEntity.Chart.Response, CompositeErrorRepository>)
+
     case throwError(CompositeErrorRepository)
   }
 
   enum CancelID: Equatable, CaseIterable {
     case teardown
+    case requestItem
   }
 
   var body: some Reducer<State, Action> {
     BindingReducer()
-    Reduce { _, action in
+    Reduce { state, action in
       switch action {
       case .binding:
         return .none
@@ -48,6 +55,24 @@ struct HomeReducer {
       case .teardown:
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
+
+      case .getItem:
+        state.fetchItem.isLoading = true
+        return sideEffect
+          .getItem()
+          .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
+
+      case .fetchItem(let result):
+        state.fetchItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchItem.value = item
+          state.itemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)

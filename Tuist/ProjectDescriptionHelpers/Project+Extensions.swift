@@ -29,6 +29,7 @@ extension InfoPlist {
   public static var extraInfoPlist: [String: Plist.Value] {
     [
       "UILaunchScreen": .dictionary([:]),
+      "NSAppleMusicUsageDescription": .string("미디어 접근을 허용해주세요."),
     ]
   }
 }

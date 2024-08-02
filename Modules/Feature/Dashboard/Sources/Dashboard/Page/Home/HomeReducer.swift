@@ -59,7 +59,7 @@ struct HomeReducer {
       case .getItem:
         state.fetchItem.isLoading = true
         return sideEffect
-          .getItem()
+          .getItem(.init(limit: 20))
           .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
 
       case .fetchItem(let result):

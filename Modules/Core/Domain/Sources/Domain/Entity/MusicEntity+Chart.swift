@@ -8,7 +8,17 @@ extension MusicEntity {
 }
 
 extension MusicEntity.Chart {
-  public struct Request: Equatable, Codable, Sendable { }
+  public struct Request: Equatable, Codable, Sendable {
+    public let limit: Int
+
+    public init(limit: Int) {
+      self.limit = limit
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case limit
+    }
+  }
 
   public struct Response: Equatable, Codable, Sendable {
     public let itemList: [Item]

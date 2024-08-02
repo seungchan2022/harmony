@@ -1,5 +1,5 @@
 import Combine
 
 public protocol MusicUseCase {
-  var chart: () -> AnyPublisher<MusicEntity.Chart.Response, CompositeErrorRepository> { get }
+  var chart: (MusicEntity.Chart.Request) -> AnyPublisher<MusicEntity.Chart.Response, CompositeErrorRepository> { get }
 }

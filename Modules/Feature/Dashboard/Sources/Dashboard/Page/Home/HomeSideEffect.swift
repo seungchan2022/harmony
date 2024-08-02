@@ -24,11 +24,11 @@ struct HomeSideEffect {
 }
 
 extension HomeSideEffect {
-  var getItem: () -> Effect<HomeReducer.Action> {
-    {
+  var getItem: (MusicEntity.Chart.Request) -> Effect<HomeReducer.Action> {
+    { req in
       .publisher {
         useCase.musicUseCase
-          .chart()
+          .chart(req)
           .receive(on: main)
           .mapToResult()
           .map(HomeReducer.Action.fetchItem)

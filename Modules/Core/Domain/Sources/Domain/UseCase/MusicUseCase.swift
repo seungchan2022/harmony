@@ -7,4 +7,8 @@ public protocol MusicUseCase {
   > { get }
   var cityTop: (MusicEntity.Chart.CityTop.Request)
     -> AnyPublisher<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository> { get }
+  var dailyTop: (MusicEntity.Chart.DailyTop.Request) -> AnyPublisher<
+    MusicEntity.Chart.DailyTop.Response,
+    CompositeErrorRepository
+  > { get }
 }

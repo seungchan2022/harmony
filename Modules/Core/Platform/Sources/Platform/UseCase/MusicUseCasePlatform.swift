@@ -104,4 +104,48 @@ extension MusicUseCasePlatform: MusicUseCase {
       .eraseToAnyPublisher()
     }
   }
+
+  public var dailyTop: (MusicEntity.Chart.DailyTop.Request) -> AnyPublisher<
+    MusicEntity.Chart.DailyTop.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            var request = MusicCatalogChartsRequest(
+              genre: .none,
+              kinds: [.dailyGlobalTop],
+              types: [Playlist.self])
+
+            request.limit = req.limit
+            request.offset = .zero
+
+            let response = try await request.response()
+
+            let itemList = response
+              .playlistCharts
+              .filter { $0.title == "Daily Top 100" }
+              .flatMap { $0.items }
+              .map {
+                MusicEntity.Chart.DailyTop.Item(
+                  id: $0.id.rawValue,
+                  name: $0.name,
+                  curatorName: $0.curatorName ?? "",
+                  artwork: .init(
+                    url: $0.artwork?.url(width: 180, height: 180)))
+              }
+
+            let chartResponse = MusicEntity.Chart.DailyTop.Response(itemList: itemList)
+
+            return promise(.success(chartResponse))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
 }

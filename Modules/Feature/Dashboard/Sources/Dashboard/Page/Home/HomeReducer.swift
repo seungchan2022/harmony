@@ -24,11 +24,13 @@ struct HomeReducer {
 
     var mostPlayedSongItemList: [MusicEntity.Chart.MostPlayedSong.Item] = []
     var cityTopItemList: [MusicEntity.Chart.CityTop.Item] = []
+    var dailyTopItemList: [MusicEntity.Chart.DailyTop.Item] = []
 
     var fetchMostPlayedSongItem: FetchState.Data<MusicEntity.Chart.MostPlayedSong.Response?> = .init(
       isLoading: false,
       value: .none)
     var fetchCityTopItem: FetchState.Data<MusicEntity.Chart.CityTop.Response?> = .init(isLoading: false, value: .none)
+    var fetchDailyTopItem: FetchState.Data<MusicEntity.Chart.DailyTop.Response?> = .init(isLoading: false, value: .none)
 
     init(id: UUID = UUID()) {
       self.id = id
@@ -41,9 +43,11 @@ struct HomeReducer {
 
     case getMostPlayedSongItem
     case getCityTopItem
+    case getDailyTopItem
 
     case fetchMostPlayedSongItem(Result<MusicEntity.Chart.MostPlayedSong.Response, CompositeErrorRepository>)
     case fetchCityTopItem(Result<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository>)
+    case fetchDailyTopItem(Result<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -52,6 +56,7 @@ struct HomeReducer {
     case teardown
     case requestMostPlayedSongItem
     case requestCityTopItem
+    case requestDailyTopItem
   }
 
   var body: some Reducer<State, Action> {
@@ -77,6 +82,12 @@ struct HomeReducer {
           .getCityTopItem(.init(limit: 20))
           .cancellable(pageID: pageID, id: CancelID.requestCityTopItem, cancelInFlight: true)
 
+      case .getDailyTopItem:
+        state.fetchDailyTopItem.isLoading = true
+        return sideEffect
+          .getDailyTopItem(.init(limit: 20))
+          .cancellable(pageID: pageID, id: CancelID.requestDailyTopItem, cancelInFlight: true)
+
       case .fetchMostPlayedSongItem(let result):
         state.fetchMostPlayedSongItem.isLoading = false
         switch result {
@@ -95,6 +106,18 @@ struct HomeReducer {
         case .success(let item):
           state.fetchCityTopItem.value = item
           state.cityTopItemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchDailyTopItem(let result):
+        state.fetchDailyTopItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchDailyTopItem.value = item
+          state.dailyTopItemList = item.itemList
           return .none
 
         case .failure(let error):

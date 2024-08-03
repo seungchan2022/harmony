@@ -89,6 +89,36 @@ extension HomePage: View {
           }
           .scrollIndicators(.hidden)
         }
+
+        VStack {
+          Button(action: { }) {
+            HStack {
+              Text("오늘의 TOP 100")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Image(systemName: "chevron.right")
+                .fontWeight(.bold)
+                .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+              Spacer()
+            }
+          }
+          .padding(.leading, 16)
+
+          ScrollView(.horizontal) {
+            LazyHStack {
+              ForEach(store.dailyTopItemList, id: \.id) { item in
+                DailyTopComponent(viewState: .init(item: item))
+              }
+            }
+          }
+          .scrollIndicators(.hidden)
+        }
       }
       .padding(.top, 32)
     }
@@ -96,6 +126,7 @@ extension HomePage: View {
     .onAppear {
       store.send(.getMostPlayedSongItem)
       store.send(.getCityTopItem)
+      store.send(.getDailyTopItem)
     }
   }
 }

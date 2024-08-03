@@ -47,4 +47,16 @@ extension HomeSideEffect {
       }
     }
   }
+
+  var getDailyTopItem: (MusicEntity.Chart.DailyTop.Request) -> Effect<HomeReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicUseCase
+          .dailyTop(req)
+          .receive(on: main)
+          .mapToResult()
+          .map(HomeReducer.Action.fetchDailyTopItem)
+      }
+    }
+  }
 }

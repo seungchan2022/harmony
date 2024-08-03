@@ -16,4 +16,9 @@ public protocol MusicUseCase {
     MusicEntity.Chart.TopPlayList.Response,
     CompositeErrorRepository
   > { get }
+
+  var topAlbum: (MusicEntity.Chart.TopAlbum.Request) -> AnyPublisher<
+    MusicEntity.Chart.TopAlbum.Response,
+    CompositeErrorRepository
+  > { get }
 }

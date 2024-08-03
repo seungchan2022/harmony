@@ -86,6 +86,7 @@ extension HomePage: View {
                 CityTopComponent(viewState: .init(item: item))
               }
             }
+            .padding(.trailing, 16)
           }
           .scrollIndicators(.hidden)
         }
@@ -116,6 +117,7 @@ extension HomePage: View {
                 DailyTopComponent(viewState: .init(item: item))
               }
             }
+            .padding(.trailing, 16)
           }
           .scrollIndicators(.hidden)
         }
@@ -148,6 +150,40 @@ extension HomePage: View {
                   store: store)
               }
             }
+            .padding(.trailing, 16)
+          }
+          .scrollIndicators(.hidden)
+        }
+
+        VStack {
+          Button(action: { }) {
+            HStack {
+              Text("인기 앨범")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Image(systemName: "chevron.right")
+                .fontWeight(.bold)
+                .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+              Spacer()
+            }
+          }
+          .padding(.leading, 16)
+
+          ScrollView(.horizontal) {
+            LazyHStack {
+              ForEach(store.topAlbumItemList, id: \.id) { item in
+                TopAlbumComponent(
+                  viewState: .init(item: item),
+                  store: store)
+              }
+            }
+            .padding(.trailing, 16)
           }
           .scrollIndicators(.hidden)
         }
@@ -159,7 +195,8 @@ extension HomePage: View {
       store.send(.getMostPlayedSongItem)
       store.send(.getCityTopItem)
       store.send(.getDailyTopItem)
-      store.send((.getTopPlayItem))
+      store.send(.getTopPlayItem)
+      store.send(.getTopAlbumItem)
     }
   }
 }

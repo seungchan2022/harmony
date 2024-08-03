@@ -71,4 +71,16 @@ extension HomeSideEffect {
       }
     }
   }
+
+  var getTopAlbumItem: (MusicEntity.Chart.TopAlbum.Request) -> Effect<HomeReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicUseCase
+          .topAlbum(req)
+          .receive(on: main)
+          .mapToResult()
+          .map(HomeReducer.Action.fetchTopAlbumItem)
+      }
+    }
+  }
 }

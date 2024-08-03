@@ -26,6 +26,7 @@ struct HomeReducer {
     var cityTopItemList: [MusicEntity.Chart.CityTop.Item] = []
     var dailyTopItemList: [MusicEntity.Chart.DailyTop.Item] = []
     var topPlayItemList: [MusicEntity.Chart.TopPlayList.Item] = []
+    var topAlbumItemList: [MusicEntity.Chart.TopAlbum.Item] = []
 
     var fetchMostPlayedSongItem: FetchState.Data<MusicEntity.Chart.MostPlayedSong.Response?> = .init(
       isLoading: false,
@@ -33,6 +34,7 @@ struct HomeReducer {
     var fetchCityTopItem: FetchState.Data<MusicEntity.Chart.CityTop.Response?> = .init(isLoading: false, value: .none)
     var fetchDailyTopItem: FetchState.Data<MusicEntity.Chart.DailyTop.Response?> = .init(isLoading: false, value: .none)
     var fetchTopPlayItem: FetchState.Data<MusicEntity.Chart.TopPlayList.Response?> = .init(isLoading: false, value: .none)
+    var fetchTopAlbumItem: FetchState.Data<MusicEntity.Chart.TopAlbum.Response?> = .init(isLoading: false, value: .none)
 
     init(id: UUID = UUID()) {
       self.id = id
@@ -47,11 +49,13 @@ struct HomeReducer {
     case getCityTopItem
     case getDailyTopItem
     case getTopPlayItem
+    case getTopAlbumItem
 
     case fetchMostPlayedSongItem(Result<MusicEntity.Chart.MostPlayedSong.Response, CompositeErrorRepository>)
     case fetchCityTopItem(Result<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository>)
     case fetchDailyTopItem(Result<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository>)
     case fetchTopPlayItem(Result<MusicEntity.Chart.TopPlayList.Response, CompositeErrorRepository>)
+    case fetchTopAlbumItem(Result<MusicEntity.Chart.TopAlbum.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -62,6 +66,7 @@ struct HomeReducer {
     case requestCityTopItem
     case requestDailyTopItem
     case requestTopPlayItem
+    case requestTopAlbumItem
   }
 
   var body: some Reducer<State, Action> {
@@ -78,26 +83,32 @@ struct HomeReducer {
       case .getMostPlayedSongItem:
         state.fetchMostPlayedSongItem.isLoading = true
         return sideEffect
-          .getMostPlayedSongItem(.init(limit: 20))
+          .getMostPlayedSongItem(.init())
           .cancellable(pageID: pageID, id: CancelID.requestMostPlayedSongItem, cancelInFlight: true)
 
       case .getCityTopItem:
         state.fetchCityTopItem.isLoading = true
         return sideEffect
-          .getCityTopItem(.init(limit: 20))
+          .getCityTopItem(.init())
           .cancellable(pageID: pageID, id: CancelID.requestCityTopItem, cancelInFlight: true)
 
       case .getDailyTopItem:
         state.fetchDailyTopItem.isLoading = true
         return sideEffect
-          .getDailyTopItem(.init(limit: 20))
+          .getDailyTopItem(.init())
           .cancellable(pageID: pageID, id: CancelID.requestDailyTopItem, cancelInFlight: true)
 
       case .getTopPlayItem:
         state.fetchTopPlayItem.isLoading = true
         return sideEffect
-          .getTopPlayItem(.init(limit: 20))
+          .getTopPlayItem(.init())
           .cancellable(pageID: pageID, id: CancelID.requestTopPlayItem, cancelInFlight: true)
+
+      case .getTopAlbumItem:
+        state.fetchTopAlbumItem.isLoading = true
+        return sideEffect
+          .getTopAlbumItem(.init())
+          .cancellable(pageID: pageID, id: CancelID.requestTopAlbumItem, cancelInFlight: true)
 
       case .fetchMostPlayedSongItem(let result):
         state.fetchMostPlayedSongItem.isLoading = false
@@ -141,6 +152,18 @@ struct HomeReducer {
         case .success(let item):
           state.fetchTopPlayItem.value = item
           state.topPlayItemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchTopAlbumItem(let result):
+        state.fetchTopAlbumItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchTopAlbumItem.value = item
+          state.topAlbumItemList = item.itemList
           return .none
 
         case .failure(let error):

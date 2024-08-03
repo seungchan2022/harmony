@@ -21,4 +21,9 @@ public protocol MusicUseCase {
     MusicEntity.Chart.TopAlbum.Response,
     CompositeErrorRepository
   > { get }
+
+  var topMusicVideo: (MusicEntity.Chart.TopMusicVideo.Request) -> AnyPublisher<
+    MusicEntity.Chart.TopMusicVideo.Response,
+    CompositeErrorRepository
+  > { get }
 }

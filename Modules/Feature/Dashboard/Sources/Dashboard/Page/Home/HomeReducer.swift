@@ -20,6 +20,15 @@ struct HomeReducer {
 
   @ObservableState
   struct State: Equatable, Identifiable {
+
+    // MARK: Lifecycle
+
+    init(id: UUID = UUID()) {
+      self.id = id
+    }
+
+    // MARK: Internal
+
     let id: UUID
 
     var mostPlayedSongItemList: [MusicEntity.Chart.MostPlayedSong.Item] = []
@@ -27,6 +36,7 @@ struct HomeReducer {
     var dailyTopItemList: [MusicEntity.Chart.DailyTop.Item] = []
     var topPlayItemList: [MusicEntity.Chart.TopPlayList.Item] = []
     var topAlbumItemList: [MusicEntity.Chart.TopAlbum.Item] = []
+    var topMusicVideoItemList: [MusicEntity.Chart.TopMusicVideo.Item] = []
 
     var fetchMostPlayedSongItem: FetchState.Data<MusicEntity.Chart.MostPlayedSong.Response?> = .init(
       isLoading: false,
@@ -35,10 +45,8 @@ struct HomeReducer {
     var fetchDailyTopItem: FetchState.Data<MusicEntity.Chart.DailyTop.Response?> = .init(isLoading: false, value: .none)
     var fetchTopPlayItem: FetchState.Data<MusicEntity.Chart.TopPlayList.Response?> = .init(isLoading: false, value: .none)
     var fetchTopAlbumItem: FetchState.Data<MusicEntity.Chart.TopAlbum.Response?> = .init(isLoading: false, value: .none)
+    var fetchTopMusicVideoItem: FetchState.Data<MusicEntity.Chart.TopMusicVideo.Response?> = .init(isLoading: false, value: .none)
 
-    init(id: UUID = UUID()) {
-      self.id = id
-    }
   }
 
   enum Action: Equatable, BindableAction {
@@ -50,12 +58,14 @@ struct HomeReducer {
     case getDailyTopItem
     case getTopPlayItem
     case getTopAlbumItem
+    case getTopMusicVideoItem
 
     case fetchMostPlayedSongItem(Result<MusicEntity.Chart.MostPlayedSong.Response, CompositeErrorRepository>)
     case fetchCityTopItem(Result<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository>)
     case fetchDailyTopItem(Result<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository>)
     case fetchTopPlayItem(Result<MusicEntity.Chart.TopPlayList.Response, CompositeErrorRepository>)
     case fetchTopAlbumItem(Result<MusicEntity.Chart.TopAlbum.Response, CompositeErrorRepository>)
+    case fetchTopMusicVideoItem(Result<MusicEntity.Chart.TopMusicVideo.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -67,6 +77,7 @@ struct HomeReducer {
     case requestDailyTopItem
     case requestTopPlayItem
     case requestTopAlbumItem
+    case requestTopMusicVideoItem
   }
 
   var body: some Reducer<State, Action> {
@@ -109,6 +120,12 @@ struct HomeReducer {
         return sideEffect
           .getTopAlbumItem(.init())
           .cancellable(pageID: pageID, id: CancelID.requestTopAlbumItem, cancelInFlight: true)
+
+      case .getTopMusicVideoItem:
+        state.fetchTopMusicVideoItem.isLoading = true
+        return sideEffect
+          .getTopMusicVideoItem(.init())
+          .cancellable(pageID: pageID, id: CancelID.requestTopMusicVideoItem, cancelInFlight: true)
 
       case .fetchMostPlayedSongItem(let result):
         state.fetchMostPlayedSongItem.isLoading = false
@@ -164,6 +181,18 @@ struct HomeReducer {
         case .success(let item):
           state.fetchTopAlbumItem.value = item
           state.topAlbumItemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchTopMusicVideoItem(let result):
+        state.fetchTopMusicVideoItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchTopMusicVideoItem.value = item
+          state.topMusicVideoItemList = item.itemList
           return .none
 
         case .failure(let error):

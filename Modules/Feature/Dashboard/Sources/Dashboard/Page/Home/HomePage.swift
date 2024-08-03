@@ -187,6 +187,39 @@ extension HomePage: View {
           }
           .scrollIndicators(.hidden)
         }
+
+        VStack {
+          Button(action: { }) {
+            HStack {
+              Text("인기 뮤직비디오")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Image(systemName: "chevron.right")
+                .fontWeight(.bold)
+                .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+              Spacer()
+            }
+          }
+          .padding(.leading, 16)
+
+          ScrollView(.horizontal) {
+            LazyHStack {
+              ForEach(store.topMusicVideoItemList, id: \.id) { item in
+                TopMusicVideoComponent(
+                  viewState: .init(item: item),
+                  store: store)
+              }
+            }
+            .padding(.trailing, 16)
+          }
+          .scrollIndicators(.hidden)
+        }
       }
       .padding(.top, 32)
     }
@@ -197,6 +230,7 @@ extension HomePage: View {
       store.send(.getDailyTopItem)
       store.send(.getTopPlayItem)
       store.send(.getTopAlbumItem)
+      store.send(.getTopMusicVideoItem)
     }
   }
 }

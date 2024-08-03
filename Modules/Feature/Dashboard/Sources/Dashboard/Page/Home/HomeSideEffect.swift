@@ -83,4 +83,16 @@ extension HomeSideEffect {
       }
     }
   }
+
+  var getTopMusicVideoItem: (MusicEntity.Chart.TopMusicVideo.Request) -> Effect<HomeReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicUseCase
+          .topMusicVideo(req)
+          .receive(on: main)
+          .mapToResult()
+          .map(HomeReducer.Action.fetchTopMusicVideoItem)
+      }
+    }
+  }
 }

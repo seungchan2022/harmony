@@ -24,14 +24,26 @@ struct HomeSideEffect {
 }
 
 extension HomeSideEffect {
-  var getItem: (MusicEntity.Chart.Request) -> Effect<HomeReducer.Action> {
+  var getMostPlayedSongItem: (MusicEntity.Chart.MostPlayedSong.Request) -> Effect<HomeReducer.Action> {
     { req in
       .publisher {
         useCase.musicUseCase
-          .chart(req)
+          .mostPlayedSong(req)
           .receive(on: main)
           .mapToResult()
-          .map(HomeReducer.Action.fetchItem)
+          .map(HomeReducer.Action.fetchMostPlayedSongItem)
+      }
+    }
+  }
+
+  var getCityTopItem: (MusicEntity.Chart.CityTop.Request) -> Effect<HomeReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicUseCase
+          .cityTop(req)
+          .receive(on: main)
+          .mapToResult()
+          .map(HomeReducer.Action.fetchCityTopItem)
       }
     }
   }

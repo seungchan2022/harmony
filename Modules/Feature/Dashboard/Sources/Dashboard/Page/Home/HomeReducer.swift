@@ -22,8 +22,13 @@ struct HomeReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    var itemList: [MusicEntity.Chart.Item] = []
-    var fetchItem: FetchState.Data<MusicEntity.Chart.Response?> = .init(isLoading: false, value: .none)
+    var mostPlayedSongItemList: [MusicEntity.Chart.MostPlayedSong.Item] = []
+    var cityTopItemList: [MusicEntity.Chart.CityTop.Item] = []
+
+    var fetchMostPlayedSongItem: FetchState.Data<MusicEntity.Chart.MostPlayedSong.Response?> = .init(
+      isLoading: false,
+      value: .none)
+    var fetchCityTopItem: FetchState.Data<MusicEntity.Chart.CityTop.Response?> = .init(isLoading: false, value: .none)
 
     init(id: UUID = UUID()) {
       self.id = id
@@ -34,15 +39,19 @@ struct HomeReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem
-    case fetchItem(Result<MusicEntity.Chart.Response, CompositeErrorRepository>)
+    case getMostPlayedSongItem
+    case getCityTopItem
+
+    case fetchMostPlayedSongItem(Result<MusicEntity.Chart.MostPlayedSong.Response, CompositeErrorRepository>)
+    case fetchCityTopItem(Result<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
 
   enum CancelID: Equatable, CaseIterable {
     case teardown
-    case requestItem
+    case requestMostPlayedSongItem
+    case requestCityTopItem
   }
 
   var body: some Reducer<State, Action> {
@@ -56,18 +65,36 @@ struct HomeReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getItem:
-        state.fetchItem.isLoading = true
+      case .getMostPlayedSongItem:
+        state.fetchMostPlayedSongItem.isLoading = true
         return sideEffect
-          .getItem(.init(limit: 20))
-          .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
+          .getMostPlayedSongItem(.init(limit: 20))
+          .cancellable(pageID: pageID, id: CancelID.requestMostPlayedSongItem, cancelInFlight: true)
 
-      case .fetchItem(let result):
-        state.fetchItem.isLoading = false
+      case .getCityTopItem:
+        state.fetchCityTopItem.isLoading = true
+        return sideEffect
+          .getCityTopItem(.init(limit: 20))
+          .cancellable(pageID: pageID, id: CancelID.requestCityTopItem, cancelInFlight: true)
+
+      case .fetchMostPlayedSongItem(let result):
+        state.fetchMostPlayedSongItem.isLoading = false
         switch result {
         case .success(let item):
-          state.fetchItem.value = item
-          state.itemList = item.itemList
+          state.fetchMostPlayedSongItem.value = item
+          state.mostPlayedSongItemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchCityTopItem(let result):
+        state.fetchCityTopItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchCityTopItem.value = item
+          state.cityTopItemList = item.itemList
           return .none
 
         case .failure(let error):

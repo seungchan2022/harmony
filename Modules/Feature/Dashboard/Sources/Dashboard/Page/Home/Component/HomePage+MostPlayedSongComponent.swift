@@ -18,7 +18,7 @@ extension HomePage {
 
 extension HomePage.MostPlayedSongComponent {
   private var ranking: Int {
-    (store.itemList.firstIndex(of: viewState.item) ?? .zero) + 1
+    (store.mostPlayedSongItemList.firstIndex(of: viewState.item) ?? .zero) + 1
   }
 }
 
@@ -81,7 +81,6 @@ extension HomePage.MostPlayedSongComponent: View {
 
 extension HomePage.MostPlayedSongComponent {
   struct ViewState: Equatable {
-    ///    let itemList: MusicEntity.Chart.Response
-    let item: MusicEntity.Chart.Item
+    let item: MusicEntity.Chart.MostPlayedSong.Item
   }
 }

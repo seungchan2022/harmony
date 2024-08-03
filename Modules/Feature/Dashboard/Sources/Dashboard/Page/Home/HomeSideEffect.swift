@@ -95,4 +95,13 @@ extension HomeSideEffect {
       }
     }
   }
+
+  var routeToMostPlayedSong: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.mostPlayedSong.rawValue),
+          isAnimated: true)
+    }
+  }
 }

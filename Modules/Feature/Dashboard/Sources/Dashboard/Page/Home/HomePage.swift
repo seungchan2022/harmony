@@ -1,4 +1,3 @@
-
 import ComposableArchitecture
 import DesignSystem
 import MusicKit
@@ -25,7 +24,7 @@ extension HomePage: View {
     ScrollView {
       VStack(spacing: 32) {
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToMostPlayedSong) }) {
             HStack {
               Text("인기곡")
                 .font(.title)

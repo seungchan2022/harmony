@@ -67,6 +67,8 @@ struct HomeReducer {
     case fetchTopAlbumItem(Result<MusicEntity.Chart.TopAlbum.Response, CompositeErrorRepository>)
     case fetchTopMusicVideoItem(Result<MusicEntity.Chart.TopMusicVideo.Response, CompositeErrorRepository>)
 
+    case routeToMostPlayedSong
+
     case throwError(CompositeErrorRepository)
   }
 
@@ -198,6 +200,10 @@ struct HomeReducer {
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
+
+      case .routeToMostPlayedSong:
+        sideEffect.routeToMostPlayedSong()
+        return .none
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)

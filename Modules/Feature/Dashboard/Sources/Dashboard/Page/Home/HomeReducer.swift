@@ -25,12 +25,14 @@ struct HomeReducer {
     var mostPlayedSongItemList: [MusicEntity.Chart.MostPlayedSong.Item] = []
     var cityTopItemList: [MusicEntity.Chart.CityTop.Item] = []
     var dailyTopItemList: [MusicEntity.Chart.DailyTop.Item] = []
+    var topPlayItemList: [MusicEntity.Chart.TopPlayList.Item] = []
 
     var fetchMostPlayedSongItem: FetchState.Data<MusicEntity.Chart.MostPlayedSong.Response?> = .init(
       isLoading: false,
       value: .none)
     var fetchCityTopItem: FetchState.Data<MusicEntity.Chart.CityTop.Response?> = .init(isLoading: false, value: .none)
     var fetchDailyTopItem: FetchState.Data<MusicEntity.Chart.DailyTop.Response?> = .init(isLoading: false, value: .none)
+    var fetchTopPlayItem: FetchState.Data<MusicEntity.Chart.TopPlayList.Response?> = .init(isLoading: false, value: .none)
 
     init(id: UUID = UUID()) {
       self.id = id
@@ -44,10 +46,12 @@ struct HomeReducer {
     case getMostPlayedSongItem
     case getCityTopItem
     case getDailyTopItem
+    case getTopPlayItem
 
     case fetchMostPlayedSongItem(Result<MusicEntity.Chart.MostPlayedSong.Response, CompositeErrorRepository>)
     case fetchCityTopItem(Result<MusicEntity.Chart.CityTop.Response, CompositeErrorRepository>)
     case fetchDailyTopItem(Result<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository>)
+    case fetchTopPlayItem(Result<MusicEntity.Chart.TopPlayList.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -57,6 +61,7 @@ struct HomeReducer {
     case requestMostPlayedSongItem
     case requestCityTopItem
     case requestDailyTopItem
+    case requestTopPlayItem
   }
 
   var body: some Reducer<State, Action> {
@@ -88,6 +93,12 @@ struct HomeReducer {
           .getDailyTopItem(.init(limit: 20))
           .cancellable(pageID: pageID, id: CancelID.requestDailyTopItem, cancelInFlight: true)
 
+      case .getTopPlayItem:
+        state.fetchTopPlayItem.isLoading = true
+        return sideEffect
+          .getTopPlayItem(.init(limit: 20))
+          .cancellable(pageID: pageID, id: CancelID.requestTopPlayItem, cancelInFlight: true)
+
       case .fetchMostPlayedSongItem(let result):
         state.fetchMostPlayedSongItem.isLoading = false
         switch result {
@@ -118,6 +129,18 @@ struct HomeReducer {
         case .success(let item):
           state.fetchDailyTopItem.value = item
           state.dailyTopItemList = item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchTopPlayItem(let result):
+        state.fetchTopPlayItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchTopPlayItem.value = item
+          state.topPlayItemList = item.itemList
           return .none
 
         case .failure(let error):

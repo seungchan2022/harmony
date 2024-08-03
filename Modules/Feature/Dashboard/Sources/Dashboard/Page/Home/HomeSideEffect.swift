@@ -59,4 +59,16 @@ extension HomeSideEffect {
       }
     }
   }
+
+  var getTopPlayItem: (MusicEntity.Chart.TopPlayList.Request) -> Effect<HomeReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicUseCase
+          .topPlayList(req)
+          .receive(on: main)
+          .mapToResult()
+          .map(HomeReducer.Action.fetchTopPlayItem)
+      }
+    }
+  }
 }

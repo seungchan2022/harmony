@@ -119,6 +119,38 @@ extension HomePage: View {
           }
           .scrollIndicators(.hidden)
         }
+
+        VStack {
+          Button(action: { }) {
+            HStack {
+              Text("인기 플레이리스트")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Image(systemName: "chevron.right")
+                .fontWeight(.bold)
+                .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+              Spacer()
+            }
+          }
+          .padding(.leading, 16)
+
+          ScrollView(.horizontal) {
+            LazyHStack {
+              ForEach(store.topPlayItemList, id: \.id) { item in
+                TopPlayListComponent(
+                  viewState: .init(item: item),
+                  store: store)
+              }
+            }
+          }
+          .scrollIndicators(.hidden)
+        }
       }
       .padding(.top, 32)
     }
@@ -127,6 +159,7 @@ extension HomePage: View {
       store.send(.getMostPlayedSongItem)
       store.send(.getCityTopItem)
       store.send(.getDailyTopItem)
+      store.send((.getTopPlayItem))
     }
   }
 }

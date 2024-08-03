@@ -148,4 +148,48 @@ extension MusicUseCasePlatform: MusicUseCase {
       .eraseToAnyPublisher()
     }
   }
+
+  public var topPlayList: (MusicEntity.Chart.TopPlayList.Request) -> AnyPublisher<
+    MusicEntity.Chart.TopPlayList.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Chart.TopPlayList.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            var request = MusicCatalogChartsRequest(
+              genre: .none,
+              kinds: [.mostPlayed],
+              types: [Playlist.self])
+
+            request.limit = req.limit
+            request.offset = .zero
+
+            let response = try await request.response()
+
+            let itemList = response
+              .playlistCharts
+              .filter { $0.title == "Top Playlists" }
+              .flatMap { $0.items }
+              .map {
+                MusicEntity.Chart.TopPlayList.Item(
+                  id: $0.id.rawValue,
+                  name: $0.name,
+                  curatorName: $0.curatorName ?? "",
+                  artwork: .init(
+                    url: $0.artwork?.url(width: 180, height: 180)))
+              }
+
+            let chartResponse = MusicEntity.Chart.TopPlayList.Response(itemList: itemList)
+
+            return promise(.success(chartResponse))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
 }

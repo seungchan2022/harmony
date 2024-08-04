@@ -12,5 +12,10 @@ extension Link.Dashboard {
   public enum Path: String, Equatable {
     case home
     case mostPlayedSong
+    case cityTop
+    case dailyTop
+    case topPlayList
+    case topAlbum
+    case topMusicVideo
   }
 }

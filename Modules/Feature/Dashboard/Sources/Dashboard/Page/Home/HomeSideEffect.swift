@@ -104,4 +104,50 @@ extension HomeSideEffect {
           isAnimated: true)
     }
   }
+
+  var routeToCityTop: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.cityTop.rawValue),
+          isAnimated: true)
+    }
+  }
+
+  var routeToDailyTop: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.dailyTop.rawValue),
+          isAnimated: true)
+    }
+  }
+
+  var routeToTopPlayList: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.topPlayList.rawValue),
+          isAnimated: true)
+    }
+  }
+
+  var routeToTopAlbum: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.topAlbum.rawValue),
+          isAnimated: true)
+    }
+  }
+
+  var routeToTopMusicVideo: () -> Void {
+    {
+      navigator
+        .next(
+          linkItem: .init(path: Link.Dashboard.Path.topMusicVideo.rawValue),
+          isAnimated: true)
+    }
+  }
+
 }

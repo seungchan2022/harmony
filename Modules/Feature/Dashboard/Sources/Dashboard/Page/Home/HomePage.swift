@@ -60,7 +60,7 @@ extension HomePage: View {
         }
 
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToCityTop) }) {
             HStack {
               Text("도시별 차트")
                 .font(.title)
@@ -91,7 +91,7 @@ extension HomePage: View {
         }
 
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToDailyTop) }) {
             HStack {
               Text("오늘의 TOP 100")
                 .font(.title)
@@ -122,7 +122,7 @@ extension HomePage: View {
         }
 
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToTopPlayList) }) {
             HStack {
               Text("인기 플레이리스트")
                 .font(.title)
@@ -155,7 +155,7 @@ extension HomePage: View {
         }
 
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToTopAlbum) }) {
             HStack {
               Text("인기 앨범")
                 .font(.title)
@@ -188,7 +188,7 @@ extension HomePage: View {
         }
 
         VStack {
-          Button(action: { }) {
+          Button(action: { store.send(.routeToTopMusicVideo) }) {
             HStack {
               Text("인기 뮤직비디오")
                 .font(.title)

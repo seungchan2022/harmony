@@ -68,6 +68,11 @@ struct HomeReducer {
     case fetchTopMusicVideoItem(Result<MusicEntity.Chart.TopMusicVideo.Response, CompositeErrorRepository>)
 
     case routeToMostPlayedSong
+    case routeToCityTop
+    case routeToDailyTop
+    case routeToTopPlayList
+    case routeToTopAlbum
+    case routeToTopMusicVideo
 
     case throwError(CompositeErrorRepository)
   }
@@ -203,6 +208,26 @@ struct HomeReducer {
 
       case .routeToMostPlayedSong:
         sideEffect.routeToMostPlayedSong()
+        return .none
+
+      case .routeToCityTop:
+        sideEffect.routeToCityTop()
+        return .none
+
+      case .routeToDailyTop:
+        sideEffect.routeToDailyTop()
+        return .none
+
+      case .routeToTopPlayList:
+        sideEffect.routeToTopPlayList()
+        return .none
+
+      case .routeToTopAlbum:
+        sideEffect.routeToTopAlbum()
+        return .none
+
+      case .routeToTopMusicVideo:
+        sideEffect.routeToTopMusicVideo()
         return .none
 
       case .throwError(let error):

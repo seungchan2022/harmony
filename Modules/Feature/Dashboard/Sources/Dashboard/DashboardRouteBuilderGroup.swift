@@ -13,10 +13,12 @@ extension DashboardRouteBuilderGroup {
       HomeRouteBuilder.generate(),
       MostPlayedSongRouteBuilder.generate(),
       CityTopRouteBuilder.generate(),
+      CityTopDetailRouteBuilder.generate(),
       DailyTopRouteBuilder.generate(),
       TopPlayListRouteBuilder.generate(),
       TopAlbumRouteBuilder.generate(),
       TopMusicVideoRouteBuilder.generate(),
+      SearchRouteBuilder.generate(),
     ]
   }
 }

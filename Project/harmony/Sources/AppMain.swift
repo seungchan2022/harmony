@@ -13,11 +13,28 @@ struct AppMain {
 extension AppMain: View {
 
   var body: some View {
-    LinkNavigationView(
+    TabLinkNavigationView(
       linkNavigator: viewModel.linkNavigator,
-      item: .init(path: Link.Dashboard.Path.home.rawValue),
-      prefersLargeTitles: true)
+      isHiddenDefaultTabbar: false,
+      tabItemList: [
+        .init(
+          tag: .zero,
+          tabItem: .init(
+            title: "home",
+            image: UIImage(systemName: "house.fill"),
+            tag: .zero),
+          linkItem: .init(path: Link.Dashboard.Path.home.rawValue), prefersLargeTitles: true),
+        .init(
+          tag: 1,
+          tabItem: .init(
+            title: "search",
+            image: UIImage(systemName: "magnifyingglass"),
+            tag: 1),
+          linkItem: .init(path: Link.Dashboard.Path.search.rawValue), prefersLargeTitles: true),
+      ])
       .ignoresSafeArea()
-      .onAppear()
+      .onAppear {
+        viewModel.linkNavigator.moveTab(targetPath: Link.Dashboard.Path.search.rawValue)
+      }
   }
 }

@@ -231,5 +231,8 @@ extension HomePage: View {
       store.send(.getTopAlbumItem)
       store.send(.getTopMusicVideoItem)
     }
+    .onDisappear {
+      store.send(.teardown)
+    }
   }
 }

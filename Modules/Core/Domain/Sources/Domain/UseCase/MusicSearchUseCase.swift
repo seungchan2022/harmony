@@ -13,4 +13,9 @@ public protocol MusicSearchUseCase {
     MusicEntity.Search.TopResult.Response,
     CompositeErrorRepository
   > { get }
+
+  var keyword: (MusicEntity.Search.Keyword.Request) -> AnyPublisher<
+    MusicEntity.Search.Keyword.Response,
+    CompositeErrorRepository
+  > { get }
 }

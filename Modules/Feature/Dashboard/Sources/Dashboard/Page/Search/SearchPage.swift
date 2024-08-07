@@ -18,10 +18,22 @@ extension SearchPage: View {
   var body: some View {
     ScrollView {
       LazyVStack {
+        if !store.query.isEmpty {
+          Divider()
+            .padding(.leading, 12)
+
+          ForEach(store.keywordItemList, id: \.searchTerm) { item in
+            KeywordComponent(viewState: .init(item: item), store: store)
+          }
+        }
+      }
+
+      LazyVStack {
         ForEach(store.topResultItemList, id: \.id) { item in
           TopResultComponent(viewState: .init(item: item), store: store)
         }
       }
+      .padding(.top, 24)
     }
     .searchable(
       text: $store.query,
@@ -38,6 +50,7 @@ extension SearchPage: View {
 //        store.send(.searchArtist(store.query))
 //        store.send(.searchAlbum(store.query))
         store.send(.searchTopResult(store.query))
+        store.send(.searchKeyword(store.query))
       }
     }
     .onDisappear {

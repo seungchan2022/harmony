@@ -91,4 +91,21 @@ extension SearchSideEffect {
       }
     }
   }
+
+  var keyword: (MusicEntity.Search.Keyword.Request) -> Effect<SearchReducer.Action> {
+    { req in
+      .publisher {
+        useCase.musicSearchUseCase
+          .keyword(req)
+          .receive(on: main)
+          .map {
+            MusicEntity.Search.Keyword.Composite(
+              request: req,
+              response: $0)
+          }
+          .mapToResult()
+          .map(SearchReducer.Action.fetchSearchKeywordItem)
+      }
+    }
+  }
 }

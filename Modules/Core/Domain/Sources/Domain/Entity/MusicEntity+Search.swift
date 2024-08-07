@@ -9,6 +9,7 @@ extension MusicEntity {
     public enum Artist { }
     public enum Album { }
     public enum TopResult { }
+    public enum Keyword { }
   }
 }
 
@@ -293,6 +294,50 @@ extension MusicEntity.Search.TopResult {
   }
 }
 
+extension MusicEntity.Search.Keyword {
+  public struct Request: Equatable, Codable, Sendable {
+    public let query: String
+
+    public init(query: String) {
+      self.query = query
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case query = "term"
+    }
+  }
+
+  public struct Response: Equatable, Codable, Sendable {
+    public let itemList: [Item]
+
+    public init(itemList: [Item]) {
+      self.itemList = itemList
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case itemList = "suggestions"
+    }
+  }
+
+  public struct Item: Equatable, Codable, Sendable {
+    public let displayTerm: String // 사용자에게 보여질 단어
+    public let searchTerm: String // 실제 검색에 사용될 단어
+
+    public init(
+      displayTerm: String,
+      searchTerm: String)
+    {
+      self.displayTerm = displayTerm
+      self.searchTerm = searchTerm
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case displayTerm
+      case searchTerm
+    }
+  }
+}
+
 // MARK: - MusicEntity.Search.Song.Composite
 
 extension MusicEntity.Search.Song {
@@ -352,6 +397,20 @@ extension MusicEntity.Search.TopResult {
     public let response: MusicEntity.Search.TopResult.Response
 
     public init(request: MusicEntity.Search.TopResult.Request, response: MusicEntity.Search.TopResult.Response) {
+      self.request = request
+      self.response = response
+    }
+  }
+}
+
+// MARK: - MusicEntity.Search.Keyword.Composite
+
+extension MusicEntity.Search.Keyword {
+  public struct Composite: Equatable, Sendable {
+    public let request: MusicEntity.Search.Keyword.Request
+    public let response: MusicEntity.Search.Keyword.Response
+
+    public init(request: MusicEntity.Search.Keyword.Request, response: MusicEntity.Search.Keyword.Response) {
       self.request = request
       self.response = response
     }

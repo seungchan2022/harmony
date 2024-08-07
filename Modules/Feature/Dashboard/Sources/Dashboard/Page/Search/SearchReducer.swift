@@ -20,23 +20,31 @@ struct SearchReducer {
 
   @ObservableState
   struct State: Equatable, Identifiable {
+
+    // MARK: Lifecycle
+
+    init(id: UUID = UUID()) {
+      self.id = id
+    }
+
+    // MARK: Internal
+
     let id: UUID
 
-    var query = ""
+    var query = "h"
 
     var songItemList: [MusicEntity.Search.Song.Item] = []
     var artistItemList: [MusicEntity.Search.Artist.Item] = []
     var albumItemList: [MusicEntity.Search.Album.Item] = []
     var topResultItemList: [MusicEntity.Search.TopResult.Item] = []
+    var keywordItemList: [MusicEntity.Search.Keyword.Item] = []
 
     var fetchSearchSongItem: FetchState.Data<MusicEntity.Search.Song.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchArtistItem: FetchState.Data<MusicEntity.Search.Artist.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchAlbumItem: FetchState.Data<MusicEntity.Search.Album.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchTopResultItem: FetchState.Data<MusicEntity.Search.TopResult.Composite?> = .init(isLoading: false, value: .none)
+    var fetchSearchKeywordItem: FetchState.Data<MusicEntity.Search.Keyword.Composite?> = .init(isLoading: false, value: .none)
 
-    init(id: UUID = UUID()) {
-      self.id = id
-    }
   }
 
   enum Action: Equatable, BindableAction {
@@ -46,13 +54,15 @@ struct SearchReducer {
     case searchSong(String)
     case searchArtist(String)
     case searchAlbum(String)
-
     case searchTopResult(String)
+
+    case searchKeyword(String)
 
     case fetchSearchSongItem(Result<MusicEntity.Search.Song.Composite, CompositeErrorRepository>)
     case fetchSearchArtistItem(Result<MusicEntity.Search.Artist.Composite, CompositeErrorRepository>)
     case fetchSearchAlbumItem(Result<MusicEntity.Search.Album.Composite, CompositeErrorRepository>)
     case fetchSearchTopResultItem(Result<MusicEntity.Search.TopResult.Composite, CompositeErrorRepository>)
+    case fetchSearchKeywordItem(Result<MusicEntity.Search.Keyword.Composite, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -63,6 +73,7 @@ struct SearchReducer {
     case requestSearchArtist
     case requestSearchAlbum
     case requestSearchTopResult
+    case requestSearchKeyword
   }
 
   var body: some Reducer<State, Action> {
@@ -75,6 +86,7 @@ struct SearchReducer {
           state.artistItemList = []
           state.albumItemList = []
           state.topResultItemList = []
+          state.keywordItemList = []
           return .none
         }
 
@@ -92,6 +104,10 @@ struct SearchReducer {
 
         if state.query != state.fetchSearchTopResultItem.value?.request.query {
           state.topResultItemList = []
+        }
+
+        if state.query != state.fetchSearchKeywordItem.value?.request.query {
+          state.keywordItemList = []
         }
 
         return .none
@@ -143,6 +159,13 @@ struct SearchReducer {
           .topResult(.init(query: query))
           .cancellable(pageID: pageID, id: CancelID.requestSearchTopResult, cancelInFlight: true)
 
+      case .searchKeyword(let query):
+        guard !query.isEmpty else { return .none }
+        state.fetchSearchKeywordItem.isLoading = true
+        return sideEffect
+          .keyword(.init(query: query))
+          .cancellable(pageID: pageID, id: CancelID.requestSearchKeyword, cancelInFlight: true)
+
       case .fetchSearchSongItem(let result):
         state.fetchSearchSongItem.isLoading = false
         switch result {
@@ -192,8 +215,25 @@ struct SearchReducer {
         state.fetchSearchTopResultItem.isLoading = true
         switch result {
         case .success(let item):
-          state.fetchSearchTopResultItem.value = item
-          state.topResultItemList = item.response.itemList
+          if state.query == item.request.query {
+            state.fetchSearchTopResultItem.value = item
+            state.topResultItemList = state.topResultItemList + item.response.itemList
+          }
+
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchSearchKeywordItem(let result):
+        state.fetchSearchKeywordItem.isLoading = true
+        switch result {
+        case .success(let item):
+          if state.query == item.request.query {
+            state.fetchSearchKeywordItem.value = item
+            state.keywordItemList = state.keywordItemList + item.response.itemList
+          }
           return .none
 
         case .failure(let error):

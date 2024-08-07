@@ -96,6 +96,7 @@ extension SearchPage.TopResultComponent: View {
                 Text("노래 • \(artistName)")
                   .font(.subheadline)
                   .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
+                  .lineLimit(1)
               }
             }
 
@@ -139,6 +140,7 @@ extension SearchPage.TopResultComponent: View {
                 Text("앨범 • \(artistName)")
                   .font(.subheadline)
                   .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
+                  .lineLimit(1)
               }
             }
 

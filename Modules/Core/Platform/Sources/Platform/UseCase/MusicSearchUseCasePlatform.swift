@@ -186,4 +186,39 @@ extension MusicSearchUseCasePlatform: MusicSearchUseCase {
     }
   }
 
+  public var keyword: (MusicEntity.Search.Keyword.Request) -> AnyPublisher<
+    MusicEntity.Search.Keyword.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Search.Keyword.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            var request = MusicCatalogSearchSuggestionsRequest(
+              term: req.query)
+
+            request.limit = 3
+
+            let response = try await request.response()
+
+            let itemList = response
+              .suggestions
+              .map {
+                MusicEntity.Search.Keyword.Item(
+                  displayTerm: $0.displayTerm,
+                  searchTerm: $0.searchTerm)
+              }
+
+            let result = MusicEntity.Search.Keyword.Response(itemList: itemList)
+
+            return promise(.success(result))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
 }

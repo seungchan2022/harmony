@@ -205,6 +205,7 @@ extension MusicSearchUseCasePlatform: MusicSearchUseCase {
               .suggestions
               .map {
                 MusicEntity.Search.Keyword.Item(
+                  id: $0.id,
                   displayTerm: $0.displayTerm,
                   searchTerm: $0.searchTerm)
               }

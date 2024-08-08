@@ -232,7 +232,8 @@ struct SearchReducer {
         case .success(let item):
           if state.query == item.request.query {
             state.fetchSearchKeywordItem.value = item
-            state.keywordItemList = state.keywordItemList + item.response.itemList
+            state.keywordItemList = state.keywordItemList.merge(item.response.itemList)
+
           }
           return .none
 
@@ -252,4 +253,15 @@ struct SearchReducer {
   private let pageID: String
   private let sideEffect: SearchSideEffect
 
+}
+
+extension [MusicEntity.Search.Keyword.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+
+    return new
+  }
 }

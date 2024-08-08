@@ -34,4 +34,21 @@ extension CityTopSideEffect {
       }
     }
   }
+
+  var routeToDetail: (MusicEntity.Chart.CityTop.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.cityTopDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }
+
+//
+// extension MusicEntity.Chart.CityTop.Item {
+//  fileprivate func serialized() -> MusicEntity.CityTop.Seoul.Request {
+//    .init(term: self.id)
+//  }
+// }

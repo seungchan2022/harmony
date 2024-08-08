@@ -321,8 +321,8 @@ extension MusicEntity.Search.Keyword {
 
   public struct Item: Equatable, Codable, Sendable {
     public let id: String
-    public let displayTerm: String // 사용자에게 보여질 단어
-    public let searchTerm: String // 실제 검색에 사용될 단어
+    public let displayTerm: String /// 사용자에게 보여질 단어
+    public let searchTerm: String /// 실제 검색에 사용될 단어
 
     public init(
       id: String,

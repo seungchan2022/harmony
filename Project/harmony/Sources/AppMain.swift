@@ -33,8 +33,6 @@ extension AppMain: View {
           linkItem: .init(path: Link.Dashboard.Path.search.rawValue), prefersLargeTitles: true),
       ])
       .ignoresSafeArea()
-      .onAppear {
-        viewModel.linkNavigator.moveTab(targetPath: Link.Dashboard.Path.search.rawValue)
-      }
+      .onAppear { }
   }
 }

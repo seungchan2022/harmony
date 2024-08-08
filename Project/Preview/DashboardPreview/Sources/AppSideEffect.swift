@@ -10,6 +10,6 @@ import Platform
 struct AppSideEffect: DependencyType, DashboardEnvironmentUsable {
   let toastViewModel: ToastViewActionType
   let musicUseCase: MusicUseCase
-  let musicCityTopUseCase: MusicCityTopUseCase
+  let musicCityTopDetailUseCase: MusicCityTopDetailUseCase
   let musicSearchUseCase: MusicSearchUseCase
 }

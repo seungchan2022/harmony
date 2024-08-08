@@ -3,6 +3,8 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
+// MARK: - SearchReducer
+
 @Reducer
 struct SearchReducer {
 
@@ -233,7 +235,6 @@ struct SearchReducer {
           if state.query == item.request.query {
             state.fetchSearchKeywordItem.value = item
             state.keywordItemList = state.keywordItemList.merge(item.response.itemList)
-
           }
           return .none
 

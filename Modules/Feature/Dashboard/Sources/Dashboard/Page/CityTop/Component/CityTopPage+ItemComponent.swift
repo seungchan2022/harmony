@@ -8,6 +8,7 @@ import SwiftUI
 extension CityTopPage {
   struct ItemComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Chart.CityTop.Item) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -20,7 +21,7 @@ extension CityTopPage.ItemComponent { }
 
 extension CityTopPage.ItemComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           RoundedRectangle(cornerRadius: 8)

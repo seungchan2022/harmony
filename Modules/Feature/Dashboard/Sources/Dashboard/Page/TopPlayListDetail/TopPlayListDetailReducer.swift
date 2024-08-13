@@ -4,13 +4,13 @@ import Domain
 import Foundation
 
 @Reducer
-struct CityTopDetailReducer {
+struct TopPlayListDetailReducer {
 
   // MARK: Lifecycle
 
   init(
     pageID: String = UUID().uuidString,
-    sideEffect: CityTopDetailSideEffect)
+    sideEffect: TopPlayListDetailSideEffect)
   {
     self.pageID = pageID
     self.sideEffect = sideEffect
@@ -22,27 +22,28 @@ struct CityTopDetailReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    let item: MusicEntity.Chart.CityTop.Item
+    let item: MusicEntity.Chart.TopPlayList.Item
 
-    var itemList: [MusicEntity.CityTopDetail.Track.Item] = []
+    var itemList: [MusicEntity.TopPlayListDetail.Track.Item] = []
 
-    var fetchItem: FetchState.Data<MusicEntity.CityTopDetail.Track.Response?> = .init(isLoading: false, value: .none)
+    var fetchItem: FetchState.Data<MusicEntity.TopPlayListDetail.Track.Response?> = .init(isLoading: false, value: .none)
 
     init(
       id: UUID = UUID(),
-      item: MusicEntity.Chart.CityTop.Item)
+      item: MusicEntity.Chart.TopPlayList.Item)
     {
       self.id = id
       self.item = item
     }
   }
 
-  enum Action: BindableAction, Equatable {
+  enum Action: Equatable, BindableAction {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem(MusicEntity.Chart.CityTop.Item)
-    case fetchItem(Result<MusicEntity.CityTopDetail.Track.Response, CompositeErrorRepository>)
+    case getItem(MusicEntity.Chart.TopPlayList.Item)
+
+    case fetchItem(Result<MusicEntity.TopPlayListDetail.Track.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -70,7 +71,6 @@ struct CityTopDetailReducer {
           .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
 
       case .fetchItem(let result):
-
         state.fetchItem.isLoading = false
         switch result {
         case .success(let item):
@@ -92,6 +92,6 @@ struct CityTopDetailReducer {
   // MARK: Private
 
   private let pageID: String
-  private let sideEffect: CityTopDetailSideEffect
+  private let sideEffect: TopPlayListDetailSideEffect
 
 }

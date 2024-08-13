@@ -150,6 +150,7 @@ extension HomePage: View {
               ForEach(store.topPlayItemList, id: \.id) { item in
                 TopPlayListComponent(
                   viewState: .init(item: item),
+                  tapAction: { store.send(.routeToTopPlayListDetail($0)) },
                   store: store)
               }
             }

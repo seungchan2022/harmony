@@ -34,4 +34,14 @@ extension TopPlayListSideEffect {
       }
     }
   }
+
+  var routeToDetail: (MusicEntity.Chart.TopPlayList.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.topPlayListDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

@@ -39,6 +39,8 @@ struct TopPlayListReducer {
 
     case fetchItem(Result<MusicEntity.Chart.TopPlayList.Response, CompositeErrorRepository>)
 
+    case routeToDetail(MusicEntity.Chart.TopPlayList.Item)
+
     case throwError(CompositeErrorRepository)
   }
 
@@ -69,12 +71,16 @@ struct TopPlayListReducer {
         switch result {
         case .success(let item):
           state.fetchItem.value = item
-          state.itemList = item.itemList
+          state.itemList = state.itemList + item.itemList
           return .none
 
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
+
+      case .routeToDetail(let item):
+        sideEffect.routeToDetail(item)
+        return .none
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)

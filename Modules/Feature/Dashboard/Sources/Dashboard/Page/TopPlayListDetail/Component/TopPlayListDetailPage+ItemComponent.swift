@@ -3,27 +3,21 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - CityTopDetailPage.ItemComponent
+// MARK: - TopPlayListDetailPage.ItemComponent
 
-extension CityTopDetailPage {
+extension TopPlayListDetailPage {
   struct ItemComponent {
     let viewState: ViewState
-
-    @Bindable var store: StoreOf<CityTopDetailReducer>
 
     @Environment(\.colorScheme) private var colorScheme
   }
 }
 
-extension CityTopDetailPage.ItemComponent {
-  private var ranking: Int {
-    (store.itemList.firstIndex(of: viewState.item) ?? .zero) + 1
-  }
-}
+extension TopPlayListDetailPage.ItemComponent { }
 
-// MARK: - CityTopDetailPage.ItemComponent + View
+// MARK: - TopPlayListDetailPage.ItemComponent + View
 
-extension CityTopDetailPage.ItemComponent: View {
+extension TopPlayListDetailPage.ItemComponent: View {
   var body: some View {
     Button(action: { }) {
       VStack(alignment: .leading) {
@@ -35,14 +29,6 @@ extension CityTopDetailPage.ItemComponent: View {
           }
           .frame(width: 60, height: 60)
           .clipShape(RoundedRectangle(cornerRadius: 8))
-
-          Text("\(ranking)")
-            .font(.title3)
-            .fontWeight(.semibold)
-            .foregroundStyle(
-              colorScheme == .dark
-                ? DesignSystemColor.system(.white).color
-                : DesignSystemColor.system(.black).color)
 
           VStack(alignment: .leading, spacing: 4) {
             Text(viewState.item.title)
@@ -57,7 +43,6 @@ extension CityTopDetailPage.ItemComponent: View {
             Text(viewState.item.artistName)
               .font(.subheadline)
               .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
-              .multilineTextAlignment(.leading)
           }
 
           Spacer()
@@ -79,10 +64,10 @@ extension CityTopDetailPage.ItemComponent: View {
   }
 }
 
-// MARK: - CityTopDetailPage.ItemComponent.ViewState
+// MARK: - TopPlayListDetailPage.ItemComponent.ViewState
 
-extension CityTopDetailPage.ItemComponent {
+extension TopPlayListDetailPage.ItemComponent {
   struct ViewState: Equatable {
-    let item: MusicEntity.CityTopDetail.Track.Item
+    let item: MusicEntity.TopPlayListDetail.Track.Item
   }
 }

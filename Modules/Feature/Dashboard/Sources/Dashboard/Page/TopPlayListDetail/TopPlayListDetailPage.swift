@@ -1,25 +1,23 @@
 import ComposableArchitecture
-import DesignSystem
 import SwiftUI
 
-// MARK: - CityTopDetailPage
+// MARK: - TopPlayListDetailPage
 
-struct CityTopDetailPage {
-  @Bindable var store: StoreOf<CityTopDetailReducer>
+struct TopPlayListDetailPage {
+  @Bindable var store: StoreOf<TopPlayListDetailReducer>
 }
 
-extension CityTopDetailPage { }
+extension TopPlayListDetailPage { }
 
 // MARK: View
 
-extension CityTopDetailPage: View {
+extension TopPlayListDetailPage: View {
   var body: some View {
     ScrollView {
       LazyVStack {
         ForEach(store.itemList, id: \.id) { item in
           ItemComponent(
-            viewState: .init(item: item),
-            store: store)
+            viewState: .init(item: item))
         }
       }
     }

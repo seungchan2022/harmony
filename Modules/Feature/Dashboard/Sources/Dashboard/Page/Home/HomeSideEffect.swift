@@ -152,6 +152,16 @@ extension HomeSideEffect {
     }
   }
 
+  var routeToTopPlayListDetail: (MusicEntity.Chart.TopPlayList.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.topPlayListDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
   var routeToTopAlbum: () -> Void {
     {
       navigator

@@ -8,6 +8,7 @@ import SwiftUI
 extension TopPlayListPage {
   struct ItemComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Chart.TopPlayList.Item) -> Void
 
     @Bindable var store: StoreOf<TopPlayListReducer>
 
@@ -26,7 +27,7 @@ extension TopPlayListPage.ItemComponent {
 
 extension TopPlayListPage.ItemComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           RoundedRectangle(cornerRadius: 8)

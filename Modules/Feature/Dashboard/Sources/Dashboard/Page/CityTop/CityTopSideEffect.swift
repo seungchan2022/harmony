@@ -45,10 +45,3 @@ extension CityTopSideEffect {
     }
   }
 }
-
-//
-// extension MusicEntity.Chart.CityTop.Item {
-//  fileprivate func serialized() -> MusicEntity.CityTop.Seoul.Request {
-//    .init(term: self.id)
-//  }
-// }

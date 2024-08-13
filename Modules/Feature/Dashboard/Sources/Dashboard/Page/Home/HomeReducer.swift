@@ -69,6 +69,7 @@ struct HomeReducer {
 
     case routeToMostPlayedSong
     case routeToCityTop
+    case routeToCityTopDeatil(MusicEntity.Chart.CityTop.Item)
     case routeToDailyTop
     case routeToTopPlayList
     case routeToTopAlbum
@@ -212,6 +213,10 @@ struct HomeReducer {
 
       case .routeToCityTop:
         sideEffect.routeToCityTop()
+        return .none
+
+      case .routeToCityTopDeatil(let item):
+        sideEffect.routeToCityTopDetail(item)
         return .none
 
       case .routeToDailyTop:

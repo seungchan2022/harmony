@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import DesignSystem
 
 // MARK: - CityTopDetailPage
 
@@ -13,11 +14,16 @@ extension CityTopDetailPage { }
 
 extension CityTopDetailPage: View {
   var body: some View {
-    VStack {
-      ForEach(store.itemList, id: \.id) { item in
-        Text(item.title)
+    ScrollView {
+      LazyVStack {
+        ForEach(store.itemList, id: \.id) { item in
+          ItemComponent(
+            viewState: .init(item: item),
+            store: store)
+        }
       }
     }
+    .navigationTitle(store.item.name)
     .onAppear {
       store.send(.getItem(store.item))
     }

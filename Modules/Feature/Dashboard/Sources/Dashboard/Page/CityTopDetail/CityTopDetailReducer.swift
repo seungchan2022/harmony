@@ -22,7 +22,6 @@ struct CityTopDetailReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    ///    let item: MusicEntity.Chart.CityTop.Item = .init(id: "", name: "", curatorName: "", artwork: .init())
     let item: MusicEntity.Chart.CityTop.Item
 
     var itemList: [MusicEntity.CityTopDetail.Track.Item] = []

@@ -20,7 +20,8 @@ extension MusicCityTopDetailUseCasePlatform: MusicCityTopDetailUseCase {
         Task {
           do {
             /// 플레이리스트의 상세 정보를 요청
-            let request = MusicCatalogResourceRequest<Playlist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
+            var request = MusicCatalogResourceRequest<Playlist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
+            request.limit = 25
 
             let response = try await request.response()
 

@@ -114,6 +114,16 @@ extension HomeSideEffect {
     }
   }
 
+  var routeToCityTopDetail: (MusicEntity.Chart.CityTop.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.cityTopDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
   var routeToDailyTop: () -> Void {
     {
       navigator

@@ -15,8 +15,11 @@ extension Link.Dashboard {
     case cityTop
     case cityTopDetail
     case dailyTop
+    case dailyTopDetail
     case topPlayList
+    case topPlayListDetail
     case topAlbum
+    case topAlbumDetail
     case topMusicVideo
     case search
   }

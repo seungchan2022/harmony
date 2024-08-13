@@ -8,6 +8,7 @@ import SwiftUI
 extension DailyTopPage {
   struct ItemComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Chart.DailyTop.Item) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -20,7 +21,7 @@ extension DailyTopPage.ItemComponent { }
 
 extension DailyTopPage.ItemComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           RoundedRectangle(cornerRadius: 8)
@@ -37,10 +38,12 @@ extension DailyTopPage.ItemComponent: View {
               ? DesignSystemColor.system(.white).color
               : DesignSystemColor.system(.black).color)
             .lineLimit(1)
+            .multilineTextAlignment(.leading)
 
         Text(viewState.item.curatorName)
           .font(.subheadline)
           .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
+          .multilineTextAlignment(.leading)
       }
     }
     .padding(.leading, 12)

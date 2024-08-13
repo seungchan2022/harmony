@@ -1,12 +1,13 @@
 import Architecture
 import Combine
+import CombineExt
 import ComposableArchitecture
 import Domain
 import Foundation
 
-// MARK: - DailyTopSideEffect
+// MARK: - DailyTopDetailSideEffect
 
-struct DailyTopSideEffect {
+struct DailyTopDetailSideEffect {
   let useCase: DashboardEnvironmentUsable
   let main: AnySchedulerOf<DispatchQueue>
   let navigator: RootNavigatorType
@@ -22,26 +23,22 @@ struct DailyTopSideEffect {
   }
 }
 
-extension DailyTopSideEffect {
-  var getItem: (MusicEntity.Chart.DailyTop.Request) -> Effect<DailyTopReducer.Action> {
-    { req in
+extension DailyTopDetailSideEffect {
+  var getItem: (MusicEntity.Chart.DailyTop.Item) -> Effect<DailyTopDetailReducer.Action> {
+    { item in
       .publisher {
-        useCase.musicUseCase
-          .dailyTop(req)
+        useCase.musicDailyTopDetailUseCase
+          .track(item.serialized())
           .receive(on: main)
           .mapToResult()
-          .map(DailyTopReducer.Action.fetchItem)
+          .map(DailyTopDetailReducer.Action.fetchItem)
       }
     }
   }
+}
 
-  var routeToDetail: (MusicEntity.Chart.DailyTop.Item) -> Void {
-    { item in
-      navigator.next(
-        linkItem: .init(
-          path: Link.Dashboard.Path.dailyTopDetail.rawValue,
-          items: item),
-        isAnimated: true)
-    }
+extension MusicEntity.Chart.DailyTop.Item {
+  fileprivate func serialized() -> MusicEntity.DailyTopDetail.Track.Request {
+    .init(id: id)
   }
 }

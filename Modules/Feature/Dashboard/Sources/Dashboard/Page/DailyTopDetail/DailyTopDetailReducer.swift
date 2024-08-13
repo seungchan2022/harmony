@@ -4,13 +4,13 @@ import Domain
 import Foundation
 
 @Reducer
-struct DailyTopReducer {
+struct DailyTopDetailReducer {
 
   // MARK: Lifecycle
 
   init(
     pageID: String = UUID().uuidString,
-    sideEffect: DailyTopSideEffect)
+    sideEffect: DailyTopDetailSideEffect)
   {
     self.pageID = pageID
     self.sideEffect = sideEffect
@@ -22,12 +22,18 @@ struct DailyTopReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    var itemList: [MusicEntity.Chart.DailyTop.Item] = []
+    let item: MusicEntity.Chart.DailyTop.Item
 
-    var fetchItem: FetchState.Data<MusicEntity.Chart.DailyTop.Response?> = .init(isLoading: false, value: .none)
+    var itemList: [MusicEntity.DailyTopDetail.Track.Item] = []
 
-    init(id: UUID = UUID()) {
+    var fetchItem: FetchState.Data<MusicEntity.DailyTopDetail.Track.Response?> = .init(isLoading: false, value: .none)
+
+    init(
+      id: UUID = UUID(),
+      item: MusicEntity.Chart.DailyTop.Item)
+    {
       self.id = id
+      self.item = item
     }
   }
 
@@ -35,16 +41,13 @@ struct DailyTopReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem
-
-    case fetchItem(Result<MusicEntity.Chart.DailyTop.Response, CompositeErrorRepository>)
-
-    case routeToDetail(MusicEntity.Chart.DailyTop.Item)
+    case getItem(MusicEntity.Chart.DailyTop.Item)
+    case fetchItem(Result<MusicEntity.DailyTopDetail.Track.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
 
-  enum CancelID: Equatable, CaseIterable {
+  enum CancelID: String, CaseIterable {
     case teardown
     case requestItem
   }
@@ -60,10 +63,10 @@ struct DailyTopReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getItem:
+      case .getItem(let item):
         state.fetchItem.isLoading = true
         return sideEffect
-          .getItem(.init(limit: 200))
+          .getItem(item)
           .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
 
       case .fetchItem(let result):
@@ -71,16 +74,12 @@ struct DailyTopReducer {
         switch result {
         case .success(let item):
           state.fetchItem.value = item
-          state.itemList = item.itemList
+          state.itemList = state.itemList + item.itemList
           return .none
 
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
-
-      case .routeToDetail(let item):
-        sideEffect.routeToDetail(item)
-        return .none
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)
@@ -92,6 +91,6 @@ struct DailyTopReducer {
   // MARK: Private
 
   private let pageID: String
-  private let sideEffect: DailyTopSideEffect
+  private let sideEffect: DailyTopDetailSideEffect
 
 }

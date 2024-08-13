@@ -26,6 +26,7 @@ extension AppContainer {
       toastViewModel: ToastViewModel(),
       musicUseCase: MusicUseCasePlatform(),
       musicCityTopDetailUseCase: MusicCityTopDetailUseCasePlatform(),
+      musicDailyTopDetailUseCase: MusicDailyTopDetailUseCasePlatform(),
       musicSearchUseCase: MusicSearchUseCasePlatform())
 
     return .init(

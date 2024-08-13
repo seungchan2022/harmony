@@ -133,6 +133,16 @@ extension HomeSideEffect {
     }
   }
 
+  var routeToDailyTopDetail: (MusicEntity.Chart.DailyTop.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.dailyTopDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
   var routeToTopPlayList: () -> Void {
     {
       navigator

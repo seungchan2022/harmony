@@ -84,7 +84,7 @@ extension HomePage: View {
               ForEach(store.cityTopItemList, id: \.id) { item in
                 CityTopComponent(
                   viewState: .init(item: item),
-                  tapAction: { store.send(.routeToCityTopDeatil($0))})
+                  tapAction: { store.send(.routeToCityTopDeatil($0)) })
               }
             }
             .padding(.trailing, 16)
@@ -115,7 +115,9 @@ extension HomePage: View {
           ScrollView(.horizontal) {
             LazyHStack {
               ForEach(store.dailyTopItemList, id: \.id) { item in
-                DailyTopComponent(viewState: .init(item: item))
+                DailyTopComponent(
+                  viewState: .init(item: item),
+                  tapAction: { store.send(.routeToDailyTopDetail($0)) })
               }
             }
             .padding(.trailing, 16)

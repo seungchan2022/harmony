@@ -28,6 +28,7 @@ extension AppContainer {
       musicCityTopDetailUseCase: MusicCityTopDetailUseCasePlatform(),
       musicDailyTopDetailUseCase: MusicDailyTopDetailUseCasePlatform(),
       musicTopPlayListDetailUseCase: MusicTopPlayListDetailUseCasePlatform(),
+      musicAlbumDetailUseCase: MusicAlbumDetailUseCasePlatform(),
       musicSearchUseCase: MusicSearchUseCasePlatform())
 
     return .init(

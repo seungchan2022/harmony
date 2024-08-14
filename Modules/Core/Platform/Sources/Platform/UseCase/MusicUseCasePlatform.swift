@@ -105,10 +105,8 @@ extension MusicUseCasePlatform: MusicUseCase {
 
               request.limit = req.limit
               request.offset = .zero
-//              print(request)
 
               let response = try await request.response()
-//              print(response.debugDescription)
 
               let itemList = response
                 .playlistCharts
@@ -303,6 +301,8 @@ extension MusicUseCasePlatform: MusicUseCase {
                     id: $0.id.rawValue,
                     title: $0.title,
                     artistName: $0.artistName,
+                    releaseDate: $0.releaseDate,
+                    genreItemList: $0.genreNames,
                     artwork: .init(url: $0.artwork?.url(width: 180, height: 180)))
                 }
 

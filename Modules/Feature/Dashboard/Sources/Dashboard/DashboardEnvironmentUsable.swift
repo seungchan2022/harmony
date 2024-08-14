@@ -7,5 +7,6 @@ public protocol DashboardEnvironmentUsable {
   var musicCityTopDetailUseCase: MusicCityTopDetailUseCase { get }
   var musicDailyTopDetailUseCase: MusicDailyTopDetailUseCase { get }
   var musicTopPlayListDetailUseCase: MusicTopPlayListDetailUseCase { get }
+  var musicAlbumDetailUseCase: MusicAlbumDetailUseCase { get }
   var musicSearchUseCase: MusicSearchUseCase { get }
 }

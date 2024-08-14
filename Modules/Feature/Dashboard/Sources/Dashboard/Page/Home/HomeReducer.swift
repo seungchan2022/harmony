@@ -75,6 +75,7 @@ struct HomeReducer {
     case routeToTopPlayList
     case routeToTopPlayListDetail(MusicEntity.Chart.TopPlayList.Item)
     case routeToTopAlbum
+    case routeToTopAlbumDetail(MusicEntity.Chart.TopAlbum.Item)
     case routeToTopMusicVideo
 
     case throwError(CompositeErrorRepository)
@@ -239,6 +240,10 @@ struct HomeReducer {
 
       case .routeToTopAlbum:
         sideEffect.routeToTopAlbum()
+        return .none
+
+      case .routeToTopAlbumDetail(let item):
+        sideEffect.routeToTopAlbumDetail(item)
         return .none
 
       case .routeToTopMusicVideo:

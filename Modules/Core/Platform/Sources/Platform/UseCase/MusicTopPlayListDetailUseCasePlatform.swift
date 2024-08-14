@@ -19,7 +19,7 @@ extension MusicTopPlayListDetailUseCasePlatform: MusicTopPlayListDetailUseCase {
       Future<MusicEntity.TopPlayListDetail.Track.Response, CompositeErrorRepository> { promise in
         Task {
           do {
-            var request = MusicCatalogResourceRequest<Playlist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
+            let request = MusicCatalogResourceRequest<Playlist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
 
             let response = try await request.response()
 

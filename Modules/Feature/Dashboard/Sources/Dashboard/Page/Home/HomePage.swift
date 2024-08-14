@@ -184,6 +184,7 @@ extension HomePage: View {
               ForEach(store.topAlbumItemList, id: \.id) { item in
                 TopAlbumComponent(
                   viewState: .init(item: item),
+                  tapAction: { store.send(.routeToTopAlbumDetail($0)) },
                   store: store)
               }
             }

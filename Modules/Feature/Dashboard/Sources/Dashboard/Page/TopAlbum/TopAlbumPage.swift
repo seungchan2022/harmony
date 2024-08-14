@@ -23,6 +23,7 @@ extension TopAlbumPage: View {
         ForEach(store.itemList, id: \.id) { item in
           ItemComponent(
             viewState: .init(item: item),
+            tapAction: { store.send(.routeToDetail($0)) },
             store: store)
         }
       }

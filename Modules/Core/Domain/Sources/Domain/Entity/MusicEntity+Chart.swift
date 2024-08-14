@@ -324,11 +324,15 @@ extension MusicEntity.Chart.TopAlbum {
       id: String,
       title: String,
       artistName: String,
+      releaseDate: Date?,
+      genreItemList: [String],
       artwork: ArtworkItem)
     {
       self.id = id
       self.title = title
       self.artistName = artistName
+      self.releaseDate = releaseDate
+      self.genreItemList = genreItemList
       self.artwork = artwork
     }
 
@@ -337,6 +341,8 @@ extension MusicEntity.Chart.TopAlbum {
     public let id: String
     public let title: String
     public let artistName: String
+    public let releaseDate: Date?
+    public let genreItemList: [String]
     public let artwork: ArtworkItem
 
     // MARK: Private
@@ -345,6 +351,8 @@ extension MusicEntity.Chart.TopAlbum {
       case id
       case title
       case artistName
+      case releaseDate
+      case genreItemList = "genreNames"
       case artwork
     }
   }
@@ -358,7 +366,6 @@ extension MusicEntity.Chart.TopAlbum {
       self.url = url
     }
   }
-
 }
 
 extension MusicEntity.Chart.TopMusicVideo {

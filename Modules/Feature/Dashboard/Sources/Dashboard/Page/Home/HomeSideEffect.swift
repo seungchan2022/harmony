@@ -171,6 +171,17 @@ extension HomeSideEffect {
     }
   }
 
+  var routeToTopAlbumDetail: (MusicEntity.Chart.TopAlbum.Item) -> Void {
+    { item in
+      navigator
+        .next(
+          linkItem: .init(
+            path: Link.Dashboard.Path.topAlbumDetail.rawValue,
+            items: item),
+          isAnimated: true)
+    }
+  }
+
   var routeToTopMusicVideo: () -> Void {
     {
       navigator

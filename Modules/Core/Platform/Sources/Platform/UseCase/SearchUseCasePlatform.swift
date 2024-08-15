@@ -2,15 +2,15 @@ import Combine
 import Domain
 import MusicKit
 
-// MARK: - MusicSearchUseCasePlatform
+// MARK: - SearchUseCasePlatform
 
-public struct MusicSearchUseCasePlatform {
+public struct SearchUseCasePlatform {
   public init() { }
 }
 
-// MARK: MusicSearchUseCase
+// MARK: SearchUseCase
 
-extension MusicSearchUseCasePlatform: MusicSearchUseCase {
+extension SearchUseCasePlatform: SearchUseCase {
   public var song: (MusicEntity.Search.Song.Request) -> AnyPublisher<MusicEntity.Search.Song.Response, CompositeErrorRepository> {
     { req in
       Future<MusicEntity.Search.Song.Response, CompositeErrorRepository> { promise in

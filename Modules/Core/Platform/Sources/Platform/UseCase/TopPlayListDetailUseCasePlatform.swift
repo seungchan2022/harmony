@@ -2,15 +2,15 @@ import Combine
 import Domain
 import MusicKit
 
-// MARK: - MusicTopPlayListDetailUseCasePlatform
+// MARK: - TopPlayListDetailUseCasePlatform
 
-public struct MusicTopPlayListDetailUseCasePlatform {
+public struct TopPlayListDetailUseCasePlatform {
   public init() { }
 }
 
-// MARK: MusicTopPlayListDetailUseCase
+// MARK: TopPlayListDetailUseCase
 
-extension MusicTopPlayListDetailUseCasePlatform: MusicTopPlayListDetailUseCase {
+extension TopPlayListDetailUseCasePlatform: TopPlayListDetailUseCase {
   public var track: (MusicEntity.TopPlayListDetail.Track.Request) -> AnyPublisher<
     MusicEntity.TopPlayListDetail.Track.Response,
     CompositeErrorRepository

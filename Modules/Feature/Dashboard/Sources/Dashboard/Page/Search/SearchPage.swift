@@ -9,7 +9,6 @@ struct SearchPage {
   @Bindable var store: StoreOf<SearchReducer>
   @State var throttleEvent: ThrottleEvent = .init(value: "", delaySeconds: 1.5)
 
-  
 }
 
 extension SearchPage { }

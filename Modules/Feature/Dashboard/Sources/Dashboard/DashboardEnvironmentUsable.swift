@@ -4,9 +4,9 @@ import Domain
 public protocol DashboardEnvironmentUsable {
   var toastViewModel: ToastViewActionType { get }
   var musicUseCase: MusicUseCase { get }
-  var musicCityTopDetailUseCase: MusicCityTopDetailUseCase { get }
-  var musicDailyTopDetailUseCase: MusicDailyTopDetailUseCase { get }
-  var musicTopPlayListDetailUseCase: MusicTopPlayListDetailUseCase { get }
-  var musicAlbumDetailUseCase: MusicAlbumDetailUseCase { get }
-  var musicSearchUseCase: MusicSearchUseCase { get }
+  var cityTopDetailUseCase: CityTopDetailUseCase { get }
+  var dailyTopDetailUseCase: DailyTopDetailUseCase { get }
+  var topPlayListDetailUseCase: TopPlayListDetailUseCase { get }
+  var albumDetailUseCase: AlbumDetailUseCase { get }
+  var searchUseCase: SearchUseCase { get }
 }

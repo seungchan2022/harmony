@@ -2,15 +2,15 @@ import Combine
 import Domain
 import MusicKit
 
-// MARK: - MusicDailyTopDetailUseCasePlatform
+// MARK: - DailyTopDetailUseCasePlatform
 
-public struct MusicDailyTopDetailUseCasePlatform {
+public struct DailyTopDetailUseCasePlatform {
   public init() { }
 }
 
-// MARK: MusicDailyTopDetailUseCase
+// MARK: DailyTopDetailUseCase
 
-extension MusicDailyTopDetailUseCasePlatform: MusicDailyTopDetailUseCase {
+extension DailyTopDetailUseCasePlatform: DailyTopDetailUseCase {
   public var track: (MusicEntity.DailyTopDetail.Track.Request) -> AnyPublisher<
     MusicEntity.DailyTopDetail.Track.Response,
     CompositeErrorRepository

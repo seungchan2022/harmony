@@ -26,7 +26,7 @@ extension TopAlbumDetailSideEffect {
   var getItem: (MusicEntity.Chart.TopAlbum.Item) -> Effect<TopAlbumDetailReducer.Action> {
     { item in
       .publisher {
-        useCase.musicAlbumDetailUseCase
+        useCase.albumDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()

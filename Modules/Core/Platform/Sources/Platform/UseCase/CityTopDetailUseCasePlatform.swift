@@ -2,15 +2,15 @@ import Combine
 import Domain
 import MusicKit
 
-// MARK: - MusicCityTopDetailUseCasePlatform
+// MARK: - CityTopDetailUseCasePlatform
 
-public struct MusicCityTopDetailUseCasePlatform {
+public struct CityTopDetailUseCasePlatform {
   public init() { }
 }
 
-// MARK: MusicCityTopDetailUseCase
+// MARK: CityTopDetailUseCase
 
-extension MusicCityTopDetailUseCasePlatform: MusicCityTopDetailUseCase {
+extension CityTopDetailUseCasePlatform: CityTopDetailUseCase {
   public var track: (MusicEntity.CityTopDetail.Track.Request) -> AnyPublisher<
     MusicEntity.CityTopDetail.Track.Response,
     CompositeErrorRepository

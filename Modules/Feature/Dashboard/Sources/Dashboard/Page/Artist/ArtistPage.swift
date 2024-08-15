@@ -1,13 +1,15 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
+
+// MARK: - ArtistPage
 
 struct ArtistPage {
   @Bindable var store: StoreOf<ArtistReducer>
 }
 
-extension ArtistPage {
+extension ArtistPage { }
 
-}
+// MARK: View
 
 extension ArtistPage: View {
   var body: some View {

@@ -27,7 +27,7 @@ extension SearchSideEffect {
   var song: (MusicEntity.Search.Song.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {
-        useCase.musicSearchUseCase
+        useCase.searchUseCase
           .song(req)
           .receive(on: main)
           .map {
@@ -44,7 +44,7 @@ extension SearchSideEffect {
   var artist: (MusicEntity.Search.Artist.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {
-        useCase.musicSearchUseCase
+        useCase.searchUseCase
           .artist(req)
           .receive(on: main)
           .map {
@@ -61,7 +61,7 @@ extension SearchSideEffect {
   var album: (MusicEntity.Search.Album.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {
-        useCase.musicSearchUseCase
+        useCase.searchUseCase
           .album(req)
           .receive(on: main)
           .map {
@@ -78,7 +78,7 @@ extension SearchSideEffect {
   var topResult: (MusicEntity.Search.TopResult.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {
-        useCase.musicSearchUseCase
+        useCase.searchUseCase
           .topResult(req)
           .receive(on: main)
           .map {
@@ -95,7 +95,7 @@ extension SearchSideEffect {
   var keyword: (MusicEntity.Search.Keyword.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {
-        useCase.musicSearchUseCase
+        useCase.searchUseCase
           .keyword(req)
           .receive(on: main)
           .map {

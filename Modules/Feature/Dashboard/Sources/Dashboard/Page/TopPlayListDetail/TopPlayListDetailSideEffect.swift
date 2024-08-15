@@ -26,7 +26,7 @@ extension TopPlayListDetailSideEffect {
   var getItem: (MusicEntity.Chart.TopPlayList.Item) -> Effect<TopPlayListDetailReducer.Action> {
     { item in
       .publisher {
-        useCase.musicTopPlayListDetailUseCase
+        useCase.topPlayListDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()

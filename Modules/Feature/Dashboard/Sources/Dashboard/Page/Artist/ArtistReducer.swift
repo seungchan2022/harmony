@@ -22,7 +22,6 @@ struct ArtistReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-
     init(id: UUID = UUID()) {
       self.id = id
     }
@@ -42,7 +41,7 @@ struct ArtistReducer {
 
   var body: some Reducer<State, Action> {
     BindingReducer()
-    Reduce { state, action in
+    Reduce { _, action in
       switch action {
       case .binding:
         return .none

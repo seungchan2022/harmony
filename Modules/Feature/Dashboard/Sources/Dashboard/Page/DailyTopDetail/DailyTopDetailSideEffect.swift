@@ -27,7 +27,7 @@ extension DailyTopDetailSideEffect {
   var getItem: (MusicEntity.Chart.DailyTop.Item) -> Effect<DailyTopDetailReducer.Action> {
     { item in
       .publisher {
-        useCase.musicDailyTopDetailUseCase
+        useCase.dailyTopDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()

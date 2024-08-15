@@ -1,6 +1,6 @@
 import Combine
 
-public protocol MusicSearchUseCase {
+public protocol SearchUseCase {
   var song: (MusicEntity.Search.Song.Request) -> AnyPublisher<MusicEntity.Search.Song.Response, CompositeErrorRepository> { get }
 
   var artist: (MusicEntity.Search.Artist.Request)

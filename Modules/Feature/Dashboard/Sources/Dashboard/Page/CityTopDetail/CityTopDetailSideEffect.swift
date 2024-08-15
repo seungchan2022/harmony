@@ -26,7 +26,7 @@ extension CityTopDetailSideEffect {
   var getItem: (MusicEntity.Chart.CityTop.Item) -> Effect<CityTopDetailReducer.Action> {
     { item in
       .publisher {
-        useCase.musicCityTopDetailUseCase
+        useCase.cityTopDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()

@@ -1,9 +1,11 @@
 import Architecture
-import Domain
-import ComposableArchitecture
 import Combine
 import CombineExt
+import ComposableArchitecture
+import Domain
 import Foundation
+
+// MARK: - ArtistSideEffect
 
 struct ArtistSideEffect {
   let useCase: DashboardEnvironmentUsable

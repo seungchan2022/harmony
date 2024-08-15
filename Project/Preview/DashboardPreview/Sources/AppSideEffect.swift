@@ -10,9 +10,9 @@ import Platform
 struct AppSideEffect: DependencyType, DashboardEnvironmentUsable {
   let toastViewModel: ToastViewActionType
   let musicUseCase: MusicUseCase
-  let musicCityTopDetailUseCase: MusicCityTopDetailUseCase
-  let musicDailyTopDetailUseCase: MusicDailyTopDetailUseCase
-  let musicTopPlayListDetailUseCase: MusicTopPlayListDetailUseCase
-  let musicAlbumDetailUseCase: MusicAlbumDetailUseCase
-  let musicSearchUseCase: MusicSearchUseCase
+  let cityTopDetailUseCase: CityTopDetailUseCase
+  let dailyTopDetailUseCase: DailyTopDetailUseCase
+  let topPlayListDetailUseCase: TopPlayListDetailUseCase
+  let albumDetailUseCase: AlbumDetailUseCase
+  let searchUseCase: SearchUseCase
 }

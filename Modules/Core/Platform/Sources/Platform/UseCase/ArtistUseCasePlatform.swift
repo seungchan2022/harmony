@@ -88,4 +88,43 @@ extension ArtistUseCasePlatform: ArtistUseCase {
       .eraseToAnyPublisher()
     }
   }
+
+  public var fullAlbum: (MusicEntity.Artist.FullAlbum.Request) -> AnyPublisher<
+    MusicEntity.Artist.FullAlbum.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Artist.FullAlbum.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            let request = MusicCatalogResourceRequest<Artist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
+
+            let response = try await request.response()
+
+            guard let artist = response.items.first else { return }
+
+            let artistWithFullAlbums = try await artist.with([.fullAlbums])
+
+            let fullAlbumList = artistWithFullAlbums.fullAlbums ?? []
+
+            let itemList = fullAlbumList
+              .map {
+                MusicEntity.Artist.FullAlbum.Item(
+                  id: $0.id.rawValue,
+                  title: $0.title,
+                  releaseDate: $0.releaseDate ?? .now,
+                  artwork: .init(url: $0.artwork?.url(width: 320, height: 320)))
+              }
+
+            let result = MusicEntity.Artist.FullAlbum.Response(title: fullAlbumList.title ?? "", itemList: itemList)
+            return promise(.success(result))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
 }

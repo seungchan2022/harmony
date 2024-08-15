@@ -57,6 +57,7 @@ extension ArtistPage: View {
           .scrollIndicators(.hidden)
           .scrollTargetBehavior(.viewAligned)
         }
+
         if !store.essentialAlbumItemList.isEmpty {
           VStack {
             HStack {
@@ -89,11 +90,41 @@ extension ArtistPage: View {
             .scrollTargetBehavior(.viewAligned)
           }
         }
+
+        if !store.fulllAlbumItemList.isEmpty {
+          VStack {
+            HStack {
+              if let title = store.fetchFullAlbumItem.value?.title {
+                Text(title)
+                  .font(.title)
+                  .fontWeight(.semibold)
+                  .foregroundStyle(
+                    colorScheme == .dark
+                      ? DesignSystemColor.system(.white).color
+                      : DesignSystemColor.system(.black).color)
+
+                Spacer()
+              }
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.fulllAlbumItemList, id: \.id) { item in
+                  FullAlbumComponent(viewState: .init(item: item))
+                }
+              }
+              .padding(.horizontal, 16)
+            }
+            .scrollIndicators(.hidden)
+          }
+        }
       }
     }
     .onAppear {
       store.send(.getTopSongItem(store.item))
       store.send(.getEssentialAlbumItem(store.item))
+      store.send(.getFullAlbumItem(store.item))
     }
   }
 }

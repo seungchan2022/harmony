@@ -10,4 +10,9 @@ public protocol ArtistUseCase {
     MusicEntity.Artist.EssentialAlbum.Response,
     CompositeErrorRepository
   > { get }
+
+  var fullAlbum: (MusicEntity.Artist.FullAlbum.Request) -> AnyPublisher<
+    MusicEntity.Artist.FullAlbum.Response,
+    CompositeErrorRepository
+  > { get }
 }

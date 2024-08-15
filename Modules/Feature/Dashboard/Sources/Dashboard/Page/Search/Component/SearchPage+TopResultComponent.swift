@@ -8,6 +8,7 @@ import SwiftUI
 extension SearchPage {
   struct TopResultComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Search.TopResult.Item) -> Void
 
     @Bindable var store: StoreOf<SearchReducer>
     @Environment(\.colorScheme) private var colorScheme
@@ -22,7 +23,7 @@ extension SearchPage.TopResultComponent: View {
   var body: some View {
     switch viewState.item.itemType {
     case .artist:
-      Button(action: { }) {
+      Button(action: { tapAction(viewState.item) }) {
         VStack(alignment: .leading) {
           HStack(spacing: 12) {
             RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {

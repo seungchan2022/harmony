@@ -22,6 +22,7 @@ extension DashboardRouteBuilderGroup {
       TopAlbumDetailRouteBuilder.generate(),
       TopMusicVideoRouteBuilder.generate(),
       SearchRouteBuilder.generate(),
+      ArtistRouteBuilder.generate(),
     ]
   }
 }

@@ -33,7 +33,7 @@ struct SearchReducer {
 
     let id: UUID
 
-    var query = "h"
+    var query = "g"
 
     var songItemList: [MusicEntity.Search.Song.Item] = []
     var artistItemList: [MusicEntity.Search.Artist.Item] = []
@@ -65,6 +65,8 @@ struct SearchReducer {
     case fetchSearchAlbumItem(Result<MusicEntity.Search.Album.Composite, CompositeErrorRepository>)
     case fetchSearchTopResultItem(Result<MusicEntity.Search.TopResult.Composite, CompositeErrorRepository>)
     case fetchSearchKeywordItem(Result<MusicEntity.Search.Keyword.Composite, CompositeErrorRepository>)
+
+    case routeToArtist(MusicEntity.Search.TopResult.Item)
 
     case throwError(CompositeErrorRepository)
   }
@@ -241,6 +243,10 @@ struct SearchReducer {
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
+
+      case .routeToArtist(let item):
+        sideEffect.routeToArtist(item)
+        return .none
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)

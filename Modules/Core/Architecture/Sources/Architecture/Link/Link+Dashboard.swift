@@ -22,5 +22,6 @@ extension Link.Dashboard {
     case topAlbumDetail
     case topMusicVideo
     case search
+    case artist
   }
 }

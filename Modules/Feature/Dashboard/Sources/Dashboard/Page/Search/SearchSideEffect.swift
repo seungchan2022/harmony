@@ -108,4 +108,14 @@ extension SearchSideEffect {
       }
     }
   }
+
+  var routeToArtist: (MusicEntity.Search.TopResult.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.artist.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

@@ -8,6 +8,8 @@ import SwiftUI
 struct SearchPage {
   @Bindable var store: StoreOf<SearchReducer>
   @State var throttleEvent: ThrottleEvent = .init(value: "", delaySeconds: 1.5)
+
+  
 }
 
 extension SearchPage { }
@@ -30,7 +32,10 @@ extension SearchPage: View {
 
       LazyVStack {
         ForEach(store.topResultItemList, id: \.id) { item in
-          TopResultComponent(viewState: .init(item: item), store: store)
+          TopResultComponent(
+            viewState: .init(item: item),
+            tapAction: { store.send(.routeToArtist($0)) },
+            store: store)
         }
       }
       .padding(.top, 24)
@@ -47,7 +52,7 @@ extension SearchPage: View {
     .onAppear {
       throttleEvent.apply { _ in
 //        store.send(.searchSong(store.query))
-//        store.send(.searchArtist(store.query))
+        store.send(.searchArtist(store.query))
 //        store.send(.searchAlbum(store.query))
         store.send(.searchTopResult(store.query))
         store.send(.searchKeyword(store.query))

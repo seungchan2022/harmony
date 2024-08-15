@@ -29,7 +29,8 @@ extension AppContainer {
       dailyTopDetailUseCase: DailyTopDetailUseCasePlatform(),
       topPlayListDetailUseCase: TopPlayListDetailUseCasePlatform(),
       albumDetailUseCase: AlbumDetailUseCasePlatform(),
-      searchUseCase: SearchUseCasePlatform())
+      searchUseCase: SearchUseCasePlatform(),
+      artistUseCase: ArtistUseCasePlatform())
 
     return .init(
       dependency: sideEffect,

@@ -23,4 +23,22 @@ struct ArtistSideEffect {
   }
 }
 
-extension ArtistSideEffect { }
+extension ArtistSideEffect {
+  var getItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+    { item in
+      .publisher {
+        useCase.artistUseCase
+          .topSong(item.serialized())
+          .receive(on: main)
+          .mapToResult()
+          .map(ArtistReducer.Action.fetchTopSongItem)
+      }
+    }
+  }
+}
+
+extension MusicEntity.Search.TopResult.Item {
+  fileprivate func serialized() -> MusicEntity.Artist.TopSong.Request {
+    .init(id: id)
+  }
+}

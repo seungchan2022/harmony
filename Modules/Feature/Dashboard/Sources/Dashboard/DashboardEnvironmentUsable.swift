@@ -9,4 +9,5 @@ public protocol DashboardEnvironmentUsable {
   var topPlayListDetailUseCase: TopPlayListDetailUseCase { get }
   var albumDetailUseCase: AlbumDetailUseCase { get }
   var searchUseCase: SearchUseCase { get }
+  var artistUseCase: ArtistUseCase { get }
 }

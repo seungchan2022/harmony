@@ -24,7 +24,12 @@ struct ArtistReducer {
     let item: MusicEntity.Search.TopResult.Item
 
     var topSongItemList: [MusicEntity.Artist.TopSong.Item] = []
+    var essentialAlbumItemList: [MusicEntity.Artist.EssentialAlbum.Item] = []
+
     var fetchTopSongItem: FetchState.Data<MusicEntity.Artist.TopSong.Response?> = .init(isLoading: false, value: .none)
+    var fetchEssentialAlbumItem: FetchState.Data<MusicEntity.Artist.EssentialAlbum.Response?> = .init(
+      isLoading: false,
+      value: .none)
 
     init(
       id: UUID = UUID(),
@@ -39,16 +44,19 @@ struct ArtistReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem(MusicEntity.Search.TopResult.Item)
+    case getTopSongItem(MusicEntity.Search.TopResult.Item)
+    case getEssentialAlbumItem(MusicEntity.Search.TopResult.Item)
 
     case fetchTopSongItem(Result<MusicEntity.Artist.TopSong.Response, CompositeErrorRepository>)
+    case fetchEssentialAlbumItem(Result<MusicEntity.Artist.EssentialAlbum.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
 
   enum CancelID: Equatable, CaseIterable {
     case teardown
-    case requestItem
+    case requestTopSongItem
+    case requestEssentialAlbumItem
   }
 
   var body: some Reducer<State, Action> {
@@ -62,11 +70,17 @@ struct ArtistReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getItem(let item):
+      case .getTopSongItem(let item):
         state.fetchTopSongItem.isLoading = true
         return sideEffect
-          .getItem(item)
-          .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
+          .getTopSongItem(item)
+          .cancellable(pageID: pageID, id: CancelID.requestTopSongItem, cancelInFlight: true)
+
+      case .getEssentialAlbumItem(let item):
+        state.fetchEssentialAlbumItem.isLoading = true
+        return sideEffect
+          .getEssentialAlbumItem(item)
+          .cancellable(pageID: pageID, id: CancelID.requestEssentialAlbumItem, cancelInFlight: true)
 
       case .fetchTopSongItem(let result):
         state.fetchTopSongItem.isLoading = false
@@ -74,6 +88,18 @@ struct ArtistReducer {
         case .success(let item):
           state.fetchTopSongItem.value = item
           state.topSongItemList = state.topSongItemList + item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchEssentialAlbumItem(let result):
+        state.fetchEssentialAlbumItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchEssentialAlbumItem.value = item
+          state.essentialAlbumItemList = state.essentialAlbumItemList + item.itemList
           return .none
 
         case .failure(let error):

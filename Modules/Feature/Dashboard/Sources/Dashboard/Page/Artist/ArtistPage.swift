@@ -21,7 +21,7 @@ extension ArtistPage {
 extension ArtistPage: View {
   var body: some View {
     ScrollView {
-      VStack(spacing: 32) {
+      VStack(spacing: 40) {
         VStack {
           Button(action: { }) {
             HStack {
@@ -57,12 +57,43 @@ extension ArtistPage: View {
           .scrollIndicators(.hidden)
           .scrollTargetBehavior(.viewAligned)
         }
+        if !store.essentialAlbumItemList.isEmpty {
+          VStack {
+            HStack {
+              if let title = store.fetchEssentialAlbumItem.value?.title {
+                Text(title)
+                  .font(.title)
+                  .fontWeight(.semibold)
+                  .foregroundStyle(
+                    colorScheme == .dark
+                      ? DesignSystemColor.system(.white).color
+                      : DesignSystemColor.system(.black).color)
 
-        VStack { }
+                Spacer()
+              }
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.essentialAlbumItemList, id: \.id) { item in
+                  EssentialAlbumComponent(
+                    viewState: .init(item: item),
+                    tapAction: { })
+                }
+              }
+              .scrollTargetLayout()
+              .padding(.horizontal, 32)
+            }
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(.viewAligned)
+          }
+        }
       }
     }
     .onAppear {
-      store.send(.getItem(store.item))
+      store.send(.getTopSongItem(store.item))
+      store.send(.getEssentialAlbumItem(store.item))
     }
   }
 }

@@ -8,6 +8,7 @@ extension MusicEntity {
     public enum EssentialAlbum { }
     public enum FullAlbum { }
     public enum MusicVideo { }
+    public enum PlayList { }
   }
 }
 
@@ -304,4 +305,73 @@ extension MusicEntity.Artist.MusicVideo {
     }
   }
 
+}
+
+extension MusicEntity.Artist.PlayList {
+  public struct Request: Equatable, Sendable, Codable {
+    public let id: String
+
+    public init(id: String) {
+      self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case id
+    }
+  }
+
+  public struct Response: Equatable, Sendable, Codable {
+    public let itemList: [Item]
+
+    public init(itemList: [Item]) {
+      self.itemList = itemList
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case itemList = "items"
+    }
+  }
+
+  public struct Item: Equatable, Sendable, Codable {
+
+    // MARK: Lifecycle
+
+    public init(
+      id: String,
+      name: String,
+      curatorName: String,
+      artwork: ArtworkItem)
+    {
+      self.id = id
+      self.name = name
+      self.curatorName = curatorName
+      self.artwork = artwork
+    }
+
+    // MARK: Public
+
+    public let id: String
+    public let name: String
+    public let curatorName: String
+    public let artwork: ArtworkItem
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+      case id
+      case name
+      case curatorName
+      case artwork
+    }
+  }
+
+  public struct ArtworkItem: Equatable, Codable, Sendable {
+    public let url: URL?
+
+    public init(
+      url: URL? = .none)
+    {
+      self.url = url
+    }
+  }
 }

@@ -146,6 +146,33 @@ extension ArtistPage: View {
             .scrollIndicators(.hidden)
           }
         }
+
+        if !store.playItemList.isEmpty {
+          VStack {
+            HStack {
+              Text("아티스트 및 플레이리스트")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Spacer()
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.playItemList, id: \.id) { item in
+                  PlayListComponent(viewState: .init(item: item))
+                }
+              }
+              .padding(.horizontal, 16)
+            }
+            .scrollIndicators(.hidden)
+          }
+        }
       }
     }
     .onAppear {
@@ -153,6 +180,7 @@ extension ArtistPage: View {
       store.send(.getEssentialAlbumItem(store.item))
       store.send(.getFullAlbumItem(store.item))
       store.send(.getMusicVideoItem(store.item))
+      store.send((.getPlayItem(store.item)))
     }
   }
 }

@@ -1,27 +1,24 @@
-import ComposableArchitecture
 import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - CityTopPage.ItemComponent
+// MARK: - ArtistPage.PlayListComponent
 
-extension CityTopPage {
-  struct ItemComponent {
+extension ArtistPage {
+  struct PlayListComponent {
     let viewState: ViewState
-    let tapAction: (MusicEntity.Chart.CityTop.Item) -> Void
 
-    @Environment(\.colorScheme) private var colorScheme
-
+    @Environment(\.colorScheme) var colorScheme
   }
 }
 
-extension CityTopPage.ItemComponent { }
+extension ArtistPage.PlayListComponent { }
 
-// MARK: - CityTopPage.ItemComponent + View
+// MARK: - ArtistPage.PlayListComponent + View
 
-extension CityTopPage.ItemComponent: View {
+extension ArtistPage.PlayListComponent: View {
   var body: some View {
-    Button(action: { tapAction(viewState.item) }) {
+    Button(action: { }) {
       VStack(alignment: .leading, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           RoundedRectangle(cornerRadius: 8)
@@ -32,26 +29,27 @@ extension CityTopPage.ItemComponent: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
 
         Text(viewState.item.name)
-          .font(.body)
+          .font(.footnote)
           .foregroundStyle(
             colorScheme == .dark
               ? DesignSystemColor.system(.white).color
               : DesignSystemColor.system(.black).color)
+            .multilineTextAlignment(.leading)
             .lineLimit(1)
 
-        Text(viewState.item.curatorName ?? "")
-          .font(.subheadline)
+        Text(viewState.item.curatorName)
+          .font(.footnote)
           .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
+          .lineLimit(1)
       }
     }
   }
-
 }
 
-// MARK: - CityTopPage.ItemComponent.ViewState
+// MARK: - ArtistPage.PlayListComponent.ViewState
 
-extension CityTopPage.ItemComponent {
+extension ArtistPage.PlayListComponent {
   struct ViewState: Equatable {
-    let item: MusicEntity.Chart.CityTop.Item
+    let item: MusicEntity.Artist.PlayList.Item
   }
 }

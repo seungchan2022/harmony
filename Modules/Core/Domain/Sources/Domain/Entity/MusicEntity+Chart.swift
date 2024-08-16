@@ -116,7 +116,7 @@ extension MusicEntity.Chart.CityTop {
     public init(
       id: String,
       name: String,
-      curatorName: String,
+      curatorName: String? = .none,
       artwork: ArtworkItem)
     {
       self.id = id
@@ -129,7 +129,7 @@ extension MusicEntity.Chart.CityTop {
 
     public let id: String
     public let name: String
-    public let curatorName: String
+    public let curatorName: String?
     public let artwork: ArtworkItem
 
     // MARK: Private

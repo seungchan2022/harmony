@@ -38,7 +38,7 @@ extension HomePage.CityTopComponent: View {
               ? DesignSystemColor.system(.white).color
               : DesignSystemColor.system(.black).color)
 
-        Text(viewState.item.curatorName)
+        Text(viewState.item.curatorName ?? "")
           .font(.subheadline)
           .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
       }

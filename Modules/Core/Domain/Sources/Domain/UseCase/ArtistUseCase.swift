@@ -20,4 +20,9 @@ public protocol ArtistUseCase {
     MusicEntity.Artist.MusicVideo.Response,
     CompositeErrorRepository
   > { get }
+
+  var playList: (MusicEntity.Artist.PlayList.Request) -> AnyPublisher<
+    MusicEntity.Artist.PlayList.Response,
+    CompositeErrorRepository
+  > { get }
 }

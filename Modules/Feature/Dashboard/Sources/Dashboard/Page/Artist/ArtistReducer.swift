@@ -41,6 +41,7 @@ struct ArtistReducer {
     var fulllAlbumItemList: [MusicEntity.Artist.FullAlbum.Item] = []
     var musicVideoItemList: [MusicEntity.Artist.MusicVideo.Item] = []
     var playItemList: [MusicEntity.Artist.PlayList.Item] = []
+    var singleItemList: [MusicEntity.Artist.Single.Item] = []
 
     var fetchTopSongItem: FetchState.Data<MusicEntity.Artist.TopSong.Response?> = .init(isLoading: false, value: .none)
     var fetchEssentialAlbumItem: FetchState.Data<MusicEntity.Artist.EssentialAlbum.Response?> = .init(
@@ -49,6 +50,7 @@ struct ArtistReducer {
     var fetchFullAlbumItem: FetchState.Data<MusicEntity.Artist.FullAlbum.Response?> = .init(isLoading: false, value: .none)
     var fetchMusicVideoItem: FetchState.Data<MusicEntity.Artist.MusicVideo.Response?> = .init(isLoading: false, value: .none)
     var fetchPlayItem: FetchState.Data<MusicEntity.Artist.PlayList.Response?> = .init(isLoading: false, value: .none)
+    var fetchSingleItem: FetchState.Data<MusicEntity.Artist.Single.Response?> = .init(isLoading: false, value: .none)
 
   }
 
@@ -61,12 +63,14 @@ struct ArtistReducer {
     case getFullAlbumItem(MusicEntity.Search.TopResult.Item)
     case getMusicVideoItem(MusicEntity.Search.TopResult.Item)
     case getPlayItem(MusicEntity.Search.TopResult.Item)
+    case getSingleItem(MusicEntity.Search.TopResult.Item)
 
     case fetchTopSongItem(Result<MusicEntity.Artist.TopSong.Response, CompositeErrorRepository>)
     case fetchEssentialAlbumItem(Result<MusicEntity.Artist.EssentialAlbum.Response, CompositeErrorRepository>)
     case fetchFullAlbumItem(Result<MusicEntity.Artist.FullAlbum.Response, CompositeErrorRepository>)
     case fetchMusicVideoItem(Result<MusicEntity.Artist.MusicVideo.Response, CompositeErrorRepository>)
     case fetchPlayItem(Result<MusicEntity.Artist.PlayList.Response, CompositeErrorRepository>)
+    case fetchSingleItem(Result<MusicEntity.Artist.Single.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -78,6 +82,7 @@ struct ArtistReducer {
     case requestFullAlbumItem
     case requestMusicVideoItem
     case requestPlayItem
+    case requestSingleItem
   }
 
   var body: some Reducer<State, Action> {
@@ -120,6 +125,12 @@ struct ArtistReducer {
         return sideEffect
           .getPlayItem(item)
           .cancellable(pageID: pageID, id: CancelID.requestPlayItem, cancelInFlight: true)
+
+      case .getSingleItem(let item):
+        state.fetchSingleItem.isLoading = true
+        return sideEffect
+          .getSingleItem(item)
+          .cancellable(pageID: pageID, id: CancelID.requestSingleItem, cancelInFlight: true)
 
       case .fetchTopSongItem(let result):
         state.fetchTopSongItem.isLoading = false
@@ -175,6 +186,18 @@ struct ArtistReducer {
         case .success(let item):
           state.fetchPlayItem.value = item
           state.playItemList = state.playItemList + item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchSingleItem(let result):
+        state.fetchSingleItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchSingleItem.value = item
+          state.singleItemList = state.singleItemList + item.itemList
           return .none
 
         case .failure(let error):

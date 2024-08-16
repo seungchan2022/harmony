@@ -173,6 +173,33 @@ extension ArtistPage: View {
             .scrollIndicators(.hidden)
           }
         }
+
+        if !store.singleItemList.isEmpty {
+          VStack {
+            HStack {
+              Text("싱글 및 EP")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Spacer()
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.singleItemList, id: \.id) { item in
+                  SingleComponent(viewState: .init(item: item))
+                }
+              }
+              .padding(.horizontal, 16)
+            }
+            .scrollIndicators(.hidden)
+          }
+        }
       }
     }
     .onAppear {
@@ -181,6 +208,7 @@ extension ArtistPage: View {
       store.send(.getFullAlbumItem(store.item))
       store.send(.getMusicVideoItem(store.item))
       store.send((.getPlayItem(store.item)))
+      store.send(.getSingleItem(store.item))
     }
   }
 }

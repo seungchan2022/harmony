@@ -25,4 +25,7 @@ public protocol ArtistUseCase {
     MusicEntity.Artist.PlayList.Response,
     CompositeErrorRepository
   > { get }
+
+  var single: (MusicEntity.Artist.Single.Request)
+    -> AnyPublisher<MusicEntity.Artist.Single.Response, CompositeErrorRepository> { get }
 }

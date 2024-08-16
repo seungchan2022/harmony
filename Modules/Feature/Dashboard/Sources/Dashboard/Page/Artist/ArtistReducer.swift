@@ -20,18 +20,8 @@ struct ArtistReducer {
 
   @ObservableState
   struct State: Equatable, Identifiable {
-    let id: UUID
-    let item: MusicEntity.Search.TopResult.Item
 
-    var topSongItemList: [MusicEntity.Artist.TopSong.Item] = []
-    var essentialAlbumItemList: [MusicEntity.Artist.EssentialAlbum.Item] = []
-    var fulllAlbumItemList: [MusicEntity.Artist.FullAlbum.Item] = []
-
-    var fetchTopSongItem: FetchState.Data<MusicEntity.Artist.TopSong.Response?> = .init(isLoading: false, value: .none)
-    var fetchEssentialAlbumItem: FetchState.Data<MusicEntity.Artist.EssentialAlbum.Response?> = .init(
-      isLoading: false,
-      value: .none)
-    var fetchFullAlbumItem: FetchState.Data<MusicEntity.Artist.FullAlbum.Response?> = .init(isLoading: false, value: .none)
+    // MARK: Lifecycle
 
     init(
       id: UUID = UUID(),
@@ -40,6 +30,24 @@ struct ArtistReducer {
       self.id = id
       self.item = item
     }
+
+    // MARK: Internal
+
+    let id: UUID
+    let item: MusicEntity.Search.TopResult.Item
+
+    var topSongItemList: [MusicEntity.Artist.TopSong.Item] = []
+    var essentialAlbumItemList: [MusicEntity.Artist.EssentialAlbum.Item] = []
+    var fulllAlbumItemList: [MusicEntity.Artist.FullAlbum.Item] = []
+    var musicVideoItemList: [MusicEntity.Artist.MusicVideo.Item] = []
+
+    var fetchTopSongItem: FetchState.Data<MusicEntity.Artist.TopSong.Response?> = .init(isLoading: false, value: .none)
+    var fetchEssentialAlbumItem: FetchState.Data<MusicEntity.Artist.EssentialAlbum.Response?> = .init(
+      isLoading: false,
+      value: .none)
+    var fetchFullAlbumItem: FetchState.Data<MusicEntity.Artist.FullAlbum.Response?> = .init(isLoading: false, value: .none)
+    var fetchMusicVideoItem: FetchState.Data<MusicEntity.Artist.MusicVideo.Response?> = .init(isLoading: false, value: .none)
+
   }
 
   enum Action: Equatable, BindableAction {
@@ -49,10 +57,12 @@ struct ArtistReducer {
     case getTopSongItem(MusicEntity.Search.TopResult.Item)
     case getEssentialAlbumItem(MusicEntity.Search.TopResult.Item)
     case getFullAlbumItem(MusicEntity.Search.TopResult.Item)
+    case getMusicVideoItem(MusicEntity.Search.TopResult.Item)
 
     case fetchTopSongItem(Result<MusicEntity.Artist.TopSong.Response, CompositeErrorRepository>)
     case fetchEssentialAlbumItem(Result<MusicEntity.Artist.EssentialAlbum.Response, CompositeErrorRepository>)
     case fetchFullAlbumItem(Result<MusicEntity.Artist.FullAlbum.Response, CompositeErrorRepository>)
+    case fetchMusicVideoItem(Result<MusicEntity.Artist.MusicVideo.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -62,6 +72,7 @@ struct ArtistReducer {
     case requestTopSongItem
     case requestEssentialAlbumItem
     case requestFullAlbumItem
+    case requestMusicVideoItem
   }
 
   var body: some Reducer<State, Action> {
@@ -93,6 +104,12 @@ struct ArtistReducer {
           .getFullAlbumItem(item)
           .cancellable(pageID: pageID, id: CancelID.requestFullAlbumItem, cancelInFlight: true)
 
+      case .getMusicVideoItem(let item):
+        state.fetchMusicVideoItem.isLoading = true
+        return sideEffect
+          .getMusicVideoItem(item)
+          .cancellable(pageID: pageID, id: CancelID.requestMusicVideoItem, cancelInFlight: true)
+
       case .fetchTopSongItem(let result):
         state.fetchTopSongItem.isLoading = false
         switch result {
@@ -123,6 +140,18 @@ struct ArtistReducer {
         case .success(let item):
           state.fetchFullAlbumItem.value = item
           state.fulllAlbumItemList = state.fulllAlbumItemList + item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchMusicVideoItem(let result):
+        state.fetchMusicVideoItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchMusicVideoItem.value = item
+          state.musicVideoItemList = state.musicVideoItemList + item.itemList
           return .none
 
         case .failure(let error):

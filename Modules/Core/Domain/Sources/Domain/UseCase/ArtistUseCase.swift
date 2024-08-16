@@ -15,4 +15,9 @@ public protocol ArtistUseCase {
     MusicEntity.Artist.FullAlbum.Response,
     CompositeErrorRepository
   > { get }
+
+  var musicVideo: (MusicEntity.Artist.MusicVideo.Request) -> AnyPublisher<
+    MusicEntity.Artist.MusicVideo.Response,
+    CompositeErrorRepository
+  > { get }
 }

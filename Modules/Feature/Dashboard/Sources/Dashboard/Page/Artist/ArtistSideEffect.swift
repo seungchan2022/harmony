@@ -59,6 +59,18 @@ extension ArtistSideEffect {
       }
     }
   }
+
+  var getMusicVideoItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+    { item in
+      .publisher {
+        useCase.artistUseCase
+          .musicVideo(item.serialized())
+          .receive(on: main)
+          .mapToResult()
+          .map(ArtistReducer.Action.fetchMusicVideoItem)
+      }
+    }
+  }
 }
 
 extension MusicEntity.Search.TopResult.Item {
@@ -71,6 +83,10 @@ extension MusicEntity.Search.TopResult.Item {
   }
 
   fileprivate func serialized() -> MusicEntity.Artist.FullAlbum.Request {
+    .init(id: id)
+  }
+
+  fileprivate func serialized() -> MusicEntity.Artist.MusicVideo.Request {
     .init(id: id)
   }
 }

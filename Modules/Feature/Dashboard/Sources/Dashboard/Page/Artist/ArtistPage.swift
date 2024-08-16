@@ -119,12 +119,40 @@ extension ArtistPage: View {
             .scrollIndicators(.hidden)
           }
         }
+
+        if !store.musicVideoItemList.isEmpty {
+          VStack {
+            HStack {
+              Text("뮤직 비디오")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(
+                  colorScheme == .dark
+                    ? DesignSystemColor.system(.white).color
+                    : DesignSystemColor.system(.black).color)
+
+              Spacer()
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.musicVideoItemList, id: \.id) { item in
+                  MusicVideoComponent(viewState: .init(item: item))
+                }
+              }
+              .padding(.horizontal, 16)
+            }
+            .scrollIndicators(.hidden)
+          }
+        }
       }
     }
     .onAppear {
       store.send(.getTopSongItem(store.item))
       store.send(.getEssentialAlbumItem(store.item))
       store.send(.getFullAlbumItem(store.item))
+      store.send(.getMusicVideoItem(store.item))
     }
   }
 }

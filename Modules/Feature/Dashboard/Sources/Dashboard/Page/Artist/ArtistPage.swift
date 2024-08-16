@@ -200,6 +200,39 @@ extension ArtistPage: View {
             .scrollIndicators(.hidden)
           }
         }
+
+        if !store.similarArtistItemList.isEmpty {
+          VStack {
+            Button(action: { }) {
+              HStack {
+                Text("유사한 아티스트")
+                  .font(.title)
+                  .fontWeight(.semibold)
+                  .foregroundStyle(
+                    colorScheme == .dark
+                      ? DesignSystemColor.system(.white).color
+                      : DesignSystemColor.system(.black).color)
+
+                Image(systemName: "chevron.right")
+                  .fontWeight(.bold)
+                  .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+                Spacer()
+              }
+            }
+            .padding(.leading, 16)
+
+            ScrollView(.horizontal) {
+              LazyHStack(spacing: 16) {
+                ForEach(store.similarArtistItemList, id: \.id) { item in
+                  SimilarArtistComponent(viewState: .init(item: item))
+                }
+              }
+              .padding(.horizontal, 16)
+            }
+            .scrollIndicators(.hidden)
+          }
+        }
       }
     }
     .onAppear {
@@ -209,6 +242,7 @@ extension ArtistPage: View {
       store.send(.getMusicVideoItem(store.item))
       store.send((.getPlayItem(store.item)))
       store.send(.getSingleItem(store.item))
+      store.send(.getSimilarArtistItem(store.item))
     }
   }
 }

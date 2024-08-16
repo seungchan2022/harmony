@@ -247,4 +247,43 @@ extension ArtistUseCasePlatform: ArtistUseCase {
       .eraseToAnyPublisher()
     }
   }
+
+  public var similarArtist: (MusicEntity.Artist.SimilarArtist.Request) -> AnyPublisher<
+    MusicEntity.Artist.SimilarArtist.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Artist.SimilarArtist.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            let request = MusicCatalogResourceRequest<Artist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
+
+            let response = try await request.response()
+
+            guard let artist = response.items.first else { return }
+
+            let artistWithSimilarArtist = try await artist.with([.similarArtists])
+
+            let similarArtistItemList = artistWithSimilarArtist.similarArtists ?? []
+
+            let itemList = similarArtistItemList
+              .map {
+                MusicEntity.Artist.SimilarArtist.Item(
+                  id: $0.id.rawValue,
+                  name: $0.name,
+                  artwork: .init(url: $0.artwork?.url(width: 120, height: 120)))
+              }
+
+            let result = MusicEntity.Artist.SimilarArtist.Response(itemList: itemList)
+
+            return promise(.success(result))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
 }

@@ -95,6 +95,18 @@ extension ArtistSideEffect {
       }
     }
   }
+
+  var getSimilarArtistItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+    { item in
+      .publisher {
+        useCase.artistUseCase
+          .similarArtist(item.serialized())
+          .receive(on: main)
+          .mapToResult()
+          .map(ArtistReducer.Action.fetchSimilarArtistItem)
+      }
+    }
+  }
 }
 
 extension MusicEntity.Search.TopResult.Item {
@@ -119,6 +131,10 @@ extension MusicEntity.Search.TopResult.Item {
   }
 
   fileprivate func serialized() -> MusicEntity.Artist.Single.Request {
+    .init(id: id)
+  }
+
+  fileprivate func serialized() -> MusicEntity.Artist.SimilarArtist.Request {
     .init(id: id)
   }
 }

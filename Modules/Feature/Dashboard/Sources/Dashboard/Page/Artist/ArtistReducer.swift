@@ -42,6 +42,7 @@ struct ArtistReducer {
     var musicVideoItemList: [MusicEntity.Artist.MusicVideo.Item] = []
     var playItemList: [MusicEntity.Artist.PlayList.Item] = []
     var singleItemList: [MusicEntity.Artist.Single.Item] = []
+    var similarArtistItemList: [MusicEntity.Artist.SimilarArtist.Item] = []
 
     var fetchTopSongItem: FetchState.Data<MusicEntity.Artist.TopSong.Response?> = .init(isLoading: false, value: .none)
     var fetchEssentialAlbumItem: FetchState.Data<MusicEntity.Artist.EssentialAlbum.Response?> = .init(
@@ -51,6 +52,9 @@ struct ArtistReducer {
     var fetchMusicVideoItem: FetchState.Data<MusicEntity.Artist.MusicVideo.Response?> = .init(isLoading: false, value: .none)
     var fetchPlayItem: FetchState.Data<MusicEntity.Artist.PlayList.Response?> = .init(isLoading: false, value: .none)
     var fetchSingleItem: FetchState.Data<MusicEntity.Artist.Single.Response?> = .init(isLoading: false, value: .none)
+    var fetchSimilarArtistItem: FetchState.Data<MusicEntity.Artist.SimilarArtist.Response?> = .init(
+      isLoading: false,
+      value: .none)
 
   }
 
@@ -64,6 +68,7 @@ struct ArtistReducer {
     case getMusicVideoItem(MusicEntity.Search.TopResult.Item)
     case getPlayItem(MusicEntity.Search.TopResult.Item)
     case getSingleItem(MusicEntity.Search.TopResult.Item)
+    case getSimilarArtistItem(MusicEntity.Search.TopResult.Item)
 
     case fetchTopSongItem(Result<MusicEntity.Artist.TopSong.Response, CompositeErrorRepository>)
     case fetchEssentialAlbumItem(Result<MusicEntity.Artist.EssentialAlbum.Response, CompositeErrorRepository>)
@@ -71,6 +76,7 @@ struct ArtistReducer {
     case fetchMusicVideoItem(Result<MusicEntity.Artist.MusicVideo.Response, CompositeErrorRepository>)
     case fetchPlayItem(Result<MusicEntity.Artist.PlayList.Response, CompositeErrorRepository>)
     case fetchSingleItem(Result<MusicEntity.Artist.Single.Response, CompositeErrorRepository>)
+    case fetchSimilarArtistItem(Result<MusicEntity.Artist.SimilarArtist.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -83,6 +89,7 @@ struct ArtistReducer {
     case requestMusicVideoItem
     case requestPlayItem
     case requestSingleItem
+    case requestSimilarArtistItem
   }
 
   var body: some Reducer<State, Action> {
@@ -131,6 +138,12 @@ struct ArtistReducer {
         return sideEffect
           .getSingleItem(item)
           .cancellable(pageID: pageID, id: CancelID.requestSingleItem, cancelInFlight: true)
+
+      case .getSimilarArtistItem(let item):
+        state.fetchSimilarArtistItem.isLoading = true
+        return sideEffect
+          .getSimilarArtistItem(item)
+          .cancellable(pageID: pageID, id: CancelID.requestSimilarArtistItem, cancelInFlight: true)
 
       case .fetchTopSongItem(let result):
         state.fetchTopSongItem.isLoading = false
@@ -198,6 +211,18 @@ struct ArtistReducer {
         case .success(let item):
           state.fetchSingleItem.value = item
           state.singleItemList = state.singleItemList + item.itemList
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchSimilarArtistItem(let result):
+        state.fetchSimilarArtistItem.isLoading = false
+        switch result {
+        case .success(let item):
+          state.fetchSimilarArtistItem.value = item
+          state.similarArtistItemList = state.similarArtistItemList + item.itemList
           return .none
 
         case .failure(let error):

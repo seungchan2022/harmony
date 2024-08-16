@@ -10,6 +10,7 @@ extension MusicEntity {
     public enum MusicVideo { }
     public enum PlayList { }
     public enum Single { }
+    public enum SimilarArtist { }
   }
 }
 
@@ -437,6 +438,60 @@ extension MusicEntity.Artist.Single {
       case id
       case title
       case releaseDate
+      case artwork
+    }
+  }
+
+  public struct ArtworkItem: Equatable, Codable, Sendable {
+    public let url: URL?
+
+    public init(
+      url: URL? = .none)
+    {
+      self.url = url
+    }
+  }
+}
+
+extension MusicEntity.Artist.SimilarArtist {
+  public struct Request: Equatable, Codable, Sendable {
+    public let id: String
+
+    public init(id: String) {
+      self.id = id
+    }
+  }
+
+  public struct Response: Equatable, Codable, Sendable {
+    public let itemList: [Item]
+
+    public init(itemList: [Item]) {
+      self.itemList = itemList
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case itemList = "items"
+    }
+  }
+
+  public struct Item: Equatable, Codable, Sendable {
+    public let id: String
+    public let name: String
+    public let artwork: ArtworkItem
+
+    public init(
+      id: String,
+      name: String,
+      artwork: ArtworkItem)
+    {
+      self.id = id
+      self.name = name
+      self.artwork = artwork
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case id
+      case name
       case artwork
     }
   }

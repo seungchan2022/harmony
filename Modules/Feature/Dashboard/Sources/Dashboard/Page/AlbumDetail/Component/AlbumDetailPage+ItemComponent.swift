@@ -3,9 +3,9 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - TopAlbumDetailPage.ItemComponent
+// MARK: - AlbumDetailPage.ItemComponent
 
-extension TopAlbumDetailPage {
+extension AlbumDetailPage {
   struct ItemComponent {
     let viewState: ViewState
 
@@ -14,9 +14,9 @@ extension TopAlbumDetailPage {
   }
 }
 
-// MARK: - TopAlbumDetailPage.ItemComponent + View
+// MARK: - AlbumDetailPage.ItemComponent + View
 
-extension TopAlbumDetailPage.ItemComponent: View {
+extension AlbumDetailPage.ItemComponent: View {
   var body: some View {
     Button(action: { }) {
       VStack(alignment: .leading) {
@@ -54,9 +54,9 @@ extension TopAlbumDetailPage.ItemComponent: View {
   }
 }
 
-// MARK: - TopAlbumDetailPage.ItemComponent.ViewState
+// MARK: - AlbumDetailPage.ItemComponent.ViewState
 
-extension TopAlbumDetailPage.ItemComponent {
+extension AlbumDetailPage.ItemComponent {
   struct ViewState: Equatable {
     let item: MusicEntity.AlbumDetail.Track.Item
   }

@@ -19,7 +19,7 @@ extension Link.Dashboard {
     case topPlayList
     case topPlayListDetail
     case topAlbum
-    case topAlbumDetail
+    case albumDetail
     case topMusicVideo
     case search
     case artist

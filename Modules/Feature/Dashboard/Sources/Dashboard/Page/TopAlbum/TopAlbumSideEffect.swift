@@ -39,7 +39,7 @@ extension TopAlbumSideEffect {
     { item in
       navigator.next(
         linkItem: .init(
-          path: Link.Dashboard.Path.topAlbumDetail.rawValue,
+          path: Link.Dashboard.Path.albumDetail.rawValue,
           items: item),
         isAnimated: true)
     }

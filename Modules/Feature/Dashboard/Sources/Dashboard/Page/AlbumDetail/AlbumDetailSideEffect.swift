@@ -4,9 +4,9 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
-// MARK: - TopAlbumDetailSideEffect
+// MARK: - AlbumDetailSideEffect
 
-struct TopAlbumDetailSideEffect {
+struct AlbumDetailSideEffect {
   let useCase: DashboardEnvironmentUsable
   let main: AnySchedulerOf<DispatchQueue>
   let navigator: RootNavigatorType
@@ -22,15 +22,15 @@ struct TopAlbumDetailSideEffect {
   }
 }
 
-extension TopAlbumDetailSideEffect {
-  var getItem: (MusicEntity.Chart.TopAlbum.Item) -> Effect<TopAlbumDetailReducer.Action> {
+extension AlbumDetailSideEffect {
+  var getItem: (MusicEntity.Chart.TopAlbum.Item) -> Effect<AlbumDetailReducer.Action> {
     { item in
       .publisher {
         useCase.albumDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()
-          .map(TopAlbumDetailReducer.Action.fetchItem)
+          .map(AlbumDetailReducer.Action.fetchItem)
       }
     }
   }

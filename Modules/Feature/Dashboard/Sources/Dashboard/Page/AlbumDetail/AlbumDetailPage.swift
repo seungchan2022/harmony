@@ -2,19 +2,19 @@ import ComposableArchitecture
 import DesignSystem
 import SwiftUI
 
-// MARK: - TopAlbumDetailPage
+// MARK: - AlbumDetailPage
 
-struct TopAlbumDetailPage {
-  @Bindable var store: StoreOf<TopAlbumDetailReducer>
+struct AlbumDetailPage {
+  @Bindable var store: StoreOf<AlbumDetailReducer>
   @Environment(\.colorScheme) private var colorScheme
 
 }
 
-extension TopAlbumDetailPage { }
+extension AlbumDetailPage { }
 
 // MARK: View
 
-extension TopAlbumDetailPage: View {
+extension AlbumDetailPage: View {
   var body: some View {
     ScrollView {
       LazyVStack {

@@ -31,9 +31,11 @@ extension SearchPage: View {
 
       LazyVStack {
         ForEach(store.topResultItemList, id: \.id) { item in
+
           TopResultComponent(
             viewState: .init(item: item),
-            tapAction: { store.send(.routeToArtist($0)) },
+            tapAritistAction: { store.send(.routeToArtist($0)) },
+            tapAlbumAction: { _ in  },
             store: store)
         }
       }

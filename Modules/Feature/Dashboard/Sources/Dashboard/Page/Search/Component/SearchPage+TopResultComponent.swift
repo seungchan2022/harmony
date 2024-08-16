@@ -8,7 +8,8 @@ import SwiftUI
 extension SearchPage {
   struct TopResultComponent {
     let viewState: ViewState
-    let tapAction: (MusicEntity.Search.TopResult.Item) -> Void
+    let tapAritistAction: (MusicEntity.Search.TopResult.Item) -> Void
+    let tapAlbumAction: (MusicEntity.Search.TopResult.Item) -> Void
 
     @Bindable var store: StoreOf<SearchReducer>
     @Environment(\.colorScheme) private var colorScheme
@@ -23,7 +24,7 @@ extension SearchPage.TopResultComponent: View {
   var body: some View {
     switch viewState.item.itemType {
     case .artist:
-      Button(action: { tapAction(viewState.item) }) {
+      Button(action: { tapAritistAction(viewState.item) }) {
         VStack(alignment: .leading) {
           HStack(spacing: 12) {
             RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
@@ -114,7 +115,7 @@ extension SearchPage.TopResultComponent: View {
       }
 
     case .album:
-      Button(action: { }) {
+      Button(action: { tapAlbumAction(viewState.item) }) {
         VStack(alignment: .leading) {
           HStack(spacing: 12) {
             RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {

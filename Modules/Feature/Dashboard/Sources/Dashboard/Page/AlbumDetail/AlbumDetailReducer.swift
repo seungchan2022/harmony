@@ -4,13 +4,13 @@ import Domain
 import Foundation
 
 @Reducer
-struct TopAlbumDetailReducer {
+struct AlbumDetailReducer {
 
   // MARK: Lifecycle
 
   init(
     pageID: String = UUID().uuidString,
-    sideEffect: TopAlbumDetailSideEffect)
+    sideEffect: AlbumDetailSideEffect)
   {
     self.pageID = pageID
     self.sideEffect = sideEffect
@@ -92,6 +92,6 @@ struct TopAlbumDetailReducer {
   // MARK: Private
 
   private let pageID: String
-  private let sideEffect: TopAlbumDetailSideEffect
+  private let sideEffect: AlbumDetailSideEffect
 
 }

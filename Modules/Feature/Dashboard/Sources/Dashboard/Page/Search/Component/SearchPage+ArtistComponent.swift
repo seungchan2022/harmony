@@ -43,12 +43,13 @@ extension SearchPage.ArtistComponent: View {
                 colorScheme == .dark
                   ? DesignSystemColor.system(.white).color
                   : DesignSystemColor.system(.black).color)
-                .multilineTextAlignment(.leading)
 
             Text("아티스트")
               .font(.subheadline)
               .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
           }
+          .multilineTextAlignment(.leading)
+          .lineLimit(1)
 
           Spacer()
 

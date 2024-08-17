@@ -50,6 +50,7 @@ extension SearchPage.TopResultComponent: View {
                       ? DesignSystemColor.system(.white).color
                       : DesignSystemColor.system(.black).color)
                     .multilineTextAlignment(.leading)
+                    .lineLimit(1)
 
                 Text("아티스트")
                   .font(.subheadline)

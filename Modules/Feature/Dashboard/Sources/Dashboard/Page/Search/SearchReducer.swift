@@ -3,6 +3,16 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
+// MARK: - CategoryList
+
+enum CategoryList: String, Equatable, CaseIterable {
+  case topResult
+  case artist
+  case album
+  case song
+  case playList
+}
+
 // MARK: - SearchReducer
 
 @Reducer
@@ -33,17 +43,23 @@ struct SearchReducer {
 
     let id: UUID
 
+    var category: CategoryList = .topResult
+
+    var isShowSearchResult = false
+
     var query = "iu"
 
     var songItemList: [MusicEntity.Search.Song.Item] = []
     var artistItemList: [MusicEntity.Search.Artist.Item] = []
     var albumItemList: [MusicEntity.Search.Album.Item] = []
+    var playList: [MusicEntity.Search.PlayList.Item] = []
     var topResultItemList: [MusicEntity.Search.TopResult.Item] = []
     var keywordItemList: [MusicEntity.Search.Keyword.Item] = []
 
     var fetchSearchSongItem: FetchState.Data<MusicEntity.Search.Song.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchArtistItem: FetchState.Data<MusicEntity.Search.Artist.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchAlbumItem: FetchState.Data<MusicEntity.Search.Album.Composite?> = .init(isLoading: false, value: .none)
+    var fetchSearchPlayItem: FetchState.Data<MusicEntity.Search.PlayList.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchTopResultItem: FetchState.Data<MusicEntity.Search.TopResult.Composite?> = .init(isLoading: false, value: .none)
     var fetchSearchKeywordItem: FetchState.Data<MusicEntity.Search.Keyword.Composite?> = .init(isLoading: false, value: .none)
 
@@ -56,6 +72,7 @@ struct SearchReducer {
     case searchSong(String)
     case searchArtist(String)
     case searchAlbum(String)
+    case searchPlayList(String)
     case searchTopResult(String)
 
     case searchKeyword(String)
@@ -63,6 +80,7 @@ struct SearchReducer {
     case fetchSearchSongItem(Result<MusicEntity.Search.Song.Composite, CompositeErrorRepository>)
     case fetchSearchArtistItem(Result<MusicEntity.Search.Artist.Composite, CompositeErrorRepository>)
     case fetchSearchAlbumItem(Result<MusicEntity.Search.Album.Composite, CompositeErrorRepository>)
+    case fetchSearchPlayItem(Result<MusicEntity.Search.PlayList.Composite, CompositeErrorRepository>)
     case fetchSearchTopResultItem(Result<MusicEntity.Search.TopResult.Composite, CompositeErrorRepository>)
     case fetchSearchKeywordItem(Result<MusicEntity.Search.Keyword.Composite, CompositeErrorRepository>)
 
@@ -77,6 +95,7 @@ struct SearchReducer {
     case requestSearchSong
     case requestSearchArtist
     case requestSearchAlbum
+    case requestPlayList
     case requestSearchTopResult
     case requestSearchKeyword
   }
@@ -90,6 +109,7 @@ struct SearchReducer {
           state.songItemList = []
           state.artistItemList = []
           state.albumItemList = []
+          state.playList = []
           state.topResultItemList = []
           state.keywordItemList = []
           return .none
@@ -105,6 +125,10 @@ struct SearchReducer {
 
         if state.query != state.fetchSearchAlbumItem.value?.request.query {
           state.albumItemList = []
+        }
+
+        if state.query != state.fetchSearchPlayItem.value?.request.query {
+          state.playList = []
         }
 
         if state.query != state.fetchSearchTopResultItem.value?.request.query {
@@ -155,6 +179,13 @@ struct SearchReducer {
           .album(.init(query: query))
           .cancellable(pageID: pageID, id: CancelID.requestSearchAlbum, cancelInFlight: true)
 
+      case .searchPlayList(let query):
+        guard !query.isEmpty else { return .none }
+        state.fetchSearchPlayItem.isLoading = true
+        return sideEffect
+          .playList(.init(query: query))
+          .cancellable(pageID: pageID, id: CancelID.requestPlayList, cancelInFlight: true)
+
       case .searchTopResult(let query):
         guard !query.isEmpty else { return .none }
 
@@ -177,7 +208,7 @@ struct SearchReducer {
         case .success(let item):
           if state.query == item.request.query {
             state.fetchSearchSongItem.value = item
-            state.songItemList = state.songItemList + item.response.itemList
+            state.songItemList = state.songItemList.merge(item.response.itemList)
           }
 
           return .none
@@ -192,7 +223,7 @@ struct SearchReducer {
         case .success(let item):
           if state.query == item.request.query {
             state.fetchSearchArtistItem.value = item
-            state.artistItemList = state.artistItemList + item.response.itemList
+            state.artistItemList = state.artistItemList.merge(item.response.itemList)
           }
 
           return .none
@@ -207,7 +238,22 @@ struct SearchReducer {
         case .success(let item):
           if state.query == item.request.query {
             state.fetchSearchAlbumItem.value = item
-            state.albumItemList = state.albumItemList + item.response.itemList
+            state.albumItemList = state.albumItemList.merge(item.response.itemList)
+          }
+
+          return .none
+
+        case .failure(let error):
+          return .run { await $0(.throwError(error)) }
+        }
+
+      case .fetchSearchPlayItem(let result):
+        state.fetchSearchPlayItem.isLoading = false
+        switch result {
+        case .success(let item):
+          if state.query == item.request.query {
+            state.fetchSearchPlayItem.value = item
+            state.playList = state.playList.merge(item.response.itemList)
           }
 
           return .none
@@ -279,6 +325,46 @@ extension [MusicEntity.Search.Keyword.Item] {
 }
 
 extension [MusicEntity.Search.TopResult.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Search.Artist.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Search.Album.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Search.PlayList.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Search.Song.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
       guard !self.contains(where: { $0.id != next.id }) else { return curr }

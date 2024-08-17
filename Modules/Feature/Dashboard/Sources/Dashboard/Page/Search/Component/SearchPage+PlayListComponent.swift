@@ -2,21 +2,21 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - SearchPage.AlbumComponent
+// MARK: - SearchPage.PlayListComponent
 
 extension SearchPage {
-  struct AlbumComponent {
+  struct PlayListComponent {
     let viewState: ViewState
 
     @Environment(\.colorScheme) private var colorScheme
   }
 }
 
-extension SearchPage.AlbumComponent { }
+extension SearchPage.PlayListComponent { }
 
-// MARK: - SearchPage.AlbumComponent + View
+// MARK: - SearchPage.PlayListComponent + View
 
-extension SearchPage.AlbumComponent: View {
+extension SearchPage.PlayListComponent: View {
   var body: some View {
     Button(action: { }) {
       VStack(alignment: .leading) {
@@ -30,15 +30,15 @@ extension SearchPage.AlbumComponent: View {
           .clipShape(RoundedRectangle(cornerRadius: 8))
 
           VStack(alignment: .leading, spacing: 4) {
-            Text(viewState.item.title)
+            Text(viewState.item.name)
               .font(.body)
               .foregroundStyle(
                 colorScheme == .dark
                   ? DesignSystemColor.system(.white).color
                   : DesignSystemColor.system(.black).color)
 
-            Text("앨범 • \(viewState.item.artistName)")
-              .font(.subheadline)
+            Text(viewState.item.curatorName)
+              .font(.caption)
               .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
           }
           .multilineTextAlignment(.leading)
@@ -49,19 +49,18 @@ extension SearchPage.AlbumComponent: View {
           Image(systemName: "chevron.right")
             .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
         }
-        .padding(.horizontal, 12)
 
         Divider()
-          .padding(.leading, 76)
       }
+      .padding(.horizontal, 12)
     }
   }
 }
 
-// MARK: - SearchPage.AlbumComponent.ViewState
+// MARK: - SearchPage.PlayListComponent.ViewState
 
-extension SearchPage.AlbumComponent {
+extension SearchPage.PlayListComponent {
   struct ViewState: Equatable {
-    let item: MusicEntity.Search.Album.Item
+    let item: MusicEntity.Search.PlayList.Item
   }
 }

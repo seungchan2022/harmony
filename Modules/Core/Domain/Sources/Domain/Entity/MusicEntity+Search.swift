@@ -1,5 +1,4 @@
 import Foundation
-import MusicKit
 
 // MARK: - MusicEntity.Search
 
@@ -8,6 +7,7 @@ extension MusicEntity {
     public enum Song { }
     public enum Artist { }
     public enum Album { }
+    public enum PlayList { }
     public enum TopResult { }
     public enum Keyword { }
   }
@@ -209,6 +209,76 @@ extension MusicEntity.Search.Album {
   }
 }
 
+extension MusicEntity.Search.PlayList {
+  public struct Request: Equatable, Codable, Sendable {
+    public let query: String
+
+    public init(query: String) {
+      self.query = query
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case query = "term"
+    }
+  }
+
+  public struct Response: Equatable, Codable, Sendable {
+    public let itemList: [Item]
+
+    public init(itemList: [Item]) {
+      self.itemList = itemList
+    }
+
+    private enum CodingKeys: String, CodingKey {
+      case itemList = "items"
+    }
+  }
+
+  public struct Item: Equatable, Codable, Sendable {
+
+    // MARK: Lifecycle
+
+    public init(
+      id: String,
+      name: String,
+      curatorName: String,
+      artwork: ArtworkItem)
+    {
+      self.id = id
+      self.name = name
+      self.curatorName = curatorName
+      self.artwork = artwork
+    }
+
+    // MARK: Public
+
+    public let id: String
+    public let name: String
+    public let curatorName: String
+    public let artwork: ArtworkItem
+
+    // MARK: Private
+
+    private enum CodingKeys: String, CodingKey {
+      case id
+      case name
+      case curatorName
+      case artwork
+    }
+
+  }
+
+  public struct ArtworkItem: Equatable, Codable, Sendable {
+    public let url: URL?
+
+    public init(
+      url: URL? = .none)
+    {
+      self.url = url
+    }
+  }
+}
+
 extension MusicEntity.Search.TopResult {
 
   public struct Request: Equatable, Codable, Sendable {
@@ -386,6 +456,23 @@ extension MusicEntity.Search.Album {
     public init(
       request: MusicEntity.Search.Album.Request,
       response: MusicEntity.Search.Album.Response)
+    {
+      self.request = request
+      self.response = response
+    }
+  }
+}
+
+// MARK: - MusicEntity.Search.PlayList.Composite
+
+extension MusicEntity.Search.PlayList {
+  public struct Composite: Equatable, Sendable {
+    public let request: MusicEntity.Search.PlayList.Request
+    public let response: MusicEntity.Search.PlayList.Response
+
+    public init(
+      request: MusicEntity.Search.PlayList.Request,
+      response: MusicEntity.Search.PlayList.Response)
     {
       self.request = request
       self.response = response

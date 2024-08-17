@@ -75,6 +75,23 @@ extension SearchSideEffect {
     }
   }
 
+  var playList: (MusicEntity.Search.PlayList.Request) -> Effect<SearchReducer.Action> {
+    { req in
+      .publisher {
+        useCase.searchUseCase
+          .playList(req)
+          .receive(on: main)
+          .map {
+            MusicEntity.Search.PlayList.Composite(
+              request: req,
+              response: $0)
+          }
+          .mapToResult()
+          .map(SearchReducer.Action.fetchSearchPlayItem)
+      }
+    }
+  }
+
   var topResult: (MusicEntity.Search.TopResult.Request) -> Effect<SearchReducer.Action> {
     { req in
       .publisher {

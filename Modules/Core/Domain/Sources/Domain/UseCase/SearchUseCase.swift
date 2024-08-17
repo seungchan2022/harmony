@@ -9,6 +9,11 @@ public protocol SearchUseCase {
   var album: (MusicEntity.Search.Album.Request)
     -> AnyPublisher<MusicEntity.Search.Album.Response, CompositeErrorRepository> { get }
 
+  var playList: (MusicEntity.Search.PlayList.Request) -> AnyPublisher<
+    MusicEntity.Search.PlayList.Response,
+    CompositeErrorRepository
+  > { get }
+
   var topResult: (MusicEntity.Search.TopResult.Request) -> AnyPublisher<
     MusicEntity.Search.TopResult.Response,
     CompositeErrorRepository

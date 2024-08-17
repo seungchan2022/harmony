@@ -20,7 +20,6 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Song.self])
 
-            request.limit = 5
             request.offset = .zero
 
             let response = try await request.response()
@@ -58,7 +57,6 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Artist.self])
 
-            request.limit = 5
             request.offset = .zero
 
             let response = try await request.response()
@@ -96,7 +94,6 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Album.self])
 
-            request.limit = 3
             request.offset = .zero
 
             let response = try await request.response()
@@ -112,6 +109,45 @@ extension SearchUseCasePlatform: SearchUseCase {
               }
 
             let result = MusicEntity.Search.Album.Response(itemList: itemList)
+
+            return promise(.success(result))
+
+          } catch {
+            return promise(.failure(.other(error)))
+          }
+        }
+      }
+      .eraseToAnyPublisher()
+    }
+  }
+
+  public var playList: (MusicEntity.Search.PlayList.Request) -> AnyPublisher<
+    MusicEntity.Search.PlayList.Response,
+    CompositeErrorRepository
+  > {
+    { req in
+      Future<MusicEntity.Search.PlayList.Response, CompositeErrorRepository> { promise in
+        Task {
+          do {
+            var request = MusicCatalogSearchRequest(
+              term: req.query,
+              types: [Playlist.self])
+
+            request.offset = .zero
+
+            let response = try await request.response()
+
+            let itemList = response
+              .playlists
+              .map {
+                MusicEntity.Search.PlayList.Item(
+                  id: $0.id.rawValue,
+                  name: $0.name,
+                  curatorName: $0.curatorName ?? "",
+                  artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
+              }
+
+            let result = MusicEntity.Search.PlayList.Response(itemList: itemList)
 
             return promise(.success(result))
 

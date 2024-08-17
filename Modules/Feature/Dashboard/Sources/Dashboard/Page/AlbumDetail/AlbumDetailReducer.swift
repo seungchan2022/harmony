@@ -3,6 +3,8 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
+// MARK: - AlbumDetailReducer
+
 @Reducer
 struct AlbumDetailReducer {
 
@@ -22,16 +24,13 @@ struct AlbumDetailReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    let item: MusicEntity.Chart.TopAlbum.Item
+    let item: MusicEntity.AlbumDetail.Track.Request
 
     var itemList: [MusicEntity.AlbumDetail.Track.Item] = []
 
     var fetchItem: FetchState.Data<MusicEntity.AlbumDetail.Track.Response?> = .init(isLoading: false, value: .none)
 
-    init(
-      id: UUID = UUID(),
-      item: MusicEntity.Chart.TopAlbum.Item)
-    {
+    init(id: UUID = UUID(), item: MusicEntity.AlbumDetail.Track.Request) {
       self.id = id
       self.item = item
     }
@@ -41,7 +40,7 @@ struct AlbumDetailReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem(MusicEntity.Chart.TopAlbum.Item)
+    case getItem
 
     case fetchItem(Result<MusicEntity.AlbumDetail.Track.Response, CompositeErrorRepository>)
 
@@ -64,10 +63,10 @@ struct AlbumDetailReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getItem(let item):
+      case .getItem:
         state.fetchItem.isLoading = true
         return sideEffect
-          .getItem(item)
+          .getItem(state.item)
           .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
 
       case .fetchItem(let result):
@@ -75,7 +74,7 @@ struct AlbumDetailReducer {
         switch result {
         case .success(let item):
           state.fetchItem.value = item
-          state.itemList = state.itemList + item.itemList
+          state.itemList = state.itemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -94,4 +93,14 @@ struct AlbumDetailReducer {
   private let pageID: String
   private let sideEffect: AlbumDetailSideEffect
 
+}
+
+extension [MusicEntity.AlbumDetail.Track.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
 }

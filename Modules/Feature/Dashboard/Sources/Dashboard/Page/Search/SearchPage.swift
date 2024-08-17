@@ -35,7 +35,7 @@ extension SearchPage: View {
           TopResultComponent(
             viewState: .init(item: item),
             tapAritistAction: { store.send(.routeToArtist($0)) },
-            tapAlbumAction: { _ in  },
+            tapAlbumAction: { store.send(.routeToAlbumDetail($0)) },
             store: store)
         }
       }
@@ -53,7 +53,7 @@ extension SearchPage: View {
     .onAppear {
       throttleEvent.apply { _ in
 //        store.send(.searchSong(store.query))
-        store.send(.searchArtist(store.query))
+//        store.send(.searchArtist(store.query))
 //        store.send(.searchAlbum(store.query))
         store.send(.searchTopResult(store.query))
         store.send(.searchKeyword(store.query))

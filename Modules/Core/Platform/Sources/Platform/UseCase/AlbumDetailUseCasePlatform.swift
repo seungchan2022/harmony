@@ -34,6 +34,8 @@ extension AlbumDetailUseCasePlatform: AlbumDetailUseCase {
                   id: $0.id.rawValue,
                   title: $0.title,
                   artistName: $0.artistName,
+                  releaseDate: $0.releaseDate ?? .now,
+                  genreItemList: $0.genreNames,
                   trackNumber: $0.trackNumber,
                   artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
               }

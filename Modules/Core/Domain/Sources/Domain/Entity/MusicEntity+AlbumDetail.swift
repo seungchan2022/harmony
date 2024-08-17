@@ -38,12 +38,16 @@ extension MusicEntity.AlbumDetail.Track {
       id: String,
       title: String,
       artistName: String,
+      releaseDate: Date?,
+      genreItemList: [String],
       trackNumber: Int? = .zero,
       artwork: ArtworkItem)
     {
       self.id = id
       self.title = title
       self.artistName = artistName
+      self.releaseDate = releaseDate
+      self.genreItemList = genreItemList
       self.trackNumber = trackNumber
       self.artwork = artwork
     }
@@ -53,6 +57,8 @@ extension MusicEntity.AlbumDetail.Track {
     public let id: String
     public let title: String
     public let artistName: String
+    public let releaseDate: Date?
+    public let genreItemList: [String]
     public let trackNumber: Int?
     public let artwork: ArtworkItem
 
@@ -62,6 +68,8 @@ extension MusicEntity.AlbumDetail.Track {
       case id
       case title
       case artistName
+      case releaseDate
+      case genreItemList = "genreNames"
       case trackNumber
       case artwork
     }

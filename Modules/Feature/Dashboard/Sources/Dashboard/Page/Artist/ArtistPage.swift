@@ -12,7 +12,11 @@ struct ArtistPage {
 
 extension ArtistPage {
   private var gridColumnList: [GridItem] {
-    Array(repeating: .init(.flexible()), count: 4)
+    if store.topSongItemList.count >= 4 {
+      return Array(repeating: .init(.fixed(80)), count: 4)
+    } else {
+      return Array(repeating: .init(.fixed(80)), count: store.topSongItemList.count)
+    }
   }
 }
 
@@ -235,6 +239,7 @@ extension ArtistPage: View {
         }
       }
     }
+    .navigationTitle(store.item.name ?? "")
     .onAppear {
       store.send(.getTopSongItem(store.item))
       store.send(.getEssentialAlbumItem(store.item))

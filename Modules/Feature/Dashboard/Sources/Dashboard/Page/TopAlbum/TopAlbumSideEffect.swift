@@ -45,3 +45,9 @@ extension TopAlbumSideEffect {
     }
   }
 }
+
+extension MusicEntity.Chart.TopAlbum.Item {
+  fileprivate func serialized() -> MusicEntity.AlbumDetail.Track.Request {
+    .init(id: id)
+  }
+}

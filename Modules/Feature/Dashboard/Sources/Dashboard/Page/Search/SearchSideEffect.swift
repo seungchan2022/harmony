@@ -118,4 +118,14 @@ extension SearchSideEffect {
         isAnimated: true)
     }
   }
+
+  var routeToAlbumDetail: (MusicEntity.Search.TopResult.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

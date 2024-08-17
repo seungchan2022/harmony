@@ -23,11 +23,11 @@ struct AlbumDetailSideEffect {
 }
 
 extension AlbumDetailSideEffect {
-  var getItem: (MusicEntity.Chart.TopAlbum.Item) -> Effect<AlbumDetailReducer.Action> {
+  var getItem: (MusicEntity.AlbumDetail.Track.Request) -> Effect<AlbumDetailReducer.Action> {
     { item in
       .publisher {
         useCase.albumDetailUseCase
-          .track(item.serialized())
+          .track(item)
           .receive(on: main)
           .mapToResult()
           .map(AlbumDetailReducer.Action.fetchItem)

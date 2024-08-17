@@ -33,7 +33,7 @@ struct SearchReducer {
 
     let id: UUID
 
-    var query = "g"
+    var query = "iu"
 
     var songItemList: [MusicEntity.Search.Song.Item] = []
     var artistItemList: [MusicEntity.Search.Artist.Item] = []
@@ -67,6 +67,7 @@ struct SearchReducer {
     case fetchSearchKeywordItem(Result<MusicEntity.Search.Keyword.Composite, CompositeErrorRepository>)
 
     case routeToArtist(MusicEntity.Search.TopResult.Item)
+    case routeToAlbumDetail(MusicEntity.Search.TopResult.Item)
 
     case throwError(CompositeErrorRepository)
   }
@@ -246,6 +247,10 @@ struct SearchReducer {
 
       case .routeToArtist(let item):
         sideEffect.routeToArtist(item)
+        return .none
+
+      case .routeToAlbumDetail(let item):
+        sideEffect.routeToAlbumDetail(item)
         return .none
 
       case .throwError(let error):

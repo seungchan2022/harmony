@@ -22,7 +22,7 @@ struct PlayListDetailReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    let item: MusicEntity.Chart.TopPlayList.Item
+    let requestModel: MusicEntity.PlayListDetail.Track.Request
 
     var itemList: [MusicEntity.PlayListDetail.Track.Item] = []
 
@@ -30,10 +30,10 @@ struct PlayListDetailReducer {
 
     init(
       id: UUID = UUID(),
-      item: MusicEntity.Chart.TopPlayList.Item)
+      requestModel: MusicEntity.PlayListDetail.Track.Request)
     {
       self.id = id
-      self.item = item
+      self.requestModel = requestModel
     }
   }
 
@@ -41,7 +41,7 @@ struct PlayListDetailReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem(MusicEntity.Chart.TopPlayList.Item)
+    case getItem(MusicEntity.PlayListDetail.Track.Request)
 
     case fetchItem(Result<MusicEntity.PlayListDetail.Track.Response, CompositeErrorRepository>)
 
@@ -64,10 +64,10 @@ struct PlayListDetailReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getItem(let item):
+      case .getItem(let requestModel):
         state.fetchItem.isLoading = true
         return sideEffect
-          .getItem(item)
+          .getItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestItem, cancelInFlight: true)
 
       case .fetchItem(let result):

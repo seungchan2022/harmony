@@ -23,21 +23,15 @@ struct PlayListDetailSideEffect {
 }
 
 extension PlayListDetailSideEffect {
-  var getItem: (MusicEntity.Chart.TopPlayList.Item) -> Effect<PlayListDetailReducer.Action> {
-    { item in
+  var getItem: (MusicEntity.PlayListDetail.Track.Request) -> Effect<PlayListDetailReducer.Action> {
+    { req in
       .publisher {
         useCase.playListDetailUseCase
-          .track(item.serialized())
+          .track(req)
           .receive(on: main)
           .mapToResult()
           .map(PlayListDetailReducer.Action.fetchItem)
       }
     }
-  }
-}
-
-extension MusicEntity.Chart.TopPlayList.Item {
-  fileprivate func serialized() -> MusicEntity.PlayListDetail.Track.Request {
-    .init(id: id)
   }
 }

@@ -21,9 +21,8 @@ extension PlayListDetailPage: View {
         }
       }
     }
-    .navigationTitle(store.item.name)
     .onAppear {
-      store.send(.getItem(store.item))
+      store.send(.getItem(store.requestModel))
     }
   }
 }

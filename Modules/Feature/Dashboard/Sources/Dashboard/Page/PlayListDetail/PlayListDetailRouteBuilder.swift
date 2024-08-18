@@ -8,12 +8,12 @@ struct PlayListDetailRouteBuilder<RootNavigator: RootNavigatorType> {
 
     return .init(matchPath: matchPath) { navigator, items, diContainer -> RouteViewController? in
       guard let env: DashboardEnvironmentUsable = diContainer.resolve() else { return .none }
-      guard let item: MusicEntity.Chart.TopPlayList.Item = items.decoded() else { return .none }
+      guard let requestModel: MusicEntity.PlayListDetail.Track.Request = items.decoded() else { return .none }
 
       return DebugWrappingController(matchPath: matchPath) {
         PlayListDetailPage(
           store: .init(
-            initialState: PlayListDetailReducer.State(item: item),
+            initialState: PlayListDetailReducer.State(requestModel: requestModel),
             reducer: {
               PlayListDetailReducer(
                 sideEffect: .init(

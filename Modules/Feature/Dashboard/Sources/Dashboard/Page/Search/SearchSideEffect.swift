@@ -165,4 +165,14 @@ extension SearchSideEffect {
         isAnimated: true)
     }
   }
+
+  var routeToPlayListDetail: (MusicEntity.Search.PlayList.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.playListDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

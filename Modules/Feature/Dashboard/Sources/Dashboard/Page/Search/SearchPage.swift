@@ -126,7 +126,9 @@ extension SearchPage: View {
             case .playList:
               LazyVStack {
                 ForEach(store.playList, id: \.id) { item in
-                  PlayListComponent(viewState: .init(item: item))
+                  PlayListComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToPlayListDetail($0)) })
                     .onAppear {
                       guard let last = store.playList.last, last.id == item.id else { return }
                       guard !store.fetchSearchPlayItem.isLoading else { return }

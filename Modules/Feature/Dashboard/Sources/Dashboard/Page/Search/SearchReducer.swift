@@ -89,6 +89,7 @@ struct SearchReducer {
 
     case routeToArtist(MusicEntity.Search.Artist.Item)
     case routeToAlbumDetail(MusicEntity.Search.Album.Item)
+    case routeToPlayListDetail(MusicEntity.Search.PlayList.Item)
 
     case throwError(CompositeErrorRepository)
   }
@@ -308,6 +309,10 @@ struct SearchReducer {
 
       case .routeToAlbumDetail(let item):
         sideEffect.routeToAlbumDetail(item)
+        return .none
+
+      case .routeToPlayListDetail(let item):
+        sideEffect.routeToPlayListDetail(item)
         return .none
 
       case .throwError(let error):

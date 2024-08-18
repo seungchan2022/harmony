@@ -40,9 +40,14 @@ extension SearchPage.CategoryComponent: View {
             }
         }
       }
-      .padding(.horizontal, 12)
+      .padding(12)
     }
-    .scrollIndicators(.hidden)
+    .frame(maxWidth: .infinity)
+    .background(
+      colorScheme == .dark
+        ? .black
+        : .white)
+      .scrollIndicators(.hidden)
   }
 }
 

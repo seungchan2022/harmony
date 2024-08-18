@@ -55,7 +55,6 @@ extension SearchPage: View {
             case .topResult:
               LazyVStack {
                 ForEach(store.topResultItemList, id: \.id) { item in
-
                   TopResultComponent(
                     viewState: .init(item: item),
                     tapAritistAction: { store.send(.routeToArtist($0)) },
@@ -69,6 +68,11 @@ extension SearchPage: View {
               LazyVStack {
                 ForEach(store.artistItemList, id: \.id) { item in
                   ArtistComponent(viewState: .init(item: item))
+                    .onAppear {
+                      guard let last = store.artistItemList.last, last.id == item.id else { return }
+                      guard !store.fetchSearchArtistItem.isLoading else { return }
+                      store.send(.searchArtist(store.query))
+                    }
                 }
               }
               .padding(.top, 24)
@@ -80,6 +84,11 @@ extension SearchPage: View {
               LazyVStack {
                 ForEach(store.albumItemList, id: \.id) { item in
                   AlbumComponent(viewState: .init(item: item))
+                    .onAppear {
+                      guard let last = store.albumItemList.last, last.id == item.id else { return }
+                      guard !store.fetchSearchAlbumItem.isLoading else { return }
+                      store.send(.searchAlbum(store.query))
+                    }
                 }
               }
               .padding(.top, 24)
@@ -91,6 +100,11 @@ extension SearchPage: View {
               LazyVStack {
                 ForEach(store.songItemList, id: \.id) { item in
                   SongComponent(viewState: .init(item: item))
+                    .onAppear {
+                      guard let last = store.songItemList.last, last.id == item.id else { return }
+                      guard !store.fetchSearchSongItem.isLoading else { return }
+                      store.send(.searchSong(store.query))
+                    }
                 }
               }
               .padding(.top, 24)
@@ -102,6 +116,11 @@ extension SearchPage: View {
               LazyVStack {
                 ForEach(store.playList, id: \.id) { item in
                   PlayListComponent(viewState: .init(item: item))
+                    .onAppear {
+                      guard let last = store.playList.last, last.id == item.id else { return }
+                      guard !store.fetchSearchPlayItem.isLoading else { return }
+                      store.send(.searchPlayList(store.query))
+                    }
                 }
               }
               .padding(.top, 24)

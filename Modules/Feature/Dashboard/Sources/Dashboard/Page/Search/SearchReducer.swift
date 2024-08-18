@@ -156,7 +156,7 @@ struct SearchReducer {
         state.fetchSearchSongItem.isLoading = true
 
         return sideEffect
-          .song(.init(query: query))
+          .song(.init(query: query, limit: 10, offset: state.songItemList.count))
           .cancellable(pageID: pageID, id: CancelID.requestSearchSong, cancelInFlight: true)
 
       case .searchArtist(let query):
@@ -167,7 +167,7 @@ struct SearchReducer {
         state.fetchSearchArtistItem.isLoading = true
 
         return sideEffect
-          .artist(.init(query: query))
+          .artist(.init(query: query, limit: 10, offset: state.artistItemList.count))
           .cancellable(pageID: pageID, id: CancelID.requestSearchArtist, cancelInFlight: true)
 
       case .searchAlbum(let query):
@@ -176,14 +176,14 @@ struct SearchReducer {
         state.fetchSearchAlbumItem.isLoading = true
 
         return sideEffect
-          .album(.init(query: query))
+          .album(.init(query: query, limit: 10, offset: state.albumItemList.count))
           .cancellable(pageID: pageID, id: CancelID.requestSearchAlbum, cancelInFlight: true)
 
       case .searchPlayList(let query):
         guard !query.isEmpty else { return .none }
         state.fetchSearchPlayItem.isLoading = true
         return sideEffect
-          .playList(.init(query: query))
+          .playList(.init(query: query, limit: 10, offset: state.playList.count))
           .cancellable(pageID: pageID, id: CancelID.requestPlayList, cancelInFlight: true)
 
       case .searchTopResult(let query):
@@ -333,8 +333,6 @@ extension [MusicEntity.Search.TopResult.Item] {
     return new
   }
 }
-
-
 
 extension [MusicEntity.Search.Artist.Item] {
   fileprivate func merge(_ target: Self) -> Self {

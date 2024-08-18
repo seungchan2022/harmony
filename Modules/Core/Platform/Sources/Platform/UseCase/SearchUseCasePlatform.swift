@@ -20,7 +20,8 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Song.self])
 
-            request.offset = .zero
+            request.limit = req.limit
+            request.offset = req.offset
 
             let response = try await request.response()
 
@@ -57,7 +58,8 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Artist.self])
 
-            request.offset = .zero
+            request.limit = req.limit
+            request.offset = req.offset
 
             let response = try await request.response()
 
@@ -94,7 +96,8 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Album.self])
 
-            request.offset = .zero
+            request.limit = req.limit
+            request.offset = req.offset
 
             let response = try await request.response()
 
@@ -133,7 +136,8 @@ extension SearchUseCasePlatform: SearchUseCase {
               term: req.query,
               types: [Playlist.self])
 
-            request.offset = .zero
+            request.limit = req.limit
+            request.offset = req.offset
 
             let response = try await request.response()
 

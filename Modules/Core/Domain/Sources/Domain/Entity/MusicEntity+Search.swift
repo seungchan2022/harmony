@@ -16,13 +16,23 @@ extension MusicEntity {
 extension MusicEntity.Search.Song {
   public struct Request: Equatable, Codable, Sendable {
     public let query: String
+    public let limit: Int?
+    public let offset: Int?
 
-    public init(query: String) {
+    public init(
+      query: String,
+      limit: Int? = .zero,
+      offset: Int? = .zero)
+    {
       self.query = query
+      self.limit = limit
+      self.offset = offset
     }
 
     private enum CodingKeys: String, CodingKey {
       case query = "term"
+      case limit
+      case offset
     }
   }
 
@@ -85,13 +95,23 @@ extension MusicEntity.Search.Song {
 extension MusicEntity.Search.Artist {
   public struct Request: Equatable, Codable, Sendable {
     public let query: String
+    public let limit: Int?
+    public let offset: Int?
 
-    public init(query: String) {
+    public init(
+      query: String,
+      limit: Int? = .zero,
+      offset: Int? = .zero)
+    {
       self.query = query
+      self.limit = limit
+      self.offset = offset
     }
 
     private enum CodingKeys: String, CodingKey {
       case query = "term"
+      case limit
+      case offset
     }
   }
 
@@ -143,13 +163,23 @@ extension MusicEntity.Search.Artist {
 extension MusicEntity.Search.Album {
   public struct Request: Equatable, Codable, Sendable {
     public let query: String
+    public let limit: Int?
+    public let offset: Int?
 
-    public init(query: String) {
+    public init(
+      query: String,
+      limit: Int? = .zero,
+      offset: Int? = .zero)
+    {
       self.query = query
+      self.limit = limit
+      self.offset = offset
     }
 
     private enum CodingKeys: String, CodingKey {
       case query = "term"
+      case limit
+      case offset
     }
   }
 
@@ -212,13 +242,23 @@ extension MusicEntity.Search.Album {
 extension MusicEntity.Search.PlayList {
   public struct Request: Equatable, Codable, Sendable {
     public let query: String
+    public let limit: Int?
+    public let offset: Int?
 
-    public init(query: String) {
+    public init(
+      query: String,
+      limit: Int? = .zero,
+      offset: Int? = .zero)
+    {
       self.query = query
+      self.limit = limit
+      self.offset = offset
     }
 
     private enum CodingKeys: String, CodingKey {
       case query = "term"
+      case limit
+      case offset
     }
   }
 

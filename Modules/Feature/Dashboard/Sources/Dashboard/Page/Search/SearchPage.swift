@@ -22,7 +22,14 @@ extension SearchPage: View {
       if !store.query.isEmpty {
         LazyVStack {
           ForEach(store.keywordItemList, id: \.searchTerm) { item in
-            KeywordComponent(viewState: .init(item: item), store: store)
+            KeywordComponent(
+              viewState: .init(item: item),
+              tapAction: {
+                store.query = $0.searchTerm
+                store.category = .topResult
+                store.isShowSearchResult = true
+              },
+              store: store)
           }
         }
 
@@ -145,6 +152,7 @@ extension SearchPage: View {
       store.category = .topResult
       store.isShowSearchResult = true
     }
+    .scrollDismissesKeyboard(.immediately)
     .navigationTitle("검색")
     .navigationBarTitleDisplayMode(.large)
     .onChange(of: store.query) { _, new in

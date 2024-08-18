@@ -36,13 +36,13 @@ extension SearchPage.SongComponent: View {
                 colorScheme == .dark
                   ? DesignSystemColor.system(.white).color
                   : DesignSystemColor.system(.black).color)
-                .multilineTextAlignment(.leading)
-                .lineLimit(1)
 
             Text("노래 • \(viewState.item.artistName)")
               .font(.subheadline)
               .foregroundStyle(DesignSystemColor.palette(.gray(.lv300)).color)
           }
+          .multilineTextAlignment(.leading)
+          .lineLimit(1)
 
           Spacer()
 

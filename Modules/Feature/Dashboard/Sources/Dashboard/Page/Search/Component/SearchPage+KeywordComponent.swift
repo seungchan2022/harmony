@@ -8,6 +8,7 @@ import SwiftUI
 extension SearchPage {
   struct KeywordComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Search.Keyword.Item) -> Void
 
     @Bindable var store: StoreOf<SearchReducer>
 
@@ -22,7 +23,7 @@ extension SearchPage.KeywordComponent { }
 
 extension SearchPage.KeywordComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading) {
         Spacer()
         HStack {

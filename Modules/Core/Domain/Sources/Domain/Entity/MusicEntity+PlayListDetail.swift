@@ -1,15 +1,15 @@
 import Foundation
 import MusicKit
 
-// MARK: - MusicEntity.TopPlayListDetail
+// MARK: - MusicEntity.PlayListDetail
 
 extension MusicEntity {
-  public enum TopPlayListDetail {
+  public enum PlayListDetail {
     public enum Track { }
   }
 }
 
-extension MusicEntity.TopPlayListDetail.Track {
+extension MusicEntity.PlayListDetail.Track {
   public struct Request: Equatable, Codable, Sendable {
     public let id: String
 

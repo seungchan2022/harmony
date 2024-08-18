@@ -2,21 +2,21 @@ import Combine
 import Domain
 import MusicKit
 
-// MARK: - TopPlayListDetailUseCasePlatform
+// MARK: - PlayListDetailUseCasePlatform
 
-public struct TopPlayListDetailUseCasePlatform {
+public struct PlayListDetailUseCasePlatform {
   public init() { }
 }
 
-// MARK: TopPlayListDetailUseCase
+// MARK: PlayListDetailUseCase
 
-extension TopPlayListDetailUseCasePlatform: TopPlayListDetailUseCase {
-  public var track: (MusicEntity.TopPlayListDetail.Track.Request) -> AnyPublisher<
-    MusicEntity.TopPlayListDetail.Track.Response,
+extension PlayListDetailUseCasePlatform: PlayListDetailUseCase {
+  public var track: (MusicEntity.PlayListDetail.Track.Request) -> AnyPublisher<
+    MusicEntity.PlayListDetail.Track.Response,
     CompositeErrorRepository
   > {
     { req in
-      Future<MusicEntity.TopPlayListDetail.Track.Response, CompositeErrorRepository> { promise in
+      Future<MusicEntity.PlayListDetail.Track.Response, CompositeErrorRepository> { promise in
         Task {
           do {
             let request = MusicCatalogResourceRequest<Playlist>(matching: \.id, equalTo: MusicItemID(rawValue: req.id))
@@ -30,14 +30,14 @@ extension TopPlayListDetailUseCasePlatform: TopPlayListDetailUseCase {
 
             let itemList = tracks
               .map {
-                MusicEntity.TopPlayListDetail.Track.Item(
+                MusicEntity.PlayListDetail.Track.Item(
                   id: $0.id.rawValue,
                   title: $0.title,
                   artistName: $0.artistName,
                   artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
               }
 
-            let result = MusicEntity.TopPlayListDetail.Track.Response(itemList: itemList)
+            let result = MusicEntity.PlayListDetail.Track.Response(itemList: itemList)
             return promise(.success(result))
 
           } catch {

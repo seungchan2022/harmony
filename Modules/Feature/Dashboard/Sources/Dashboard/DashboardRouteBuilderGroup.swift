@@ -17,7 +17,7 @@ extension DashboardRouteBuilderGroup {
       DailyTopRouteBuilder.generate(),
       DailyTopDetailRouteBuilder.generate(),
       TopPlayListRouteBuilder.generate(),
-      TopPlayListDetailRouteBuilder.generate(),
+      PlayListDetailRouteBuilder.generate(),
       TopAlbumRouteBuilder.generate(),
       AlbumDetailRouteBuilder.generate(),
       TopMusicVideoRouteBuilder.generate(),

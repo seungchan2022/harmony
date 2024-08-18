@@ -1,17 +1,17 @@
 import ComposableArchitecture
 import SwiftUI
 
-// MARK: - TopPlayListDetailPage
+// MARK: - PlayListDetailPage
 
-struct TopPlayListDetailPage {
-  @Bindable var store: StoreOf<TopPlayListDetailReducer>
+struct PlayListDetailPage {
+  @Bindable var store: StoreOf<PlayListDetailReducer>
 }
 
-extension TopPlayListDetailPage { }
+extension PlayListDetailPage { }
 
 // MARK: View
 
-extension TopPlayListDetailPage: View {
+extension PlayListDetailPage: View {
   var body: some View {
     ScrollView {
       LazyVStack {

@@ -39,7 +39,7 @@ extension TopPlayListSideEffect {
     { item in
       navigator.next(
         linkItem: .init(
-          path: Link.Dashboard.Path.topPlayListDetail.rawValue,
+          path: Link.Dashboard.Path.playListDetail.rawValue,
           items: item),
         isAnimated: true)
     }

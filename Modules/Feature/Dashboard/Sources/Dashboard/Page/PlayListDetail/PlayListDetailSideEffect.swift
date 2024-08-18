@@ -4,9 +4,9 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
-// MARK: - TopPlayListDetailSideEffect
+// MARK: - PlayListDetailSideEffect
 
-struct TopPlayListDetailSideEffect {
+struct PlayListDetailSideEffect {
   let useCase: DashboardEnvironmentUsable
   let main: AnySchedulerOf<DispatchQueue>
   let navigator: RootNavigatorType
@@ -22,22 +22,22 @@ struct TopPlayListDetailSideEffect {
   }
 }
 
-extension TopPlayListDetailSideEffect {
-  var getItem: (MusicEntity.Chart.TopPlayList.Item) -> Effect<TopPlayListDetailReducer.Action> {
+extension PlayListDetailSideEffect {
+  var getItem: (MusicEntity.Chart.TopPlayList.Item) -> Effect<PlayListDetailReducer.Action> {
     { item in
       .publisher {
-        useCase.topPlayListDetailUseCase
+        useCase.playListDetailUseCase
           .track(item.serialized())
           .receive(on: main)
           .mapToResult()
-          .map(TopPlayListDetailReducer.Action.fetchItem)
+          .map(PlayListDetailReducer.Action.fetchItem)
       }
     }
   }
 }
 
 extension MusicEntity.Chart.TopPlayList.Item {
-  fileprivate func serialized() -> MusicEntity.TopPlayListDetail.Track.Request {
+  fileprivate func serialized() -> MusicEntity.PlayListDetail.Track.Request {
     .init(id: id)
   }
 }

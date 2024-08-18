@@ -17,7 +17,7 @@ extension Link.Dashboard {
     case dailyTop
     case dailyTopDetail
     case topPlayList
-    case topPlayListDetail
+    case playListDetail
     case topAlbum
     case albumDetail
     case topMusicVideo

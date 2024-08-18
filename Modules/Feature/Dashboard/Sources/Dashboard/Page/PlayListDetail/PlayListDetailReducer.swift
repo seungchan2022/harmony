@@ -4,13 +4,13 @@ import Domain
 import Foundation
 
 @Reducer
-struct TopPlayListDetailReducer {
+struct PlayListDetailReducer {
 
   // MARK: Lifecycle
 
   init(
     pageID: String = UUID().uuidString,
-    sideEffect: TopPlayListDetailSideEffect)
+    sideEffect: PlayListDetailSideEffect)
   {
     self.pageID = pageID
     self.sideEffect = sideEffect
@@ -24,9 +24,9 @@ struct TopPlayListDetailReducer {
 
     let item: MusicEntity.Chart.TopPlayList.Item
 
-    var itemList: [MusicEntity.TopPlayListDetail.Track.Item] = []
+    var itemList: [MusicEntity.PlayListDetail.Track.Item] = []
 
-    var fetchItem: FetchState.Data<MusicEntity.TopPlayListDetail.Track.Response?> = .init(isLoading: false, value: .none)
+    var fetchItem: FetchState.Data<MusicEntity.PlayListDetail.Track.Response?> = .init(isLoading: false, value: .none)
 
     init(
       id: UUID = UUID(),
@@ -43,7 +43,7 @@ struct TopPlayListDetailReducer {
 
     case getItem(MusicEntity.Chart.TopPlayList.Item)
 
-    case fetchItem(Result<MusicEntity.TopPlayListDetail.Track.Response, CompositeErrorRepository>)
+    case fetchItem(Result<MusicEntity.PlayListDetail.Track.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -92,6 +92,6 @@ struct TopPlayListDetailReducer {
   // MARK: Private
 
   private let pageID: String
-  private let sideEffect: TopPlayListDetailSideEffect
+  private let sideEffect: PlayListDetailSideEffect
 
 }

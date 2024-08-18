@@ -24,11 +24,11 @@ struct ArtistSideEffect {
 }
 
 extension ArtistSideEffect {
-  var getTopSongItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getTopSongItem: (MusicEntity.Artist.TopSong.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .topSong(item.serialized())
+          .topSong(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchTopSongItem)
@@ -36,11 +36,11 @@ extension ArtistSideEffect {
     }
   }
 
-  var getEssentialAlbumItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getEssentialAlbumItem: (MusicEntity.Artist.EssentialAlbum.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .essentialAlbum(item.serialized())
+          .essentialAlbum(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchEssentialAlbumItem)
@@ -48,11 +48,11 @@ extension ArtistSideEffect {
     }
   }
 
-  var getFullAlbumItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getFullAlbumItem: (MusicEntity.Artist.FullAlbum.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .fullAlbum(item.serialized())
+          .fullAlbum(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchFullAlbumItem)
@@ -60,11 +60,11 @@ extension ArtistSideEffect {
     }
   }
 
-  var getMusicVideoItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getMusicVideoItem: (MusicEntity.Artist.MusicVideo.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .musicVideo(item.serialized())
+          .musicVideo(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchMusicVideoItem)
@@ -72,23 +72,23 @@ extension ArtistSideEffect {
     }
   }
 
-  var getPlayItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getPlayListItem: (MusicEntity.Artist.PlayList.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .playList(item.serialized())
+          .playList(item)
           .receive(on: main)
           .mapToResult()
-          .map(ArtistReducer.Action.fetchPlayItem)
+          .map(ArtistReducer.Action.fetchPlayListItem)
       }
     }
   }
 
-  var getSingleItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getSingleItem: (MusicEntity.Artist.Single.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .single(item.serialized())
+          .single(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchSingleItem)
@@ -96,45 +96,15 @@ extension ArtistSideEffect {
     }
   }
 
-  var getSimilarArtistItem: (MusicEntity.Search.TopResult.Item) -> Effect<ArtistReducer.Action> {
+  var getSimilarArtistItem: (MusicEntity.Artist.SimilarArtist.Request) -> Effect<ArtistReducer.Action> {
     { item in
       .publisher {
         useCase.artistUseCase
-          .similarArtist(item.serialized())
+          .similarArtist(item)
           .receive(on: main)
           .mapToResult()
           .map(ArtistReducer.Action.fetchSimilarArtistItem)
       }
     }
-  }
-}
-
-extension MusicEntity.Search.TopResult.Item {
-  fileprivate func serialized() -> MusicEntity.Artist.TopSong.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.EssentialAlbum.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.FullAlbum.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.MusicVideo.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.PlayList.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.Single.Request {
-    .init(id: id)
-  }
-
-  fileprivate func serialized() -> MusicEntity.Artist.SimilarArtist.Request {
-    .init(id: id)
   }
 }

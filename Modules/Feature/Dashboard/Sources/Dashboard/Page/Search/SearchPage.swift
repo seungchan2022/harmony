@@ -37,8 +37,8 @@ extension SearchPage: View {
           ForEach(store.topResultItemList, id: \.id) { item in
             TopResultComponent(
               viewState: .init(item: item),
-              tapAritistAction: { store.send(.routeToArtist($0)) },
-              tapAlbumAction: { store.send(.routeToAlbumDetail($0)) },
+              tapAritistAction: { store.send(.routeToTopResultArtist($0)) },
+              tapAlbumAction: { store.send(.routeToTopResultAlbumDetail($0)) },
               store: store)
           }
         }
@@ -64,8 +64,8 @@ extension SearchPage: View {
                 ForEach(store.topResultItemList, id: \.id) { item in
                   TopResultComponent(
                     viewState: .init(item: item),
-                    tapAritistAction: { store.send(.routeToArtist($0)) },
-                    tapAlbumAction: { store.send(.routeToAlbumDetail($0)) },
+                    tapAritistAction: { store.send(.routeToTopResultArtist($0)) },
+                    tapAlbumAction: { store.send(.routeToTopResultAlbumDetail($0)) },
                     store: store)
                 }
               }
@@ -74,7 +74,9 @@ extension SearchPage: View {
             case .artist:
               LazyVStack {
                 ForEach(store.artistItemList, id: \.id) { item in
-                  ArtistComponent(viewState: .init(item: item))
+                  ArtistComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToArtist($0)) })
                     .onAppear {
                       guard let last = store.artistItemList.last, last.id == item.id else { return }
                       guard !store.fetchSearchArtistItem.isLoading else { return }
@@ -90,7 +92,9 @@ extension SearchPage: View {
             case .album:
               LazyVStack {
                 ForEach(store.albumItemList, id: \.id) { item in
-                  AlbumComponent(viewState: .init(item: item))
+                  AlbumComponent(
+                    viewState: .init(item: item),
+                    tapAcion: { store.send(.routeToAlbumDetail($0)) })
                     .onAppear {
                       guard let last = store.albumItemList.last, last.id == item.id else { return }
                       guard !store.fetchSearchAlbumItem.isLoading else { return }

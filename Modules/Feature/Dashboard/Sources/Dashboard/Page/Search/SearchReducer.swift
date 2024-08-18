@@ -84,8 +84,11 @@ struct SearchReducer {
     case fetchSearchTopResultItem(Result<MusicEntity.Search.TopResult.Composite, CompositeErrorRepository>)
     case fetchSearchKeywordItem(Result<MusicEntity.Search.Keyword.Composite, CompositeErrorRepository>)
 
-    case routeToArtist(MusicEntity.Search.TopResult.Item)
-    case routeToAlbumDetail(MusicEntity.Search.TopResult.Item)
+    case routeToTopResultArtist(MusicEntity.Search.TopResult.Item)
+    case routeToTopResultAlbumDetail(MusicEntity.Search.TopResult.Item)
+
+    case routeToArtist(MusicEntity.Search.Artist.Item)
+    case routeToAlbumDetail(MusicEntity.Search.Album.Item)
 
     case throwError(CompositeErrorRepository)
   }
@@ -290,6 +293,14 @@ struct SearchReducer {
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
+
+      case .routeToTopResultArtist(let item):
+        sideEffect.routeToTopResultArtist(item)
+        return .none
+
+      case .routeToTopResultAlbumDetail(let item):
+        sideEffect.routeToTopResultAlbumDetail(item)
+        return .none
 
       case .routeToArtist(let item):
         sideEffect.routeToArtist(item)

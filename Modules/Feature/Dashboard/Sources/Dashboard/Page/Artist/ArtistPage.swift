@@ -151,7 +151,7 @@ extension ArtistPage: View {
           }
         }
 
-        if !store.playItemList.isEmpty {
+        if !store.playListItemList.isEmpty {
           VStack {
             HStack {
               Text("아티스트 및 플레이리스트")
@@ -168,7 +168,7 @@ extension ArtistPage: View {
 
             ScrollView(.horizontal) {
               LazyHStack(spacing: 16) {
-                ForEach(store.playItemList, id: \.id) { item in
+                ForEach(store.playListItemList, id: \.id) { item in
                   PlayListComponent(viewState: .init(item: item))
                 }
               }
@@ -239,15 +239,15 @@ extension ArtistPage: View {
         }
       }
     }
-    .navigationTitle(store.item.name ?? "")
+//    .navigationTitle(store.item.name ?? "")
     .onAppear {
-      store.send(.getTopSongItem(store.item))
-      store.send(.getEssentialAlbumItem(store.item))
-      store.send(.getFullAlbumItem(store.item))
-      store.send(.getMusicVideoItem(store.item))
-      store.send((.getPlayItem(store.item)))
-      store.send(.getSingleItem(store.item))
-      store.send(.getSimilarArtistItem(store.item))
+      store.send(.getTopSongItem(store.topSongRequestModel))
+      store.send(.getEssentialAlbumItem(store.essentialAlbumRequestModel))
+      store.send(.getFullAlbumItem(store.fullAlbumRequestModel))
+      store.send(.getMusicVideoItem(store.musicVideoRequestModel))
+      store.send((.getPlayListItem(store.playListRequestModel)))
+      store.send(.getSingleItem(store.singRequestModel))
+      store.send(.getSimilarArtistItem(store.similarArtistRequestModel))
     }
   }
 }

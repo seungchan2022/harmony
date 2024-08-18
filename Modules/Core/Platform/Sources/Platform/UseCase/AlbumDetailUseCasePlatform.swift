@@ -37,7 +37,7 @@ extension AlbumDetailUseCasePlatform: AlbumDetailUseCase {
                   releaseDate: $0.releaseDate ?? .now,
                   genreItemList: $0.genreNames,
                   trackNumber: $0.trackNumber,
-                  artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
+                  artwork: .init(url: $0.artwork?.url(width: 180, height: 180)))
               }
 
             let result = MusicEntity.AlbumDetail.Track.Response(itemList: itemList)

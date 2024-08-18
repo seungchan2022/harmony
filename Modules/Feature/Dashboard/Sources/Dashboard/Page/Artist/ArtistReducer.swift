@@ -25,22 +25,41 @@ struct ArtistReducer {
 
     init(
       id: UUID = UUID(),
-      item: MusicEntity.Search.TopResult.Item)
+      topSongRequestModel: MusicEntity.Artist.TopSong.Request,
+      essentialAlbumRequestModel: MusicEntity.Artist.EssentialAlbum.Request,
+      fullAlbumRequestModel: MusicEntity.Artist.FullAlbum.Request,
+      musicVideoRequestModel: MusicEntity.Artist.MusicVideo.Request,
+      playListRequestModel: MusicEntity.Artist.PlayList.Request,
+      singRequestModel: MusicEntity.Artist.Single.Request,
+      similarArtistRequestModel: MusicEntity.Artist.SimilarArtist.Request)
     {
       self.id = id
-      self.item = item
+      self.topSongRequestModel = topSongRequestModel
+      self.essentialAlbumRequestModel = essentialAlbumRequestModel
+      self.fullAlbumRequestModel = fullAlbumRequestModel
+      self.musicVideoRequestModel = musicVideoRequestModel
+      self.playListRequestModel = playListRequestModel
+      self.singRequestModel = singRequestModel
+      self.similarArtistRequestModel = similarArtistRequestModel
     }
 
     // MARK: Internal
 
     let id: UUID
-    let item: MusicEntity.Search.TopResult.Item
+
+    let topSongRequestModel: MusicEntity.Artist.TopSong.Request
+    let essentialAlbumRequestModel: MusicEntity.Artist.EssentialAlbum.Request
+    let fullAlbumRequestModel: MusicEntity.Artist.FullAlbum.Request
+    let musicVideoRequestModel: MusicEntity.Artist.MusicVideo.Request
+    let playListRequestModel: MusicEntity.Artist.PlayList.Request
+    let singRequestModel: MusicEntity.Artist.Single.Request
+    let similarArtistRequestModel: MusicEntity.Artist.SimilarArtist.Request
 
     var topSongItemList: [MusicEntity.Artist.TopSong.Item] = []
     var essentialAlbumItemList: [MusicEntity.Artist.EssentialAlbum.Item] = []
     var fulllAlbumItemList: [MusicEntity.Artist.FullAlbum.Item] = []
     var musicVideoItemList: [MusicEntity.Artist.MusicVideo.Item] = []
-    var playItemList: [MusicEntity.Artist.PlayList.Item] = []
+    var playListItemList: [MusicEntity.Artist.PlayList.Item] = []
     var singleItemList: [MusicEntity.Artist.Single.Item] = []
     var similarArtistItemList: [MusicEntity.Artist.SimilarArtist.Item] = []
 
@@ -50,7 +69,7 @@ struct ArtistReducer {
       value: .none)
     var fetchFullAlbumItem: FetchState.Data<MusicEntity.Artist.FullAlbum.Response?> = .init(isLoading: false, value: .none)
     var fetchMusicVideoItem: FetchState.Data<MusicEntity.Artist.MusicVideo.Response?> = .init(isLoading: false, value: .none)
-    var fetchPlayItem: FetchState.Data<MusicEntity.Artist.PlayList.Response?> = .init(isLoading: false, value: .none)
+    var fetchPlayListItem: FetchState.Data<MusicEntity.Artist.PlayList.Response?> = .init(isLoading: false, value: .none)
     var fetchSingleItem: FetchState.Data<MusicEntity.Artist.Single.Response?> = .init(isLoading: false, value: .none)
     var fetchSimilarArtistItem: FetchState.Data<MusicEntity.Artist.SimilarArtist.Response?> = .init(
       isLoading: false,
@@ -62,19 +81,19 @@ struct ArtistReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getTopSongItem(MusicEntity.Search.TopResult.Item)
-    case getEssentialAlbumItem(MusicEntity.Search.TopResult.Item)
-    case getFullAlbumItem(MusicEntity.Search.TopResult.Item)
-    case getMusicVideoItem(MusicEntity.Search.TopResult.Item)
-    case getPlayItem(MusicEntity.Search.TopResult.Item)
-    case getSingleItem(MusicEntity.Search.TopResult.Item)
-    case getSimilarArtistItem(MusicEntity.Search.TopResult.Item)
+    case getTopSongItem(MusicEntity.Artist.TopSong.Request)
+    case getEssentialAlbumItem(MusicEntity.Artist.EssentialAlbum.Request)
+    case getFullAlbumItem(MusicEntity.Artist.FullAlbum.Request)
+    case getMusicVideoItem(MusicEntity.Artist.MusicVideo.Request)
+    case getPlayListItem(MusicEntity.Artist.PlayList.Request)
+    case getSingleItem(MusicEntity.Artist.Single.Request)
+    case getSimilarArtistItem(MusicEntity.Artist.SimilarArtist.Request)
 
     case fetchTopSongItem(Result<MusicEntity.Artist.TopSong.Response, CompositeErrorRepository>)
     case fetchEssentialAlbumItem(Result<MusicEntity.Artist.EssentialAlbum.Response, CompositeErrorRepository>)
     case fetchFullAlbumItem(Result<MusicEntity.Artist.FullAlbum.Response, CompositeErrorRepository>)
     case fetchMusicVideoItem(Result<MusicEntity.Artist.MusicVideo.Response, CompositeErrorRepository>)
-    case fetchPlayItem(Result<MusicEntity.Artist.PlayList.Response, CompositeErrorRepository>)
+    case fetchPlayListItem(Result<MusicEntity.Artist.PlayList.Response, CompositeErrorRepository>)
     case fetchSingleItem(Result<MusicEntity.Artist.Single.Response, CompositeErrorRepository>)
     case fetchSimilarArtistItem(Result<MusicEntity.Artist.SimilarArtist.Response, CompositeErrorRepository>)
 
@@ -87,9 +106,10 @@ struct ArtistReducer {
     case requestEssentialAlbumItem
     case requestFullAlbumItem
     case requestMusicVideoItem
-    case requestPlayItem
+    case requestPlayListItem
     case requestSingleItem
     case requestSimilarArtistItem
+    case requestArtistItem
   }
 
   var body: some Reducer<State, Action> {
@@ -103,46 +123,46 @@ struct ArtistReducer {
         return .concatenate(
           CancelID.allCases.map { .cancel(pageID: pageID, id: $0) })
 
-      case .getTopSongItem(let item):
+      case .getTopSongItem(let requestModel):
         state.fetchTopSongItem.isLoading = true
         return sideEffect
-          .getTopSongItem(item)
+          .getTopSongItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestTopSongItem, cancelInFlight: true)
 
-      case .getEssentialAlbumItem(let item):
+      case .getEssentialAlbumItem(let requestModel):
         state.fetchEssentialAlbumItem.isLoading = true
         return sideEffect
-          .getEssentialAlbumItem(item)
+          .getEssentialAlbumItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestEssentialAlbumItem, cancelInFlight: true)
 
-      case .getFullAlbumItem(let item):
+      case .getFullAlbumItem(let requestModel):
         state.fetchFullAlbumItem.isLoading = true
         return sideEffect
-          .getFullAlbumItem(item)
+          .getFullAlbumItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestFullAlbumItem, cancelInFlight: true)
 
-      case .getMusicVideoItem(let item):
+      case .getMusicVideoItem(let requestModel):
         state.fetchMusicVideoItem.isLoading = true
         return sideEffect
-          .getMusicVideoItem(item)
+          .getMusicVideoItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestMusicVideoItem, cancelInFlight: true)
 
-      case .getPlayItem(let item):
-        state.fetchPlayItem.isLoading = true
+      case .getPlayListItem(let requestModel):
+        state.fetchPlayListItem.isLoading = true
         return sideEffect
-          .getPlayItem(item)
-          .cancellable(pageID: pageID, id: CancelID.requestPlayItem, cancelInFlight: true)
+          .getPlayListItem(requestModel)
+          .cancellable(pageID: pageID, id: CancelID.requestPlayListItem, cancelInFlight: true)
 
-      case .getSingleItem(let item):
+      case .getSingleItem(let requestModel):
         state.fetchSingleItem.isLoading = true
         return sideEffect
-          .getSingleItem(item)
+          .getSingleItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestSingleItem, cancelInFlight: true)
 
-      case .getSimilarArtistItem(let item):
+      case .getSimilarArtistItem(let requestModel):
         state.fetchSimilarArtistItem.isLoading = true
         return sideEffect
-          .getSimilarArtistItem(item)
+          .getSimilarArtistItem(requestModel)
           .cancellable(pageID: pageID, id: CancelID.requestSimilarArtistItem, cancelInFlight: true)
 
       case .fetchTopSongItem(let result):
@@ -193,12 +213,12 @@ struct ArtistReducer {
           return .run { await $0(.throwError(error)) }
         }
 
-      case .fetchPlayItem(let result):
-        state.fetchPlayItem.isLoading = false
+      case .fetchPlayListItem(let result):
+        state.fetchPlayListItem.isLoading = false
         switch result {
         case .success(let item):
-          state.fetchPlayItem.value = item
-          state.playItemList = state.playItemList + item.itemList
+          state.fetchPlayListItem.value = item
+          state.playListItemList = state.playListItemList + item.itemList
           return .none
 
         case .failure(let error):

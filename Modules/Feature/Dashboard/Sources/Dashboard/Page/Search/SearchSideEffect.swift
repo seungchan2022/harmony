@@ -126,7 +126,7 @@ extension SearchSideEffect {
     }
   }
 
-  var routeToArtist: (MusicEntity.Search.TopResult.Item) -> Void {
+  var routeToTopResultArtist: (MusicEntity.Search.TopResult.Item) -> Void {
     { item in
       navigator.next(
         linkItem: .init(
@@ -136,7 +136,27 @@ extension SearchSideEffect {
     }
   }
 
-  var routeToAlbumDetail: (MusicEntity.Search.TopResult.Item) -> Void {
+  var routeToTopResultAlbumDetail: (MusicEntity.Search.TopResult.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToArtist: (MusicEntity.Search.Artist.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.artist.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToAlbumDetail: (MusicEntity.Search.Album.Item) -> Void {
     { item in
       navigator.next(
         linkItem: .init(

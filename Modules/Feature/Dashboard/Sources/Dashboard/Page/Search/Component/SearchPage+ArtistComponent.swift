@@ -7,6 +7,7 @@ import SwiftUI
 extension SearchPage {
   struct ArtistComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Search.Artist.Item) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
 
@@ -19,7 +20,7 @@ extension SearchPage.ArtistComponent { }
 
 extension SearchPage.ArtistComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading) {
         HStack(spacing: 12) {
           RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {

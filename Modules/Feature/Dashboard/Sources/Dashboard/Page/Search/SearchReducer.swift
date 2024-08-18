@@ -327,17 +327,19 @@ extension [MusicEntity.Search.Keyword.Item] {
 extension [MusicEntity.Search.TopResult.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new
   }
 }
 
+
+
 extension [MusicEntity.Search.Artist.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new
@@ -347,7 +349,7 @@ extension [MusicEntity.Search.Artist.Item] {
 extension [MusicEntity.Search.Album.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new
@@ -357,7 +359,7 @@ extension [MusicEntity.Search.Album.Item] {
 extension [MusicEntity.Search.PlayList.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new
@@ -367,7 +369,7 @@ extension [MusicEntity.Search.PlayList.Item] {
 extension [MusicEntity.Search.Song.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new

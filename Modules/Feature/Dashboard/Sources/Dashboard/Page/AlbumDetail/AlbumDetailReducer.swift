@@ -98,7 +98,7 @@ struct AlbumDetailReducer {
 extension [MusicEntity.AlbumDetail.Track.Item] {
   fileprivate func merge(_ target: Self) -> Self {
     let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id != next.id }) else { return curr }
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
       return curr + [next]
     }
     return new

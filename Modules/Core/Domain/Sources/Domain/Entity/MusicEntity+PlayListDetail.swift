@@ -23,9 +23,20 @@ extension MusicEntity.PlayListDetail.Track {
   }
 
   public struct Response: Equatable, Codable, Sendable {
+    public let name: String
+    public let curatorName: String
+    public let artwork: ArtworkItem
     public let itemList: [Item]
 
-    public init(itemList: [Item]) {
+    public init(
+      name: String,
+      curatorName: String,
+      artwork: ArtworkItem,
+      itemList: [Item])
+    {
+      self.name = name
+      self.curatorName = curatorName
+      self.artwork = artwork
       self.itemList = itemList
     }
   }

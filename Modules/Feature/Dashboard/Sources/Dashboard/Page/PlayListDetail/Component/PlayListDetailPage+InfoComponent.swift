@@ -2,9 +2,9 @@ import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - AlbumDetailPage.InfoComponent
+// MARK: - PlayListDetailPage.InfoComponent
 
-extension AlbumDetailPage {
+extension PlayListDetailPage {
   struct InfoComponent {
     let viewState: ViewState
 
@@ -12,13 +12,13 @@ extension AlbumDetailPage {
   }
 }
 
-extension AlbumDetailPage.InfoComponent { }
+extension PlayListDetailPage.InfoComponent { }
 
-// MARK: - AlbumDetailPage.InfoComponent + View
+// MARK: - PlayListDetailPage.InfoComponent + View
 
-extension AlbumDetailPage.InfoComponent: View {
+extension PlayListDetailPage.InfoComponent: View {
   var body: some View {
-    VStack(spacing: 8) {
+    VStack {
       RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
         RoundedRectangle(cornerRadius: 8)
           .fill(.gray.opacity(0.3))
@@ -27,36 +27,29 @@ extension AlbumDetailPage.InfoComponent: View {
       .frame(width: 180, height: 180)
       .clipShape(RoundedRectangle(cornerRadius: 8))
 
-      Text(viewState.item.title)
+      Text(viewState.item.name)
         .font(.title)
         .fontWeight(.bold)
         .foregroundStyle(
           colorScheme == .dark
             ? DesignSystemColor.system(.white).color
             : DesignSystemColor.system(.black).color)
-          .multilineTextAlignment(.leading)
           .lineLimit(1)
 
-      Text(viewState.item.artistName)
+      Text(viewState.item.curatorName)
         .font(.headline)
         .foregroundStyle(DesignSystemColor.tint(.red).color)
 
-      HStack {
-        Text(viewState.item.genreItemList.first ?? "")
-
-        Text("\(viewState.item.releaseDate.formatted(.dateTime.year(.defaultDigits))) 년")
-      }
-      .font(.body)
-      .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+      Divider()
+        .padding(.leading, 12)
     }
   }
 }
 
-// MARK: - AlbumDetailPage.InfoComponent.ViewState
+// MARK: - PlayListDetailPage.InfoComponent.ViewState
 
-extension AlbumDetailPage.InfoComponent {
+extension PlayListDetailPage.InfoComponent {
   struct ViewState: Equatable {
-    let item: MusicEntity.AlbumDetail.Track.Response
+    let item: MusicEntity.PlayListDetail.Track.Response
   }
-
 }

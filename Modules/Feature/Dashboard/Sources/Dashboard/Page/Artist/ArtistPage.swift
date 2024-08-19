@@ -239,7 +239,7 @@ extension ArtistPage: View {
         }
       }
     }
-//    .navigationTitle(store.item.name ?? "")
+    .navigationBarTitleDisplayMode(.inline)
     .onAppear {
       store.send(.getTopSongItem(store.topSongRequestModel))
       store.send(.getEssentialAlbumItem(store.essentialAlbumRequestModel))

@@ -37,7 +37,12 @@ extension PlayListDetailUseCasePlatform: PlayListDetailUseCase {
                   artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
               }
 
-            let result = MusicEntity.PlayListDetail.Track.Response(itemList: itemList)
+            let result = MusicEntity.PlayListDetail.Track.Response(
+              name: playlist.name,
+              curatorName: playlist.curatorName ?? "",
+              artwork: .init(url: playlist.artwork?.url(width: 180, height: 180)),
+              itemList: itemList)
+
             return promise(.success(result))
 
           } catch {

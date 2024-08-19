@@ -18,7 +18,7 @@ extension AlbumDetailPage: View {
   var body: some View {
     ScrollView {
       LazyVStack {
-        if let item = store.fetchItem.value?.itemList.first {
+        if let item = store.fetchItem.value {
           InfoComponent(viewState: .init(item: item))
 
           Divider()

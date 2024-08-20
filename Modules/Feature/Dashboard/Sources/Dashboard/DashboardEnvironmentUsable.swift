@@ -10,4 +10,6 @@ public protocol DashboardEnvironmentUsable {
   var albumDetailUseCase: AlbumDetailUseCase { get }
   var searchUseCase: SearchUseCase { get }
   var artistUseCase: ArtistUseCase { get }
+  var topSongUseCase: TopSongUseCase { get }
+  var albumUseCase: AlbumUseCase { get }
 }

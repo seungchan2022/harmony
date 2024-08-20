@@ -7,6 +7,7 @@ import SwiftUI
 extension ArtistPage {
   struct SimilarArtistComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Artist.SimilarArtist.Item) -> Void
 
     @Environment(\.colorScheme) var colorScheme
   }
@@ -18,7 +19,7 @@ extension ArtistPage.SimilarArtistComponent { }
 
 extension ArtistPage.SimilarArtistComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .center, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           Circle()

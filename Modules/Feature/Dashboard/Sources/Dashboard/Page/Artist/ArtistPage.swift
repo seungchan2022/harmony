@@ -26,40 +26,44 @@ extension ArtistPage: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 40) {
-        VStack {
-          Button(action: { }) {
-            HStack {
-              if let title = store.fetchTopSongItem.value?.title {
-                Text(title)
-                  .font(.title)
-                  .fontWeight(.semibold)
-                  .foregroundStyle(
-                    colorScheme == .dark
-                      ? DesignSystemColor.system(.white).color
-                      : DesignSystemColor.system(.black).color)
+        if let item = store.fetchTopSongItem.value {
+          InfoComponent(viewState: .init(item: item))
 
-                Image(systemName: "chevron.right")
-                  .fontWeight(.bold)
-                  .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+          VStack {
+            Button(action: { store.send(.routeToTopSong(item)) }) {
+              HStack {
+                if let title = store.fetchTopSongItem.value?.title {
+                  Text(title)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(
+                      colorScheme == .dark
+                        ? DesignSystemColor.system(.white).color
+                        : DesignSystemColor.system(.black).color)
 
-                Spacer()
+                  Image(systemName: "chevron.right")
+                    .fontWeight(.bold)
+                    .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+                  Spacer()
+                }
               }
             }
-          }
-          .padding(.leading, 16)
+            .padding(.leading, 16)
 
-          ScrollView(.horizontal) {
-            LazyHGrid(rows: gridColumnList, spacing: 8) {
-              ForEach(store.topSongItemList.prefix(8), id: \.id) { item in
-                TopSongComponent(viewState: .init(item: item))
-                  .frame(width: 350)
+            ScrollView(.horizontal) {
+              LazyHGrid(rows: gridColumnList, spacing: 8) {
+                ForEach(store.topSongItemList.prefix(8), id: \.id) { item in
+                  TopSongComponent(viewState: .init(item: item))
+                    .frame(width: 350)
+                }
               }
+              .scrollTargetLayout()
+              .padding(.trailing, 40)
             }
-            .scrollTargetLayout()
-            .padding(.trailing, 40)
+            .scrollIndicators(.hidden)
+            .scrollTargetBehavior(.viewAligned)
           }
-          .scrollIndicators(.hidden)
-          .scrollTargetBehavior(.viewAligned)
         }
 
         if !store.essentialAlbumItemList.isEmpty {
@@ -84,7 +88,7 @@ extension ArtistPage: View {
                 ForEach(store.essentialAlbumItemList, id: \.id) { item in
                   EssentialAlbumComponent(
                     viewState: .init(item: item),
-                    tapAction: { })
+                    tapAction: { store.send(.routeToEssentialAlbumDetail($0)) })
                 }
               }
               .scrollTargetLayout()
@@ -97,25 +101,35 @@ extension ArtistPage: View {
 
         if !store.fulllAlbumItemList.isEmpty {
           VStack {
-            HStack {
-              if let title = store.fetchFullAlbumItem.value?.title {
-                Text(title)
-                  .font(.title)
-                  .fontWeight(.semibold)
-                  .foregroundStyle(
-                    colorScheme == .dark
-                      ? DesignSystemColor.system(.white).color
-                      : DesignSystemColor.system(.black).color)
+            if let item = store.fetchFullAlbumItem.value {
+              Button(action: { store.send(.routeToFullAlbum(item)) }) {
+                HStack {
+                  if let title = store.fetchFullAlbumItem.value?.title {
+                    Text(title)
+                      .font(.title)
+                      .fontWeight(.semibold)
+                      .foregroundStyle(
+                        colorScheme == .dark
+                          ? DesignSystemColor.system(.white).color
+                          : DesignSystemColor.system(.black).color)
 
-                Spacer()
+                    Image(systemName: "chevron.right")
+                      .fontWeight(.bold)
+                      .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+                    Spacer()
+                  }
+                }
+                .padding(.leading, 16)
               }
             }
-            .padding(.leading, 16)
 
             ScrollView(.horizontal) {
               LazyHStack(spacing: 16) {
                 ForEach(store.fulllAlbumItemList, id: \.id) { item in
-                  FullAlbumComponent(viewState: .init(item: item))
+                  FullAlbumComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToAlbumDetail($0)) })
                 }
               }
               .padding(.horizontal, 16)
@@ -169,7 +183,9 @@ extension ArtistPage: View {
             ScrollView(.horizontal) {
               LazyHStack(spacing: 16) {
                 ForEach(store.playListItemList, id: \.id) { item in
-                  PlayListComponent(viewState: .init(item: item))
+                  PlayListComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToPlayListDetail($0)) })
                 }
               }
               .padding(.horizontal, 16)
@@ -180,23 +196,32 @@ extension ArtistPage: View {
 
         if !store.singleItemList.isEmpty {
           VStack {
-            HStack {
-              Text("싱글 및 EP")
-                .font(.title)
-                .fontWeight(.semibold)
-                .foregroundStyle(
-                  colorScheme == .dark
-                    ? DesignSystemColor.system(.white).color
-                    : DesignSystemColor.system(.black).color)
+            if let item = store.fetchSingleItem.value {
+              Button(action: { store.send(.routeToSingleAlbum(item)) }) {
+                HStack {
+                  Text("싱글 및 EP")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(
+                      colorScheme == .dark
+                        ? DesignSystemColor.system(.white).color
+                        : DesignSystemColor.system(.black).color)
 
-              Spacer()
+                  Image(systemName: "chevron.right")
+                    .fontWeight(.bold)
+                    .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+
+                  Spacer()
+                }
+                .padding(.leading, 16)
+              }
             }
-            .padding(.leading, 16)
-
             ScrollView(.horizontal) {
               LazyHStack(spacing: 16) {
                 ForEach(store.singleItemList, id: \.id) { item in
-                  SingleComponent(viewState: .init(item: item))
+                  SingleComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToSingleAlbumDetail($0)) })
                 }
               }
               .padding(.horizontal, 16)
@@ -207,29 +232,33 @@ extension ArtistPage: View {
 
         if !store.similarArtistItemList.isEmpty {
           VStack {
-            Button(action: { }) {
-              HStack {
-                Text("유사한 아티스트")
-                  .font(.title)
-                  .fontWeight(.semibold)
-                  .foregroundStyle(
-                    colorScheme == .dark
-                      ? DesignSystemColor.system(.white).color
-                      : DesignSystemColor.system(.black).color)
+            if let item = store.fetchSimilarArtistItem.value {
+              Button(action: { store.send(.routeToSimilarArtist(item)) }) {
+                HStack {
+                  Text("유사한 아티스트")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(
+                      colorScheme == .dark
+                        ? DesignSystemColor.system(.white).color
+                        : DesignSystemColor.system(.black).color)
 
-                Image(systemName: "chevron.right")
-                  .fontWeight(.bold)
-                  .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
+                  Image(systemName: "chevron.right")
+                    .fontWeight(.bold)
+                    .foregroundStyle(DesignSystemColor.palette(.gray(.lv400)).color)
 
-                Spacer()
+                  Spacer()
+                }
+                .padding(.leading, 16)
               }
             }
-            .padding(.leading, 16)
 
             ScrollView(.horizontal) {
               LazyHStack(spacing: 16) {
                 ForEach(store.similarArtistItemList, id: \.id) { item in
-                  SimilarArtistComponent(viewState: .init(item: item))
+                  SimilarArtistComponent(
+                    viewState: .init(item: item),
+                    tapAction: { store.send(.routeToArtist($0)) })
                 }
               }
               .padding(.horizontal, 16)
@@ -239,7 +268,7 @@ extension ArtistPage: View {
         }
       }
     }
-    .navigationBarTitleDisplayMode(.inline)
+    .ignoresSafeArea(.all, edges: .top)
     .onAppear {
       store.send(.getTopSongItem(store.topSongRequestModel))
       store.send(.getEssentialAlbumItem(store.essentialAlbumRequestModel))

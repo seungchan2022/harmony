@@ -7,6 +7,7 @@ import SwiftUI
 extension ArtistPage {
   struct SingleComponent {
     let viewState: ViewState
+    let tapAction: (MusicEntity.Artist.Single.Item) -> Void
 
     @Environment(\.colorScheme) var colorScheme
   }
@@ -18,7 +19,7 @@ extension ArtistPage.SingleComponent { }
 
 extension ArtistPage.SingleComponent: View {
   var body: some View {
-    Button(action: { }) {
+    Button(action: { tapAction(viewState.item) }) {
       VStack(alignment: .leading, spacing: 4) {
         RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
           RoundedRectangle(cornerRadius: 8)

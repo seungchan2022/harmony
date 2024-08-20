@@ -28,20 +28,39 @@ extension MusicEntity.Artist.TopSong {
   }
 
   public struct Response: Equatable, Codable, Sendable {
-    public let title: String?
-    public let itemList: [Item]
+
+    // MARK: Lifecycle
 
     public init(
+      id: String,
+      artistName: String,
       title: String? = .none,
-      itemList: [Item])
+      itemList: [Item],
+      artwork: ArtworkItem)
     {
+      self.id = id
+      self.artistName = artistName
       self.title = title
       self.itemList = itemList
+      self.artwork = artwork
     }
 
+    // MARK: Public
+
+    public let id: String
+    public let artistName: String
+    public let title: String?
+    public let itemList: [Item]
+    public let artwork: ArtworkItem
+
+    // MARK: Private
+
     private enum CodingKeys: String, CodingKey {
+      case id
+      case artistName = "name"
       case title
       case itemList = "songs"
+      case artwork
     }
   }
 
@@ -178,18 +197,22 @@ extension MusicEntity.Artist.FullAlbum {
   }
 
   public struct Response: Equatable, Codable, Sendable {
+    public let id: String
     public let title: String?
     public let itemList: [Item]
 
     public init(
+      id: String,
       title: String? = .none,
       itemList: [Item])
     {
+      self.id = id
       self.title = title
       self.itemList = itemList
     }
 
     private enum CodingKeys: String, CodingKey {
+      case id
       case title
       case itemList = "items"
     }
@@ -392,18 +415,22 @@ extension MusicEntity.Artist.Single {
   }
 
   public struct Response: Equatable, Codable, Sendable {
+    public let id: String
     public let title: String?
     public let itemList: [Item]
 
     public init(
+      id: String,
       title: String? = .none,
       itemList: [Item])
     {
+      self.id = id
       self.title = title
       self.itemList = itemList
     }
 
     private enum CodingKeys: String, CodingKey {
+      case id
       case title
       case itemList = "items"
     }
@@ -463,13 +490,30 @@ extension MusicEntity.Artist.SimilarArtist {
   }
 
   public struct Response: Equatable, Codable, Sendable {
-    public let itemList: [Item]
 
-    public init(itemList: [Item]) {
+    // MARK: Lifecycle
+
+    public init(
+      id: String,
+      name: String,
+      itemList: [Item])
+    {
+      self.id = id
+      self.name = name
       self.itemList = itemList
     }
 
+    // MARK: Public
+
+    public let id: String
+    public let name: String
+    public let itemList: [Item]
+
+    // MARK: Private
+
     private enum CodingKeys: String, CodingKey {
+      case id
+      case name
       case itemList = "items"
     }
   }

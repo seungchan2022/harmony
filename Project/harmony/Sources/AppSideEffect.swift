@@ -16,4 +16,6 @@ struct AppSideEffect: DependencyType, DashboardEnvironmentUsable {
   let albumDetailUseCase: AlbumDetailUseCase
   let searchUseCase: SearchUseCase
   let artistUseCase: ArtistUseCase
+  let topSongUseCase: TopSongUseCase
+  let albumUseCase: AlbumUseCase
 }

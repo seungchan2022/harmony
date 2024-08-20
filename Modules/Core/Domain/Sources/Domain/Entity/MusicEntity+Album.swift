@@ -1,68 +1,35 @@
 import Foundation
 
-// MARK: - MusicEntity.AlbumDetail
+// MARK: - MusicEntity.Album
 
 extension MusicEntity {
-  public enum AlbumDetail {
-    public enum Track { }
-  }
+  public enum Album { }
 }
 
-extension MusicEntity.AlbumDetail.Track {
+extension MusicEntity.Album {
   public struct Request: Equatable, Codable, Sendable {
     public let id: String
 
     public init(id: String) {
       self.id = id
     }
-
-    private enum CodingKeys: String, CodingKey {
-      case id
-    }
   }
 
   public struct Response: Equatable, Codable, Sendable {
-
-    // MARK: Lifecycle
+    public let id: String
+    public let itemList: [Item]
 
     public init(
       id: String,
-      title: String,
-      artistName: String,
-      genreItemList: [String],
-      releaseDate: Date,
-      artwork: ArtworkItem,
       itemList: [Item])
     {
       self.id = id
-      self.title = title
-      self.artistName = artistName
-      self.genreItemList = genreItemList
-      self.releaseDate = releaseDate
-      self.artwork = artwork
       self.itemList = itemList
     }
 
-    // MARK: Public
-
-    public let id: String
-    public let title: String
-    public let artistName: String
-    public let genreItemList: [String]
-    public let releaseDate: Date
-    public let artwork: ArtworkItem
-    public let itemList: [Item]
-
-    // MARK: Private
-
     private enum CodingKeys: String, CodingKey {
       case id
-      case title
-      case artistName
-      case genreItemList = "genreNames"
-      case releaseDate
-      case artwork
-      case itemList = "items"
+      case itemList = "albums"
     }
   }
 
@@ -74,12 +41,12 @@ extension MusicEntity.AlbumDetail.Track {
       id: String,
       title: String,
       artistName: String,
-      trackNumber: Int)
+      artwork: ArtworkItem)
     {
       self.id = id
       self.title = title
       self.artistName = artistName
-      self.trackNumber = trackNumber
+      self.artwork = artwork
     }
 
     // MARK: Public
@@ -87,7 +54,7 @@ extension MusicEntity.AlbumDetail.Track {
     public let id: String
     public let title: String
     public let artistName: String
-    public let trackNumber: Int
+    public let artwork: ArtworkItem
 
     // MARK: Private
 
@@ -95,7 +62,7 @@ extension MusicEntity.AlbumDetail.Track {
       case id
       case title
       case artistName
-      case trackNumber
+      case artwork
     }
   }
 

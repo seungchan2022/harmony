@@ -39,7 +39,12 @@ extension ArtistUseCasePlatform: ArtistUseCase {
                   artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
               }
 
-            let result = MusicEntity.Artist.TopSong.Response(title: topSongList.title ?? "", itemList: itemList)
+            let result = MusicEntity.Artist.TopSong.Response(
+              id: artist.id.rawValue,
+              artistName: artist.name,
+              title: topSongList.title ?? "인기곡",
+              itemList: itemList,
+              artwork: .init(url: artist.artwork?.url(width: 400, height: 400)))
             return promise(.success(result))
 
           } catch {
@@ -116,7 +121,10 @@ extension ArtistUseCasePlatform: ArtistUseCase {
                   artwork: .init(url: $0.artwork?.url(width: 320, height: 320)))
               }
 
-            let result = MusicEntity.Artist.FullAlbum.Response(title: fullAlbumList.title ?? "", itemList: itemList)
+            let result = MusicEntity.Artist.FullAlbum.Response(
+              id: artist.id.rawValue,
+              title: fullAlbumList.title ?? "",
+              itemList: itemList)
             return promise(.success(result))
 
           } catch {
@@ -235,7 +243,9 @@ extension ArtistUseCasePlatform: ArtistUseCase {
                   artwork: .init(url: $0.artwork?.url(width: 180, height: 180)))
               }
 
-            let result = MusicEntity.Artist.Single.Response(itemList: itemList)
+            let result = MusicEntity.Artist.Single.Response(
+              id: artist.id.rawValue,
+              itemList: itemList)
 
             return promise(.success(result))
 
@@ -274,7 +284,10 @@ extension ArtistUseCasePlatform: ArtistUseCase {
                   artwork: .init(url: $0.artwork?.url(width: 120, height: 120)))
               }
 
-            let result = MusicEntity.Artist.SimilarArtist.Response(itemList: itemList)
+            let result = MusicEntity.Artist.SimilarArtist.Response(
+              id: artist.id.rawValue,
+              name: artist.name,
+              itemList: itemList)
 
             return promise(.success(result))
 

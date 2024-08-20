@@ -107,4 +107,94 @@ extension ArtistSideEffect {
       }
     }
   }
+
+  var routeToTopSong: (MusicEntity.Artist.TopSong.Response) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.topSong.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToEssentialAlbumDetail: (MusicEntity.Artist.EssentialAlbum.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToFullAlbum: (MusicEntity.Artist.FullAlbum.Response) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.album.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToSingleAlbum: (MusicEntity.Artist.Single.Response) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.album.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToAlbumDetail: (MusicEntity.Artist.FullAlbum.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToPlayListDetail: (MusicEntity.Artist.PlayList.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.playListDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToSingleAlbumDetail: (MusicEntity.Artist.Single.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToSimilarArtist: (MusicEntity.Artist.SimilarArtist.Response) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.similarArtist.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
+
+  var routeToArtist: (MusicEntity.Artist.SimilarArtist.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.artist.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

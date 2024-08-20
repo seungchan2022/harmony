@@ -3,6 +3,8 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
+// MARK: - ArtistReducer
+
 @Reducer
 struct ArtistReducer {
 
@@ -97,6 +99,18 @@ struct ArtistReducer {
     case fetchSingleItem(Result<MusicEntity.Artist.Single.Response, CompositeErrorRepository>)
     case fetchSimilarArtistItem(Result<MusicEntity.Artist.SimilarArtist.Response, CompositeErrorRepository>)
 
+    case routeToTopSong(MusicEntity.Artist.TopSong.Response)
+    case routeToEssentialAlbumDetail(MusicEntity.Artist.EssentialAlbum.Item)
+
+    case routeToFullAlbum(MusicEntity.Artist.FullAlbum.Response)
+
+    case routeToAlbumDetail(MusicEntity.Artist.FullAlbum.Item)
+    case routeToPlayListDetail(MusicEntity.Artist.PlayList.Item)
+    case routeToSingleAlbum(MusicEntity.Artist.Single.Response)
+    case routeToSingleAlbumDetail(MusicEntity.Artist.Single.Item)
+    case routeToSimilarArtist(MusicEntity.Artist.SimilarArtist.Response)
+    case routeToArtist(MusicEntity.Artist.SimilarArtist.Item)
+
     case throwError(CompositeErrorRepository)
   }
 
@@ -170,7 +184,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchTopSongItem.value = item
-          state.topSongItemList = state.topSongItemList + item.itemList
+          state.topSongItemList = state.topSongItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -182,7 +196,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchEssentialAlbumItem.value = item
-          state.essentialAlbumItemList = state.essentialAlbumItemList + item.itemList
+          state.essentialAlbumItemList = state.essentialAlbumItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -194,7 +208,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchFullAlbumItem.value = item
-          state.fulllAlbumItemList = state.fulllAlbumItemList + item.itemList
+          state.fulllAlbumItemList = state.fulllAlbumItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -206,7 +220,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchMusicVideoItem.value = item
-          state.musicVideoItemList = state.musicVideoItemList + item.itemList
+          state.musicVideoItemList = state.musicVideoItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -218,7 +232,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchPlayListItem.value = item
-          state.playListItemList = state.playListItemList + item.itemList
+          state.playListItemList = state.playListItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -230,7 +244,7 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchSingleItem.value = item
-          state.singleItemList = state.singleItemList + item.itemList
+          state.singleItemList = state.singleItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
@@ -242,12 +256,48 @@ struct ArtistReducer {
         switch result {
         case .success(let item):
           state.fetchSimilarArtistItem.value = item
-          state.similarArtistItemList = state.similarArtistItemList + item.itemList
+          state.similarArtistItemList = state.similarArtistItemList.merge(item.itemList)
           return .none
 
         case .failure(let error):
           return .run { await $0(.throwError(error)) }
         }
+
+      case .routeToTopSong(let item):
+        sideEffect.routeToTopSong(item)
+        return .none
+
+      case .routeToEssentialAlbumDetail(let item):
+        sideEffect.routeToEssentialAlbumDetail(item)
+        return .none
+
+      case .routeToFullAlbum(let item):
+        sideEffect.routeToFullAlbum(item)
+        return .none
+
+      case .routeToAlbumDetail(let item):
+        sideEffect.routeToAlbumDetail(item)
+        return .none
+
+      case .routeToPlayListDetail(let item):
+        sideEffect.routeToPlayListDetail(item)
+        return .none
+
+      case .routeToSingleAlbum(let item):
+        sideEffect.routeToSingleAlbum(item)
+        return .none
+
+      case .routeToSingleAlbumDetail(let item):
+        sideEffect.routeToSingleAlbumDetail(item)
+        return .none
+
+      case .routeToSimilarArtist(let item):
+        sideEffect.routeToSimilarArtist(item)
+        return .none
+
+      case .routeToArtist(let item):
+        sideEffect.routeToArtist(item)
+        return .none
 
       case .throwError(let error):
         sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)
@@ -261,4 +311,74 @@ struct ArtistReducer {
   private let pageID: String
   private let sideEffect: ArtistSideEffect
 
+}
+
+extension [MusicEntity.Artist.TopSong.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.EssentialAlbum.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.FullAlbum.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.MusicVideo.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.PlayList.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.Single.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
+}
+
+extension [MusicEntity.Artist.SimilarArtist.Item] {
+  fileprivate func merge(_ target: Self) -> Self {
+    let new = target.reduce(self) { curr, next in
+      guard !self.contains(where: { $0.id == next.id }) else { return curr }
+      return curr + [next]
+    }
+    return new
+  }
 }

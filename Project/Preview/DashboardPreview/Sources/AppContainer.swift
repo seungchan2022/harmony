@@ -30,7 +30,9 @@ extension AppContainer {
       playListDetailUseCase: PlayListDetailUseCasePlatform(),
       albumDetailUseCase: AlbumDetailUseCasePlatform(),
       searchUseCase: SearchUseCasePlatform(),
-      artistUseCase: ArtistUseCasePlatform())
+      artistUseCase: ArtistUseCasePlatform(),
+      topSongUseCase: TopSongUseCasePlatform(),
+      albumUseCase: AlbumUseCasePlatform())
 
     return .init(
       dependency: sideEffect,

@@ -8,7 +8,7 @@ import SwiftUI
 extension ArtistPage {
   struct EssentialAlbumComponent {
     let viewState: ViewState
-    let tapAction: () -> Void
+    let tapAction: (MusicEntity.Artist.EssentialAlbum.Item) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
   }
@@ -20,7 +20,7 @@ extension ArtistPage.EssentialAlbumComponent { }
 
 extension ArtistPage.EssentialAlbumComponent: View {
   var body: some View {
-    VStack {
+    VStack(alignment: .leading) {
       RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
         RoundedRectangle(cornerRadius: 8)
           .fill(.gray.opacity(0.3))
@@ -30,24 +30,16 @@ extension ArtistPage.EssentialAlbumComponent: View {
       .clipShape(RoundedRectangle(cornerRadius: 8))
 
       Text(viewState.item.title)
-        .font(.footnote)
-        .fontWeight(.light)
+        .font(.body)
         .foregroundStyle(
           colorScheme == .dark
             ? DesignSystemColor.system(.white).color
             : DesignSystemColor.system(.black).color)
           .multilineTextAlignment(.leading)
           .lineLimit(1)
-//      HStack {
-//
-//
-//
-//        Spacer()
-//      }
-//      .padding(.leading, 16)
     }
     .onTapGesture {
-      tapAction()
+      tapAction(viewState.item)
     }
   }
 }

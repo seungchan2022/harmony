@@ -33,8 +33,8 @@ extension SimilarArtistPage.ItemComponent: View {
                   .foregroundStyle(.thickMaterial)
               }
           }
-          .frame(width: 60, height: 60)
           .clipShape(Circle())
+          .frame(width: 60, height: 60)
 
           Text(viewState.item.name)
             .font(.body)

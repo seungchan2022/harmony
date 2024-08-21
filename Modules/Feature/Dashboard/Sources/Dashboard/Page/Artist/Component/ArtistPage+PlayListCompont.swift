@@ -26,8 +26,8 @@ extension ArtistPage.PlayListComponent: View {
             .fill(.gray.opacity(0.3))
             .frame(width: 180, height: 180)
         }
-        .frame(width: 180, height: 180)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(width: 180, height: 180)
 
         Text(viewState.item.name)
           .font(.footnote)

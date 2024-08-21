@@ -27,8 +27,8 @@ extension DailyTopDetailPage.ItemComponent: View {
               .fill(.gray.opacity(0.3))
               .frame(width: 60, height: 60)
           }
-          .frame(width: 60, height: 60)
           .clipShape(RoundedRectangle(cornerRadius: 8))
+          .frame(width: 60, height: 60)
 
           VStack(alignment: .leading, spacing: 4) {
             Text(viewState.item.title)

@@ -26,8 +26,8 @@ extension ArtistPage.SimilarArtistComponent: View {
             .fill(.gray.opacity(0.3))
             .frame(width: 120, height: 120)
         }
-        .frame(width: 120, height: 120)
         .clipShape(Circle())
+        .frame(width: 120, height: 120)
 
         Text(viewState.item.name)
           .font(.footnote)

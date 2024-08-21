@@ -34,8 +34,8 @@ extension SearchPage.ArtistComponent: View {
                   .foregroundStyle(.thickMaterial)
               }
           }
-          .frame(width: 60, height: 60)
           .clipShape(Circle())
+          .frame(width: 60, height: 60)
 
           VStack(alignment: .leading, spacing: 4) {
             Text(viewState.item.name)

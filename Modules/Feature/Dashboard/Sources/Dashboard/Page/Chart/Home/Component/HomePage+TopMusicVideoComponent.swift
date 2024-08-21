@@ -33,8 +33,8 @@ extension HomePage.TopMusicVideoComponent: View {
             .fill(.gray.opacity(0.3))
             .frame(width: 180, height: 100)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
         .frame(width: 180, height: 100)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
 
         Text("\(ranking)")
           .font(.title2)

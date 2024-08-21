@@ -25,6 +25,7 @@ extension Link.Dashboard {
     case artist
     case similarArtist
     case topSong
-    case album
+    case fullAlbum
+    case singleAlbum
   }
 }

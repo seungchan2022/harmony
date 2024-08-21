@@ -3,16 +3,16 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
-// MARK: - AlbumReducer
+// MARK: - FullAlbumReducer
 
 @Reducer
-struct AlbumReducer {
+struct FullAlbumReducer {
 
   // MARK: Lifecycle
 
   init(
     pageID: String = UUID().uuidString,
-    sideEffect: AlbumSideEffect)
+    sideEffect: FullAlbumSideEffect)
   {
     self.pageID = pageID
     self.sideEffect = sideEffect
@@ -24,15 +24,15 @@ struct AlbumReducer {
   struct State: Equatable, Identifiable {
     let id: UUID
 
-    let requestModel: MusicEntity.Album.Request
+    let requestModel: MusicEntity.Album.FullAlbum.Request
 
-    var itemList: [MusicEntity.Album.Item] = []
+    var itemList: [MusicEntity.Album.FullAlbum.Item] = []
 
-    var fetchItem: FetchState.Data<MusicEntity.Album.Response?> = .init(isLoading: false, value: .none)
+    var fetchItem: FetchState.Data<MusicEntity.Album.FullAlbum.Response?> = .init(isLoading: false, value: .none)
 
     init(
       id: UUID = UUID(),
-      requestModel: MusicEntity.Album.Request)
+      requestModel: MusicEntity.Album.FullAlbum.Request)
     {
       self.id = id
       self.requestModel = requestModel
@@ -43,9 +43,8 @@ struct AlbumReducer {
     case binding(BindingAction<State>)
     case teardown
 
-    case getItem(MusicEntity.Album.Request)
-
-    case fetchItem(Result<MusicEntity.Album.Response, CompositeErrorRepository>)
+    case getItem(MusicEntity.Album.FullAlbum.Request)
+    case fetchItem(Result<MusicEntity.Album.FullAlbum.Response, CompositeErrorRepository>)
 
     case throwError(CompositeErrorRepository)
   }
@@ -77,7 +76,7 @@ struct AlbumReducer {
         switch result {
         case .success(let item):
           state.fetchItem.value = item
-          state.itemList = state.itemList.merge(item.itemList)
+          state.itemList = state.itemList + item.itemList
           return .none
 
         case .failure(let error):
@@ -94,16 +93,6 @@ struct AlbumReducer {
   // MARK: Private
 
   private let pageID: String
-  private let sideEffect: AlbumSideEffect
+  private let sideEffect: FullAlbumSideEffect
 
-}
-
-extension [MusicEntity.Album.Item] {
-  fileprivate func merge(_ target: Self) -> Self {
-    let new = target.reduce(self) { curr, next in
-      guard !self.contains(where: { $0.id == next.id }) else { return curr }
-      return curr + [next]
-    }
-    return new
-  }
 }

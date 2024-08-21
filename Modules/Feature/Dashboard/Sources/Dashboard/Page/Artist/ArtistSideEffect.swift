@@ -132,7 +132,7 @@ extension ArtistSideEffect {
     { item in
       navigator.next(
         linkItem: .init(
-          path: Link.Dashboard.Path.album.rawValue,
+          path: Link.Dashboard.Path.fullAlbum.rawValue,
           items: item),
         isAnimated: true)
     }
@@ -142,7 +142,7 @@ extension ArtistSideEffect {
     { item in
       navigator.next(
         linkItem: .init(
-          path: Link.Dashboard.Path.album.rawValue,
+          path: Link.Dashboard.Path.singleAlbum.rawValue,
           items: item),
         isAnimated: true)
     }

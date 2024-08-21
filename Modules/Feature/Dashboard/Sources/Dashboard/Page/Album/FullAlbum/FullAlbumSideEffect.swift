@@ -5,9 +5,9 @@ import ComposableArchitecture
 import Domain
 import Foundation
 
-// MARK: - AlbumSideEffect
+// MARK: - FullAlbumSideEffect
 
-struct AlbumSideEffect {
+struct FullAlbumSideEffect {
   let useCase: DashboardEnvironmentUsable
   let main: AnySchedulerOf<DispatchQueue>
   let navigator: RootNavigatorType
@@ -23,15 +23,15 @@ struct AlbumSideEffect {
   }
 }
 
-extension AlbumSideEffect {
-  var getItem: (MusicEntity.Album.Request) -> Effect<AlbumReducer.Action> {
+extension FullAlbumSideEffect {
+  var getItem: (MusicEntity.Album.FullAlbum.Request) -> Effect<FullAlbumReducer.Action> {
     { req in
       .publisher {
         useCase.albumUseCase
-          .album(req)
+          .fullAlbum(req)
           .receive(on: main)
           .mapToResult()
-          .map(AlbumReducer.Action.fetchItem)
+          .map(FullAlbumReducer.Action.fetchItem)
       }
     }
   }

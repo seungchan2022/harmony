@@ -35,4 +35,14 @@ extension FullAlbumSideEffect {
       }
     }
   }
+
+  var routeToDetail: (MusicEntity.Album.FullAlbum.Item) -> Void {
+    { item in
+      navigator.next(
+        linkItem: .init(
+          path: Link.Dashboard.Path.albumDetail.rawValue,
+          items: item),
+        isAnimated: true)
+    }
+  }
 }

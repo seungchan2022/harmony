@@ -46,6 +46,8 @@ struct FullAlbumReducer {
     case getItem(MusicEntity.Album.FullAlbum.Request)
     case fetchItem(Result<MusicEntity.Album.FullAlbum.Response, CompositeErrorRepository>)
 
+    case routeToDetail(MusicEntity.Album.FullAlbum.Item)
+
     case throwError(CompositeErrorRepository)
   }
 
@@ -83,6 +85,10 @@ struct FullAlbumReducer {
           sideEffect.useCase.toastViewModel.send(errorMessage: error.displayMessage)
           return .none
         }
+
+      case .routeToDetail(let item):
+        sideEffect.routeToDetail(item)
+        return .none
 
       case .throwError(let error):
         return .run { await $0(.throwError(error)) }

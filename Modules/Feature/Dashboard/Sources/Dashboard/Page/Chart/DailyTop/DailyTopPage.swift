@@ -12,6 +12,10 @@ extension DailyTopPage {
   private var gridItemList: [GridItem] {
     .init(repeating: .init(.flexible(maximum: 180)), count: 2)
   }
+
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
 }
 
 // MARK: View
@@ -30,6 +34,9 @@ extension DailyTopPage: View {
     .navigationTitle("오늘의 TOP 100")
     .onAppear {
       store.send(.getItem)
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

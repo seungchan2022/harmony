@@ -7,7 +7,11 @@ struct DailyTopDetailPage {
   @Bindable var store: StoreOf<DailyTopDetailReducer>
 }
 
-extension DailyTopDetailPage { }
+extension DailyTopDetailPage {
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
+}
 
 // MARK: View
 
@@ -22,8 +26,12 @@ extension DailyTopDetailPage: View {
       }
     }
     .navigationTitle(store.item.name)
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem(store.item))
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

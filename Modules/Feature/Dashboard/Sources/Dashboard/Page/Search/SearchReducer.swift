@@ -267,7 +267,7 @@ struct SearchReducer {
         }
 
       case .fetchSearchTopResultItem(let result):
-        state.fetchSearchTopResultItem.isLoading = true
+        state.fetchSearchTopResultItem.isLoading = false
         switch result {
         case .success(let item):
           if state.query == item.request.query {
@@ -282,7 +282,7 @@ struct SearchReducer {
         }
 
       case .fetchSearchKeywordItem(let result):
-        state.fetchSearchKeywordItem.isLoading = true
+        state.fetchSearchKeywordItem.isLoading = false
         switch result {
         case .success(let item):
           if state.query == item.request.query {

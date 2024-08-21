@@ -12,7 +12,16 @@ struct SearchPage {
   @Environment(\.colorScheme) private var colorScheme
 }
 
-extension SearchPage { }
+extension SearchPage {
+  private var isLoading: Bool {
+    store.fetchSearchSongItem.isLoading
+      || store.fetchSearchArtistItem.isLoading
+      || store.fetchSearchAlbumItem.isLoading
+      || store.fetchSearchPlayItem.isLoading
+      || store.fetchSearchTopResultItem.isLoading
+      || store.fetchSearchKeywordItem.isLoading
+  }
+}
 
 // MARK: View
 
@@ -161,6 +170,7 @@ extension SearchPage: View {
     .scrollDismissesKeyboard(.immediately)
     .navigationTitle("검색")
     .navigationBarTitleDisplayMode(.large)
+    .setRequestFlightView(isLoading: isLoading)
     .onChange(of: store.query) { _, new in
       throttleEvent.update(value: new)
       store.isShowSearchResult = false

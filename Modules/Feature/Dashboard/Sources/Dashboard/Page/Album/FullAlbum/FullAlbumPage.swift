@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystem
 import SwiftUI
 
 // MARK: - FullAlbumPage
@@ -10,6 +11,10 @@ struct FullAlbumPage {
 extension FullAlbumPage {
   private var gridItemList: [GridItem] {
     .init(repeating: .init(.flexible(maximum: 180)), count: 2)
+  }
+
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
   }
 }
 
@@ -28,8 +33,12 @@ extension FullAlbumPage: View {
     }
     .navigationTitle("앨범")
     .navigationBarTitleDisplayMode(.inline)
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem(store.requestModel))
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

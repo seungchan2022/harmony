@@ -15,6 +15,15 @@ extension HomePage {
   private var gridColumnList: [GridItem] {
     Array(repeating: .init(.flexible()), count: 4)
   }
+
+  private var isLoading: Bool {
+    store.fetchMostPlayedSongItem.isLoading
+      || store.fetchCityTopItem.isLoading
+      || store.fetchDailyTopItem.isLoading
+      || store.fetchTopPlayItem.isLoading
+      || store.fetchTopAlbumItem.isLoading
+      || store.fetchTopMusicVideoItem.isLoading
+  }
 }
 
 // MARK: View
@@ -229,6 +238,7 @@ extension HomePage: View {
       .padding(.top, 32)
     }
     .navigationTitle("차트")
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getMostPlayedSongItem)
       store.send(.getCityTopItem)

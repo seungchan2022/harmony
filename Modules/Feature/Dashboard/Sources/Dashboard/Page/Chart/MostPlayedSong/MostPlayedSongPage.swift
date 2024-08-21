@@ -11,6 +11,12 @@ struct MostPlayedSongPage {
   @Environment(\.colorScheme) private var colorScheme
 }
 
+extension MostPlayedSongPage {
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
+}
+
 // MARK: View
 
 extension MostPlayedSongPage: View {
@@ -23,8 +29,12 @@ extension MostPlayedSongPage: View {
       }
     }
     .navigationTitle("인기곡")
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem)
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

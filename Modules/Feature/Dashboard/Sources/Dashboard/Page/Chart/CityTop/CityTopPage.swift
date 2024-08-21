@@ -12,6 +12,10 @@ extension CityTopPage {
   private var gridItemList: [GridItem] {
     .init(repeating: .init(.flexible(maximum: 180)), count: 2)
   }
+
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
 }
 
 // MARK: View
@@ -28,8 +32,12 @@ extension CityTopPage: View {
       }
     }
     .navigationTitle("도시별 차트")
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem)
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

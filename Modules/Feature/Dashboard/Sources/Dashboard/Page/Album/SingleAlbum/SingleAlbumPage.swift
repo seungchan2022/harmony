@@ -11,6 +11,10 @@ extension SingleAlbumPage {
   private var gridItemList: [GridItem] {
     .init(repeating: .init(.flexible(maximum: 180)), count: 2)
   }
+
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
 }
 
 // MARK: View
@@ -28,8 +32,12 @@ extension SingleAlbumPage: View {
     }
     .navigationTitle("싱글 및 EP")
     .navigationBarTitleDisplayMode(.inline)
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem(store.requestModel))
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

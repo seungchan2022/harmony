@@ -34,7 +34,7 @@ extension AppMain: View {
       ])
       .ignoresSafeArea()
       .onAppear {
-        viewModel.linkNavigator.moveTab(targetPath: Link.Dashboard.Path.search.rawValue)
+//        viewModel.linkNavigator.moveTab(targetPath: Link.Dashboard.Path.search.rawValue)
       }
   }
 }

@@ -10,7 +10,11 @@ struct AlbumDetailPage {
 
 }
 
-extension AlbumDetailPage { }
+extension AlbumDetailPage {
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
+}
 
 // MARK: View
 
@@ -32,8 +36,12 @@ extension AlbumDetailPage: View {
       }
     }
     .navigationBarTitleDisplayMode(.inline)
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem)
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

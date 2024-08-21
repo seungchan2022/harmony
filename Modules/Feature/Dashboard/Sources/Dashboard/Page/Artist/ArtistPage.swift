@@ -18,6 +18,16 @@ extension ArtistPage {
       return Array(repeating: .init(.fixed(80)), count: store.topSongItemList.count)
     }
   }
+
+  private var isLoading: Bool {
+    store.fetchTopSongItem.isLoading
+      || store.fetchEssentialAlbumItem.isLoading
+      || store.fetchFullAlbumItem.isLoading
+      || store.fetchMusicVideoItem.isLoading
+      || store.fetchPlayListItem.isLoading
+      || store.fetchSingleItem.isLoading
+      || store.fetchSimilarArtistItem.isLoading
+  }
 }
 
 // MARK: View
@@ -270,6 +280,7 @@ extension ArtistPage: View {
         }
       }
     }
+    .setRequestFlightView(isLoading: isLoading)
     .ignoresSafeArea(.all, edges: .top)
     .onAppear {
       store.send(.getTopSongItem(store.topSongRequestModel))
@@ -279,6 +290,9 @@ extension ArtistPage: View {
       store.send((.getPlayListItem(store.playListRequestModel)))
       store.send(.getSingleItem(store.singRequestModel))
       store.send(.getSimilarArtistItem(store.similarArtistRequestModel))
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

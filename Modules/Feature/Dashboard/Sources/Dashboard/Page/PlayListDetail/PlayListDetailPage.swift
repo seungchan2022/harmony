@@ -8,7 +8,11 @@ struct PlayListDetailPage {
   @Bindable var store: StoreOf<PlayListDetailReducer>
 }
 
-extension PlayListDetailPage { }
+extension PlayListDetailPage {
+  private var isLoading: Bool {
+    store.fetchItem.isLoading
+  }
+}
 
 // MARK: View
 
@@ -28,8 +32,12 @@ extension PlayListDetailPage: View {
     }
     .navigationTitle("")
     .navigationBarTitleDisplayMode(.inline)
+    .setRequestFlightView(isLoading: isLoading)
     .onAppear {
       store.send(.getItem(store.requestModel))
+    }
+    .onDisappear {
+      store.send(.teardown)
     }
   }
 }

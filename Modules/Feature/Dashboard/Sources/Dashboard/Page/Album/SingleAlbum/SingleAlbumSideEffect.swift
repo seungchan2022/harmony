@@ -23,7 +23,7 @@ struct SingleAlbumSideEffect {
   }
 }
 
-extension SingleAlbumSideEffect { 
+extension SingleAlbumSideEffect {
   var getItem: (MusicEntity.Album.SingleAlbum.Request) -> Effect<SingleAlbumReducer.Action> {
     { req in
       .publisher {

@@ -77,7 +77,7 @@ struct TopSongReducer {
         switch result {
         case .success(let item):
           state.fetchItem.value = item
-          state.itemList = state.itemList.merge(item.itemList)
+          state.itemList = item.itemList
           return .none
 
         case .failure(let error):

@@ -37,19 +37,21 @@ extension MusicEntity.TopSong {
     }
   }
 
-  public struct Item: Equatable, Codable, Sendable {
+  public struct Item: Equatable, Codable, Sendable, Identifiable {
 
     // MARK: Lifecycle
 
     public init(
       id: String,
       title: String,
+      albumTitle: String,
       artistName: String,
       releaseDate: Date,
       artwork: ArtworkItem)
     {
       self.id = id
       self.title = title
+      self.albumTitle = albumTitle
       self.artistName = artistName
       self.releaseDate = releaseDate
       self.artwork = artwork
@@ -59,6 +61,7 @@ extension MusicEntity.TopSong {
 
     public let id: String
     public let title: String
+    public let albumTitle: String
     public let artistName: String
     public let releaseDate: Date
     public let artwork: ArtworkItem
@@ -68,6 +71,7 @@ extension MusicEntity.TopSong {
     private enum CodingKeys: String, CodingKey {
       case id
       case title
+      case albumTitle
       case artistName
       case releaseDate
       case artwork

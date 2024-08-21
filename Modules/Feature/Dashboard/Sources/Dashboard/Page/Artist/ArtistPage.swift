@@ -130,7 +130,7 @@ extension ArtistPage: View {
                   FullAlbumComponent(
                     viewState: .init(item: item),
                     tapAction: { store.send(.routeToAlbumDetail($0)) })
-                  .frame(width: 180)
+                    .frame(width: 180)
                 }
               }
               .padding(.horizontal, 16)
@@ -223,7 +223,7 @@ extension ArtistPage: View {
                   SingleComponent(
                     viewState: .init(item: item),
                     tapAction: { store.send(.routeToSingleAlbumDetail($0)) })
-                  .frame(width: 180)
+                    .frame(width: 180)
                 }
               }
               .padding(.horizontal, 16)

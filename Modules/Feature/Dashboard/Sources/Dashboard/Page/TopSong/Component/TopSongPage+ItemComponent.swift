@@ -1,29 +1,26 @@
-import ComposableArchitecture
 import DesignSystem
 import Domain
 import SwiftUI
 
-// MARK: - ArtistPage.TopSongComponent
+// MARK: - TopSongPage.ItemComponent
 
-extension ArtistPage {
-  struct TopSongComponent {
+extension TopSongPage {
+  struct ItemComponent {
     let viewState: ViewState
 
     @Environment(\.colorScheme) private var colorScheme
+
   }
 }
 
-extension ArtistPage.TopSongComponent { }
+extension TopSongPage.ItemComponent { }
 
-// MARK: - ArtistPage.TopSongComponent + View
+// MARK: - TopSongPage.ItemComponent + View
 
-extension ArtistPage.TopSongComponent: View {
+extension TopSongPage.ItemComponent: View {
   var body: some View {
     Button(action: { }) {
       VStack {
-        Divider()
-          .padding(.leading, 72)
-
         HStack(spacing: 12) {
           RemoteImage(url: viewState.item.artwork.url?.absoluteString ?? "") {
             RoundedRectangle(cornerRadius: 8)
@@ -72,10 +69,10 @@ extension ArtistPage.TopSongComponent: View {
   }
 }
 
-// MARK: - ArtistPage.TopSongComponent.ViewState
+// MARK: - TopSongPage.ItemComponent.ViewState
 
-extension ArtistPage.TopSongComponent {
+extension TopSongPage.ItemComponent {
   struct ViewState: Equatable {
-    let item: MusicEntity.Artist.TopSong.Item
+    let item: MusicEntity.TopSong.Item
   }
 }

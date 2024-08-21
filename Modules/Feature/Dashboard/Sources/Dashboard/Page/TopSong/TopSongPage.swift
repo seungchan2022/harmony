@@ -13,9 +13,15 @@ extension TopSongPage { }
 
 extension TopSongPage: View {
   var body: some View {
-    VStack {
-      Text("\(store.itemList.count)")
+    ScrollView {
+      LazyVStack {
+        ForEach(store.itemList) { item in
+          ItemComponent(viewState: .init(item: item))
+        }
+      }
     }
+    .navigationTitle("인기곡")
+    .navigationBarTitleDisplayMode(.inline)
     .onAppear {
       store.send(.getItem(store.requestModel))
     }

@@ -7,7 +7,7 @@ struct SingleAlbumPage {
   @Bindable var store: StoreOf<SingleAlbumReducer>
 }
 
-extension SingleAlbumPage { 
+extension SingleAlbumPage {
   private var gridItemList: [GridItem] {
     .init(repeating: .init(.flexible(maximum: 180)), count: 2)
   }

@@ -34,6 +34,7 @@ extension ArtistUseCasePlatform: ArtistUseCase {
                 MusicEntity.Artist.TopSong.Item(
                   id: $0.id.rawValue,
                   title: $0.title,
+                  albumTitle: $0.albumTitle ?? "",
                   artistName: $0.artistName,
                   releaseDate: $0.releaseDate ?? .now,
                   artwork: .init(url: $0.artwork?.url(width: 60, height: 60)))
